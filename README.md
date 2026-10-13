@@ -80,6 +80,8 @@ Questo repository può contenere più mod: il Würstel Gigante sta nella radice,
 
 ### Yo-Yo Arcobaleno (`mods/rainbow-yoyo/`)
 
+![Anteprima dei trick dello yo-yo](docs/rainbow-yoyo-preview.gif)
+
 Uno yo-yo arcobaleno gigante (1,25 blocchi), per Forge 1.20.1. Jar: `rainbowyoyo-1.0.0.jar` nelle [Releases](../../releases). Va installato anche sul server, in multiplayer.
 
 - **Ricetta** (banco da lavoro):
