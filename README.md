@@ -77,3 +77,25 @@ Il jar finisce in `build/libs/`. Su GitHub la compilazione parte da sola a ogni 
 ## Altre mod
 
 Questo repository può contenere più mod: il Würstel Gigante sta nella radice, ogni altra mod in una cartella `mods/<nome>/` con il suo jar e le sue Release.
+
+### Yo-Yo Arcobaleno (`mods/rainbow-yoyo/`)
+
+Uno yo-yo arcobaleno gigante (1,25 blocchi), per Forge 1.20.1. Jar: `rainbowyoyo-1.0.0.jar` nelle [Releases](../../releases). Va installato anche sul server, in multiplayer.
+
+- **Ricetta** (banco da lavoro):
+  ```
+  lana rossa   lana arancione       lana gialla
+  filo         blocco di diamante   filo
+  lana lime    lana azzurra         lana viola
+  ```
+- **Tasto destro (tieni premuto)**: lo lanci e gira in fondo al filo (8 blocchi), seguendo il mirino. Rilascia e torna in mano. Non ti rallenta.
+- **Tasto sinistro**: colpo rapido dritto davanti a te.
+- **Tasto sinistro con lo yo-yo fuori**: un trick.
+  - guardando avanti: **Loop the Loop**, tre giri della morte giganti davanti a te;
+  - guardando in alto: **Shoot the Moon**, sale di 10 blocchi e si schianta a terra con un'onda d'urto;
+  - guardando in basso: **Walk the Dog**, rotola per terra come una ruota per 9 blocchi e torna;
+  - accovacciato: **Around the World**, due giri orizzontali intorno a te, come una sega circolare.
+- I quattro trick in una sola combo caricano la **Supernova Arcobaleno**: il clic successivo fa crescere lo yo-yo, che esplode in fuochi d'artificio colpendo tutto nel raggio di 7 blocchi.
+- **Ogni colpo fa 40 cuori di danno** (80 punti), con messaggi di morte suoi.
+- Scia luminosa arcobaleno, bordo che brilla al buio, particelle, suoni sintetizzati (lancio, ronzio che sale con la velocità, colpi, trick, schianto, Supernova). Il braccio segue il filo anche in prima persona.
+- Config: `saves/<mondo>/serverconfig/rainbowyoyo-server.toml` (`damage`, `stringLength`) e `config/rainbowyoyo-client.toml` (`trail`, `particles`).

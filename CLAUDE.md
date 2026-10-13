@@ -35,3 +35,15 @@ Cintura (oggetto `wurstel:wurstel_belt`, ArmorItem negli slot dei pantaloni) che
 - Suoni sintetizzati in `assets/wurstel/sounds/` (slap1-4, whoosh1-2, squish1), OGG Vorbis mono.
 - La 1.0.0 è stata provata in gioco dall'utente e funziona benissimo. Le aggiunte della 1.1.0 (cinture di diamante e netherite, Turgido) sono state verificate solo compilando: se l'utente segnala problemi, parti da lì.
 - `mods.toml` usa `version="${file.jarVersion}"`: per una nuova versione basta alzare `mod_version`.
+
+## Yo-Yo Arcobaleno (`mods/rainbow-yoyo/`, `mod_id` = `rainbowyoyo`)
+
+Yo-yo arcobaleno gigante (diametro 1,25 blocchi). Richieste dell'utente: animazione di lancio ricca, trick, arma da **40 cuori** (80 di danno, config `damage`), suoni, modello 3D integrato col personaggio, **multiplayer**.
+
+- Comandi: tasto destro tenuto = lancio e "sleeper" in fondo al filo (niente `startUsingItem`, così non rallenta: vanilla ripete `use` ogni 4 tick e il server lo usa come battito, `HOLD_TICKS`; il client manda anche `RELEASE`). Tasto sinistro = `YoyoActionPacket.ATTACK` (colpo rapido, o trick se lo yo-yo è fuori). I click d'attacco vengono consumati in `ClientEvents` a inizio tick, prima di vanilla.
+- `motion/` è matematica pura senza classi di Minecraft (testabile in locale con `javac`): `YoyoPhase` (stati e durate), `YoyoMotion` (posizione di ogni trick in funzione del tempo, relativa alla mano del proprietario; ogni trick parte e finisce nel punto di partenza), `ArmAim` (angoli del braccio del modello e posizione della mano), `V3`.
+- `entity/YoyoEntity.java`: il server gestisce la macchina a stati e sincronizza solo fase, `DATA_SEQ`, yaw/pitch iniziali e ancore (`DATA_TARGET`); server e client calcolano lo stesso moto, il client lo disegna al tick parziale (`renderPosition`). Solo il server colpisce (tipo di danno `data/rainbowyoyo/damage_type/yoyo.json`). Combo: i 4 trick in una combo accendono `DATA_NOVA_READY` → Supernova. Le eccezioni nel tick vengono registrate e lo yo-yo viene tolto invece di far crashare.
+- Client: `client/model/YoyoMesh.java` (superficie di rotazione, asse X, UV a bande che corrispondono a `textures/entity/rainbow_yoyo.png`), `YoyoModelRenderer` (corpo + bordo luminoso con `RenderType.eyes`), `YoyoRenderer` (filo dalla mano vera, scia arcobaleno, orientamento dell'asse per trick), `YoyoItemRenderer` (BEWLR: in mano di lato come una ruota, nascosto quando è lanciato), `YoyoClientExtensions` (ArmPose che punta il braccio sullo yo-yo), `FirstPersonArm` (in prima persona il braccio viene disegnato nel mondo e punta lo yo-yo), `YoyoSpinSound` (loop che segue lo yo-yo).
+- Texture e suoni sono generati con script Python (gradient/HSV con numpy, sintesi audio + ffmpeg libvorbis); non sono nel repository.
+- Verificata compilando con il vero Forge e con un'anteprima renderizzata offline delle traiettorie (stesse classi `motion/` e `YoyoMesh`). **Non ancora provata in gioco**: se l'utente segnala problemi, parti da lì.
+
