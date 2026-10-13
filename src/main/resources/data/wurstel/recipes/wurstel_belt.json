@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "LGL",
+    "WWW"
+  ],
+  "key": {
+    "L": { "item": "minecraft:leather" },
+    "G": { "item": "minecraft:gold_ingot" },
+    "W": { "item": "wurstel:wurstel" }
+  },
+  "result": { "item": "wurstel:wurstel_belt" }
+}

@@ -1,0 +1,14 @@
+{
+  "slap": {
+    "subtitle": "subtitles.wurstel.slap",
+    "sounds": ["wurstel:slap1", "wurstel:slap2", "wurstel:slap3", "wurstel:slap4"]
+  },
+  "whoosh": {
+    "subtitle": "subtitles.wurstel.whoosh",
+    "sounds": ["wurstel:whoosh1", "wurstel:whoosh2"]
+  },
+  "squish": {
+    "subtitle": "subtitles.wurstel.squish",
+    "sounds": ["wurstel:squish1"]
+  }
+}

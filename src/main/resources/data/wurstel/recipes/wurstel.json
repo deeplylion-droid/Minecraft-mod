@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "minecraft:cooked_porkchop" },
+    { "item": "minecraft:string" }
+  ],
+  "result": { "item": "wurstel:wurstel", "count": 2 }
+}
