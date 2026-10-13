@@ -2,6 +2,8 @@
 
 Una cintura che porta un würstel gigante: 4 blocchi di lunghezza, ¼ di blocco di spessore, appeso sul davanti e sempre puntato dove guardi. Indossandola, i pugni a mano vuota diventano schiaffi di würstel morbidi e snodabili, ogni volta da un'angolazione diversa (destra, sinistra, dall'alto, dal basso, in diagonale), contro mob, giocatori e blocchi.
 
+![Anteprima dello schiaffo col würstel](docs/preview.gif)
+
 ## Installazione
 
 1. Installa **Minecraft Forge 1.20.1** (versione 47.x).
