@@ -7,7 +7,7 @@ Una cintura che porta un würstel gigante: 4 blocchi di lunghezza, ¼ di blocco 
 ## Installazione
 
 1. Installa **Minecraft Forge 1.20.1** (versione 47.x).
-2. Scarica `wurstel-1.0.0.jar` dalla pagina [Releases](../../releases/latest).
+2. Scarica `wurstel-1.0.0.jar` dalla pagina [Releases](../../releases).
 3. Mettilo nella cartella `mods` di Minecraft (anche sul server, in multiplayer).
 
 ## Come si usa
@@ -37,4 +37,8 @@ Serve Java 17 o più recente:
 ./gradlew build
 ```
 
-Il jar finisce in `build/libs/`. Su GitHub la compilazione parte da sola a ogni push (GitHub Actions) e il jar viene pubblicato nella Release.
+Il jar finisce in `build/libs/`. Su GitHub la compilazione parte da sola a ogni push (GitHub Actions): ogni versione nuova di una mod viene pubblicata in una Release sua, senza toccare quelle vecchie.
+
+## Altre mod
+
+Questo repository può contenere più mod: il Würstel Gigante sta nella radice, ogni altra mod in una cartella `mods/<nome>/` con il suo jar e le sue Release.

@@ -1,4 +1,4 @@
-name: Build mod
+name: Build mods
 
 on:
   push:
@@ -21,26 +21,48 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build the mod jar
+      # The repository root is the Würstel Gigante mod; every other mod lives in mods/<name>/
+      # as its own Gradle project and is built with the root Gradle wrapper.
+      - name: Build every mod
         run: |
           chmod +x gradlew
-          ./gradlew build --stacktrace --no-daemon
+          for dir in . mods/*/; do
+            [ -f "$dir/gradle.properties" ] || continue
+            echo "::group::Build $dir"
+            ./gradlew -p "$dir" build --stacktrace --no-daemon
+            echo "::endgroup::"
+          done
 
-      - name: Upload jar
+      - name: Upload jars
         uses: actions/upload-artifact@v4
         with:
-          name: wurstel-mod
-          path: build/libs/*.jar
+          name: mods
+          path: |
+            build/libs/*.jar
+            mods/*/build/libs/*.jar
 
-      - name: Publish release with the jar
+      # Publishes a release for every jar that has not been published yet.
+      # Existing releases and tags are never deleted or changed.
+      - name: Publish new versions
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
-          TAG="v${VERSION}"
-          gh release delete "$TAG" --yes --cleanup-tag || true
-          gh release create "$TAG" build/libs/*.jar \
-            --target "$GITHUB_SHA" \
-            --title "Würstel Gigante ${VERSION} (Forge 1.20.1)" \
-            --notes "Metti il file .jar nella cartella mods di Minecraft Forge 1.20.1 (47.x)."
+          released=$(gh release list --limit 200 --json tagName -q '.[].tagName' | while read -r tag; do
+            gh release view "$tag" --json assets -q '.assets[].name'
+          done)
+          for dir in . mods/*/; do
+            props="$dir/gradle.properties"
+            [ -f "$props" ] || continue
+            prop() { grep "^$1=" "$props" | cut -d= -f2- | tr -d '\r'; }
+            id=$(prop mod_id); name=$(prop mod_name); version=$(prop mod_version); mc=$(prop minecraft_version)
+            jar_name="${id}-${version}.jar"
+            if printf '%s\n' "$released" | grep -qxF "$jar_name"; then
+              echo "$jar_name is already published, nothing to do"
+              continue
+            fi
+            gh release create "${id}-v${version}" "$dir/build/libs/$jar_name" \
+              --target "$GITHUB_SHA" \
+              --title "${name} ${version} (Forge ${mc})" \
+              --notes "Metti il file .jar nella cartella mods di Minecraft Forge ${mc}."
+          done
