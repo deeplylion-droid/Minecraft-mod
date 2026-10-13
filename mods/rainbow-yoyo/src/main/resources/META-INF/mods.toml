@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+issueTrackerURL="https://github.com/deeplylion-droid/minecraft-mod/issues"
+
+[[mods]]
+modId="rainbowyoyo"
+version="${file.jarVersion}"
+displayName="Yo-Yo Arcobaleno"
+authors="deeplylion-droid"
+description='''
+A giant rainbow yo-yo. Throw it, keep it spinning at the end of its string, pull off tricks (Loop the Loop, Around the World, Walk the Dog, Shoot the Moon) and chain them into a Rainbow Supernova. Every hit deals 40 hearts of damage.
+'''
+
+[[dependencies.rainbowyoyo]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.rainbowyoyo]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"

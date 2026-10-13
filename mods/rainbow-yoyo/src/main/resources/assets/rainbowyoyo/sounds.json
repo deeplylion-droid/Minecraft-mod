@@ -1,0 +1,38 @@
+{
+  "throw": {
+    "subtitle": "subtitles.rainbowyoyo.throw",
+    "sounds": ["rainbowyoyo:throw1", "rainbowyoyo:throw2"]
+  },
+  "spin": {
+    "subtitle": "subtitles.rainbowyoyo.spin",
+    "sounds": ["rainbowyoyo:spin"]
+  },
+  "hit": {
+    "subtitle": "subtitles.rainbowyoyo.hit",
+    "sounds": ["rainbowyoyo:hit1", "rainbowyoyo:hit2", "rainbowyoyo:hit3"]
+  },
+  "catch": {
+    "subtitle": "subtitles.rainbowyoyo.catch",
+    "sounds": ["rainbowyoyo:catch"]
+  },
+  "trick": {
+    "subtitle": "subtitles.rainbowyoyo.trick",
+    "sounds": ["rainbowyoyo:trick"]
+  },
+  "slam": {
+    "subtitle": "subtitles.rainbowyoyo.slam",
+    "sounds": ["rainbowyoyo:slam"]
+  },
+  "charge": {
+    "subtitle": "subtitles.rainbowyoyo.charge",
+    "sounds": ["rainbowyoyo:charge"]
+  },
+  "boom": {
+    "subtitle": "subtitles.rainbowyoyo.boom",
+    "sounds": [{"name": "rainbowyoyo:boom", "attenuation_distance": 48}]
+  },
+  "ready": {
+    "subtitle": "subtitles.rainbowyoyo.ready",
+    "sounds": ["rainbowyoyo:ready"]
+  }
+}
