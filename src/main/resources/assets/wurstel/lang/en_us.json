@@ -3,6 +3,12 @@
   "item.wurstel.wurstel_belt": "Würstel Belt",
   "item.wurstel.wurstel_belt.desc": "Carries a giant 4-block würstel",
   "item.wurstel.wurstel_belt.desc2": "Punch with an empty hand to slap with it",
+  "item.wurstel.diamond_wurstel_belt": "Diamond Würstel Belt",
+  "item.wurstel.netherite_wurstel_belt": "Netherite Würstel Belt",
+  "item.wurstel.wurstel_belt.damage": "Slap damage: ×%s",
+  "item.wurstel.wurstel_belt.mining": "Mining speed: ×%s",
+  "enchantment.wurstel.turgido": "Turgido",
+  "enchantment.wurstel.turgido.desc": "Multiplies the damage of würstel slaps.",
   "subtitles.wurstel.slap": "Würstel slaps",
   "subtitles.wurstel.whoosh": "Würstel swooshes",
   "subtitles.wurstel.squish": "Würstel squishes"

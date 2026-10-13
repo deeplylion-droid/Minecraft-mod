@@ -2,7 +2,6 @@ package com.wurstel.client.anim;
 
 import com.wurstel.config.WurstelConfig;
 import com.wurstel.item.WurstelBeltItem;
-import com.wurstel.registry.ModItems;
 import com.wurstel.registry.ModSounds;
 import java.util.Map;
 import java.util.Random;
@@ -15,6 +14,7 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -128,8 +128,10 @@ public final class WurstelAnimManager {
                 level.playLocalSound(p.x, p.y, p.z, ModSounds.SLAP.get(), living.getSoundSource(),
                         1.0F, 0.85F + RANDOM.nextFloat() * 0.3F, false);
             }
-            if (particles) {
-                ItemParticleOption bits = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.WURSTEL.get()));
+            if (particles && living.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof WurstelBeltItem belt) {
+                // Bits in the colour of the würstel: meat, diamond or netherite.
+                ItemStack bitsItem = new ItemStack(belt.getWurstelMaterial().particleItem());
+                ItemParticleOption bits = new ItemParticleOption(ParticleTypes.ITEM, bitsItem);
                 for (int i = 0; i < 7; i++) {
                     level.addParticle(bits, p.x, p.y, p.z,
                             (RANDOM.nextDouble() - 0.5) * 0.3, RANDOM.nextDouble() * 0.25, (RANDOM.nextDouble() - 0.5) * 0.3);

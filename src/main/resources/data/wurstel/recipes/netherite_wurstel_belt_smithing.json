@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "minecraft:netherite_upgrade_smithing_template" },
+  "base": { "item": "wurstel:diamond_wurstel_belt" },
+  "addition": { "item": "minecraft:netherite_ingot" },
+  "result": { "item": "wurstel:netherite_wurstel_belt" }
+}

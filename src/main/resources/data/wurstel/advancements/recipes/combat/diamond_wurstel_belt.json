@@ -1,0 +1,15 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_wurstel_belt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": ["wurstel:wurstel_belt"] } ] }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": { "recipe": "wurstel:diamond_wurstel_belt" }
+    }
+  },
+  "requirements": [ ["has_wurstel_belt", "has_the_recipe"] ],
+  "rewards": { "recipes": ["wurstel:diamond_wurstel_belt"] }
+}

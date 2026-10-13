@@ -4,22 +4,25 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.wurstel.WurstelMod;
 import com.wurstel.client.anim.WurstelAnimManager;
 import com.wurstel.client.anim.WurstelAnimState;
 import com.wurstel.client.geom.WurstelGeometry;
 import com.wurstel.config.WurstelConfig;
+import com.wurstel.item.WurstelArmorMaterial;
 import com.wurstel.item.WurstelBeltItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import org.joml.Matrix3f;
@@ -29,8 +32,6 @@ import org.joml.Vector3f;
 
 /** Draws the giant würstel, both on entity models (third person) and for yourself in first person. */
 public final class WurstelRenderer {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(WurstelMod.MODID, "textures/entity/wurstel.png");
-
     /** Belt buckle on the body, in model pixels from the body pivot (the neck); -Z is the front. */
     private static final float BUCKLE_X = 0.0F;
     private static final float BUCKLE_Y = 10.5F;
@@ -43,8 +44,15 @@ public final class WurstelRenderer {
     private WurstelRenderer() {
     }
 
-    public static RenderType renderType() {
-        return RenderType.entityCutoutNoCull(TEXTURE);
+    public static RenderType renderType(ResourceLocation texture) {
+        return RenderType.entityCutoutNoCull(texture);
+    }
+
+    /** Texture of the würstel carried by this belt: plain, diamond or netherite. */
+    public static ResourceLocation texture(ItemStack belt) {
+        WurstelArmorMaterial material = belt.getItem() instanceof WurstelBeltItem item
+                ? item.getWurstelMaterial() : WurstelArmorMaterial.WURSTEL;
+        return material.wurstelTexture();
     }
 
     /** True while an entity is drawn inside a screen (the inventory preview uses an orthographic projection). */
@@ -86,7 +94,9 @@ public final class WurstelRenderer {
         }
 
         WurstelAnimState state = WurstelAnimManager.state(entity);
-        VertexConsumer consumer = buffers.getBuffer(renderType());
+        ItemStack belt = entity.getItemBySlot(EquipmentSlot.LEGS);
+        // An enchanted belt makes its würstel shimmer, like enchanted armor.
+        VertexConsumer consumer = ItemRenderer.getArmorFoilBuffer(buffers, renderType(texture(belt)), false, belt.hasFoil());
         PoseStack.Pose pose = poseStack.last();
         Matrix4f matrix = pose.pose();
         Matrix3f normal = pose.normal();
@@ -147,7 +157,12 @@ public final class WurstelRenderer {
         render(poseStack, buffers, light, OverlayTexture.NO_OVERLAY, player,
                 0.0F, crouching ? 3.2F : 0.0F, 0.0F, crouching ? 0.5F : 0.0F, 0.0F, 0.0F,
                 headYaw, pitch, partialTick, 1.0F);
-        buffers.endBatch(renderType());
+        ItemStack belt = player.getItemBySlot(EquipmentSlot.LEGS);
+        buffers.endBatch(renderType(texture(belt)));
+        if (belt.hasFoil()) {
+            // After the würstel: the glint only draws where the würstel already is.
+            buffers.endBatch(RenderType.armorEntityGlint());
+        }
         poseStack.popPose();
     }
 }

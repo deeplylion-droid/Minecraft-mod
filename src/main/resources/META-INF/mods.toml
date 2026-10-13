@@ -5,11 +5,11 @@ issueTrackerURL="https://github.com/deeplylion-droid/minecraft-mod/issues"
 
 [[mods]]
 modId="wurstel"
-version="1.0.0"
+version="${file.jarVersion}"
 displayName="Würstel Gigante"
 authors="deeplylion-droid"
 description='''
-A belt that carries a giant 4-block wurstel. Wear it and your bare-hand punches become floppy wurstel slaps, from different angles, against mobs, players and blocks.
+A belt that carries a giant 4-block wurstel. Wear it and your bare-hand punches become floppy wurstel slaps, from different angles, against mobs, players and blocks. Upgrade it to diamond and netherite and enchant it with Turgido.
 '''
 
 [[dependencies.wurstel]]

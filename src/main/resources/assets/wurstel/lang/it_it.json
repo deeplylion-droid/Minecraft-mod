@@ -3,6 +3,12 @@
   "item.wurstel.wurstel_belt": "Cintura Würstel",
   "item.wurstel.wurstel_belt.desc": "Porta un würstel gigante di 4 blocchi",
   "item.wurstel.wurstel_belt.desc2": "Dai un pugno a mano vuota per schiaffeggiare",
+  "item.wurstel.diamond_wurstel_belt": "Cintura Würstel di Diamante",
+  "item.wurstel.netherite_wurstel_belt": "Cintura Würstel di Netherite",
+  "item.wurstel.wurstel_belt.damage": "Danno degli schiaffi: ×%s",
+  "item.wurstel.wurstel_belt.mining": "Velocità di scavo: ×%s",
+  "enchantment.wurstel.turgido": "Turgido",
+  "enchantment.wurstel.turgido.desc": "Moltiplica il danno degli schiaffi di würstel.",
   "subtitles.wurstel.slap": "Schiaffo di würstel",
   "subtitles.wurstel.whoosh": "Würstel sferzante",
   "subtitles.wurstel.squish": "Würstel molliccio"

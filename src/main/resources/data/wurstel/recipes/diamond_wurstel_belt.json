@@ -1,0 +1,14 @@
+{
+  "type": "wurstel:belt_upgrade",
+  "category": "equipment",
+  "pattern": [
+    " D ",
+    "DBD",
+    " D "
+  ],
+  "key": {
+    "D": { "item": "minecraft:diamond" },
+    "B": { "item": "wurstel:wurstel_belt" }
+  },
+  "result": { "item": "wurstel:diamond_wurstel_belt" }
+}
