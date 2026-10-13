@@ -26,6 +26,8 @@ Il würstel si vede in terza persona, lo vedono gli altri giocatori e lo vedi an
 
 ## Würstel di diamante e di netherite
 
+![Würstel normale, di diamante e di netherite](docs/materials.png)
+
 - **Cintura Würstel di Diamante**, al banco da lavoro:
   ```
               diamante
