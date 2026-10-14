@@ -1,0 +1,98 @@
+{
+  "sting": {
+    "subtitle": "subtitles.jumpscares.sting",
+    "sounds": [
+      {
+        "name": "jumpscares:sting"
+      }
+    ]
+  },
+  "whoosh": {
+    "subtitle": "subtitles.jumpscares.whoosh",
+    "sounds": [
+      {
+        "name": "jumpscares:whoosh"
+      }
+    ]
+  },
+  "clown.intro": {
+    "subtitle": "subtitles.jumpscares.clown",
+    "sounds": [
+      {
+        "name": "jumpscares:clown_intro"
+      }
+    ]
+  },
+  "clown.scream": {
+    "subtitle": "subtitles.jumpscares.clown",
+    "sounds": [
+      {
+        "name": "jumpscares:clown_scream"
+      }
+    ]
+  },
+  "lady.intro": {
+    "subtitle": "subtitles.jumpscares.lady",
+    "sounds": [
+      {
+        "name": "jumpscares:lady_intro"
+      }
+    ]
+  },
+  "lady.scream": {
+    "subtitle": "subtitles.jumpscares.lady",
+    "sounds": [
+      {
+        "name": "jumpscares:lady_scream"
+      }
+    ]
+  },
+  "spider.intro": {
+    "subtitle": "subtitles.jumpscares.spider",
+    "sounds": [
+      {
+        "name": "jumpscares:spider_intro"
+      }
+    ]
+  },
+  "spider.scream": {
+    "subtitle": "subtitles.jumpscares.spider",
+    "sounds": [
+      {
+        "name": "jumpscares:spider_scream"
+      }
+    ]
+  },
+  "corpse.intro": {
+    "subtitle": "subtitles.jumpscares.corpse",
+    "sounds": [
+      {
+        "name": "jumpscares:corpse_intro"
+      }
+    ]
+  },
+  "corpse.scream": {
+    "subtitle": "subtitles.jumpscares.corpse",
+    "sounds": [
+      {
+        "name": "jumpscares:corpse_scream"
+      }
+    ]
+  },
+  "demon.intro": {
+    "subtitle": "subtitles.jumpscares.demon",
+    "sounds": [
+      {
+        "name": "jumpscares:demon_intro"
+      }
+    ]
+  },
+  "demon.scream": {
+    "subtitle": "subtitles.jumpscares.demon",
+    "sounds": [
+      {
+        "name": "jumpscares:demon_scream"
+      }
+    ]
+  }
+}

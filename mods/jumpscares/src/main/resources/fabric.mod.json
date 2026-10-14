@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "jumpscares",
+  "version": "${version}",
+  "name": "Jumpscare!",
+  "description": "Five terrifying 3D monsters that leap at your friends' faces, with ear-splitting screams and screen shake. Use /jumpscare or throw a scare pearl.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/jumpscares/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jumpscares.Jumpscares"
+    ],
+    "client": [
+      "com.jumpscares.client.JumpscaresClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "jumpscares.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "accessWidener": "jumpscares.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

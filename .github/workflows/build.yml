@@ -14,10 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Forge 1.20.1 mods build with Java 17, Fabric 1.21.1 mods with Java 21
+      # (each mod says which one in gradle.properties: java_version, default 17).
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: |
+            21
+            17
 
       - uses: gradle/actions/setup-gradle@v4
 
@@ -28,8 +32,10 @@ jobs:
           chmod +x gradlew
           for dir in . mods/*/; do
             [ -f "$dir/gradle.properties" ] || continue
-            echo "::group::Build $dir"
-            ./gradlew -p "$dir" build --stacktrace --no-daemon
+            java=$(grep '^java_version=' "$dir/gradle.properties" | cut -d= -f2- | tr -d '\r')
+            java_home_var="JAVA_HOME_${java:-17}_X64"
+            echo "::group::Build $dir (Java ${java:-17})"
+            JAVA_HOME="${!java_home_var}" ./gradlew -p "$dir" build --stacktrace --no-daemon
             echo "::endgroup::"
           done
 
@@ -56,6 +62,11 @@ jobs:
             [ -f "$props" ] || continue
             prop() { grep "^$1=" "$props" | cut -d= -f2- | tr -d '\r'; }
             id=$(prop mod_id); name=$(prop mod_name); version=$(prop mod_version); mc=$(prop minecraft_version)
+            if [ "$(prop mod_loader)" = "fabric" ]; then
+              loader="Fabric"; notes="Metti il file .jar nella cartella mods di Minecraft ${mc} con Fabric Loader. Serve anche Fabric API."
+            else
+              loader="Forge"; notes="Metti il file .jar nella cartella mods di Minecraft Forge ${mc}."
+            fi
             jar_name="${id}-${version}.jar"
             if printf '%s\n' "$released" | grep -qxF "$jar_name"; then
               echo "$jar_name is already published, nothing to do"
@@ -63,6 +74,6 @@ jobs:
             fi
             gh release create "${id}-v${version}" "$dir/build/libs/$jar_name" \
               --target "$GITHUB_SHA" \
-              --title "${name} ${version} (Forge ${mc})" \
-              --notes "Metti il file .jar nella cartella mods di Minecraft Forge ${mc}."
+              --title "${name} ${version} (${loader} ${mc})" \
+              --notes "$notes"
           done

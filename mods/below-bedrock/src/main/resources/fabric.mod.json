@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "belowbedrock",
+  "version": "${version}",
+  "name": "Sotto la Bedrock",
+  "description": "Something is under the bedrock. A glitched pickaxe, a very long fall, and a faded copy of your world where someone else lives.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/belowbedrock/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.belowbedrock.BelowBedrock"
+    ],
+    "client": [
+      "com.belowbedrock.client.BelowBedrockClient"
+    ]
+  },
+  "mixins": [
+    "belowbedrock.mixins.json",
+    {
+      "config": "belowbedrock.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "accessWidener": "belowbedrock.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
