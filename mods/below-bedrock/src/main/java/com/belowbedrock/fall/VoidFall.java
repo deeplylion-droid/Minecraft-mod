@@ -150,10 +150,8 @@ public final class VoidFall {
         }
         // Faint sparks rushing past: left still in the air while you fall through them (the void has no light,
         // so only a particle that glows by itself can be seen down here).
-        if (age % 2 == 0) {
-            level.sendParticles(player, ParticleTypes.END_ROD, true, player.getX(), player.getY() - 14.0, player.getZ(),
-                    1, 5.0, 6.0, 5.0, 0.0);
-        }
+        level.sendParticles(player, ParticleTypes.END_ROD, true, player.getX(), player.getY() - 14.0, player.getZ(),
+                1, 5.0, 6.0, 5.0, 0.0);
         if (progress > 0.55F) {
             int interval = (int) Mth.lerp((progress - 0.55F) / 0.45F, 28.0F, 9.0F);
             if (age % interval == 0) {
