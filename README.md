@@ -136,3 +136,28 @@ Una mod misteriosa per **Fabric 1.21.1**: serve anche **Fabric API**. Jar: `belo
   - `/faded fall`: ti butta subito nel vuoto, senza scavare;
   - l'uovo generatore (scheda *Uova generatrici*) o `/summon belowbedrock:inhabitant`: Lui resta fermo a fissarti.
 - Gamerule: `/gamerule fadedHauntings false` (niente eventi e niente Lui), `/gamerule fadedSightings false` (non ti segue più a casa).
+
+### Jumpscare! (`mods/jumpscares/`)
+
+![I cinque mostri in faccia, e quello che vede chi guarda](docs/jumpscares-preview.png)
+
+Jumpscare da fare agli amici, per **Fabric 1.21.1**: serve anche **Fabric API**. Jar: `jumpscares-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori (chi non ce l'ha non vede niente).
+
+- **Cinque mostri 3D** che ti saltano in faccia, ognuno con entrata, urla ed effetti suoi:
+  - **Il Clown**: salta fuori dal basso su una molla, come un pupazzo a molla, ride e poi ti urla in faccia con due file di denti a punta. Flash rosso e coriandoli.
+  - **La Dama Bianca**: si avvicina a scatti tra le scariche di disturbo, con la testa piegata; poi la mascella le scivola giù e si apre un buco nero. Strillo da banshee, e dopo qualche secondo di Oscurità.
+  - **Il Ragno**: cala dall'alto sul suo filo, occhi lucidi, zanne che colano veleno, zampe che ti avvolgono. Sibilo, ragnatele e Lentezza (resti paralizzato).
+  - **Il Cadavere**: arriva a scatti come un pupazzo rotto, con un occhio fuori dall'orbita e la testa che si contorce. Ruggito marcio e Nausea.
+  - **Il Demone**: sale dal basso tra le fiamme, corna, crepe di lava e la gola come una fornace. Ruggito profondo con un boato.
+- Ogni jumpscare: il mostro arriva a pochi centimetri dalla telecamera, lo schermo trema, flash colorato, disturbo e vignetta; poi l'ultimo balzo dentro la sua bocca e tutto nero. L'HUD sparisce (e gli effetti si vedono anche con F1). Chi lo subisce fa un piccolo salto indietro.
+- **Suoni fortissimi**: urla sintetizzate (suonate due volte insieme) e un colpo d'orchestra. Occhio alle cuffie.
+- **Perle Spavento**, una per mostro: si lanciano come le perle di ender. Chi viene colpito, o è a meno di 2,5 blocchi da dove cade, si prende quel jumpscare; chi l'ha lanciata legge "Hai spaventato ...!". Lanciata ai tuoi piedi spaventa te, così la provi anche da solo. Funzionano anche nel distributore: una trappola dietro una piastra a pressione.
+- **Ricette** (senza forma, danno 2 perle):
+  - Clown: perla di ender + colorante rosso + colorante bianco
+  - Dama Bianca: perla di ender + membrana di fantasma + colorante nero
+  - Ragno: perla di ender + occhio di ragno + filo
+  - Cadavere: perla di ender + carne marcia + osso
+  - Demone: perla di ender + polvere di blaze + carica di fuoco
+- **Comando** (da operatore, o con i trucchi attivi): `/jumpscare <giocatori> [clown|dama|ragno|cadavere|demone|casuale] [secondi]`. Con i secondi parte più tardi, così hai il tempo di fare l'indifferente. Il messaggio di conferma lo vedi solo tu.
+- **Multiplayer**: chi è vicino vede il mostro saltare in faccia alla vittima, lo sente urlare... e a un certo punto il mostro gira la testa e fissa anche lui.
+- Accessibilità: *Effetti di distorsione* attenua il tremolio, *Lampi nel cielo attenuati* attenua i flash.
