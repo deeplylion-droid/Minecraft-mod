@@ -8,8 +8,8 @@ public final class Signs {
     /** Message id and number of lines; the text is in the language files: sign.belowbedrock.<id>.<line>. */
     private static final String[] IDS = {"turn_back", "never_sleeps", "counted", "no_rain", "lid", "been_here", "eyes", "stop",
             "house", "dig", "animals", "arrow", "hello", "its_me", "brb", "no_sun", "waiting", "day_one", "help", "question",
-            "behind", "quiet", "again", "empty", "not_yours"};
-    private static final int[] LINES = {3, 3, 4, 2, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 2, 2, 3, 1, 1, 1, 2, 2, 2, 0, 3};
+            "behind", "quiet", "again", "empty", "not_yours", "nothing_grows"};
+    private static final int[] LINES = {3, 3, 4, 2, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 2, 2, 3, 1, 1, 1, 2, 2, 2, 0, 3, 3};
 
     private Signs() {
     }

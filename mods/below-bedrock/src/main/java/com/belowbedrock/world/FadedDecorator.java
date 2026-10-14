@@ -41,9 +41,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 /**
  * The details of the faded world, added to each chunk after the vanilla features: signs that know
- * too much, leafless trees, 2x2 tunnels, sand pyramids in the sea, doors to nowhere, beds in the
- * grass, eternal fires, abandoned camps, buried chests, empty rooms, shafts down to the bedrock,
- * figures standing in the fog, and maps of Him nailed to trees.
+ * too much, 2x2 tunnels, sand pyramids in the sea, doors to nowhere, beds in the open, eternal
+ * fires, abandoned camps, buried chests, empty rooms, shafts down to the bedrock, figures standing
+ * in the fog, and maps of Him hanging on pieces of wall.
  *
  * <p>Everything is deterministic per chunk and stays within the chunk and its direct neighbours,
  * which is what a feature may touch while the chunk is generated.</p>
@@ -52,10 +52,9 @@ public final class FadedDecorator {
     /** About one chunk in eleven has something. */
     private static final float CHANCE = 0.09F;
     private static final Block[] SIGNS = {Blocks.OAK_SIGN, Blocks.SPRUCE_SIGN, Blocks.BIRCH_SIGN, Blocks.DARK_OAK_SIGN};
-    private static final Block[] LOGS = {Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.SPRUCE_LOG, Blocks.DARK_OAK_LOG};
 
     private enum Feature {
-        SIGN(18), DEAD_TREE(14), DOOR(7), BED(6), FLOATING_BLOCK(6), TORCH_RING(6), TUNNEL(6), PILLAR(6), CAMP(5),
+        SIGN(20), WALL_MAP(9), DOOR(7), BED(6), FLOATING_BLOCK(6), TORCH_RING(6), TUNNEL(6), PILLAR(6), CAMP(5),
         BURIED_CHEST(5), ROOM(5), STATUE(4), ETERNAL_FIRE(4), SHAFT(3);
 
         final int weight;
@@ -91,7 +90,7 @@ public final class FadedDecorator {
             }
             switch (pick(random)) {
                 case SIGN -> sign(level, random, pos, Signs.random(random));
-                case DEAD_TREE -> deadTree(level, random, pos);
+                case WALL_MAP -> wallMap(level, random, pos);
                 case DOOR -> door(level, random, pos);
                 case BED -> bed(level, random, pos);
                 case FLOATING_BLOCK -> floatingBlock(level, random, pos);
@@ -217,38 +216,34 @@ public final class FadedDecorator {
         }
     }
 
-    /** A tree with no leaves. */
-    private static void deadTree(WorldGenLevel level, RandomSource random, BlockPos pos) {
-        if (!ground(level, pos)) {
-            return;
-        }
-        BlockState log = LOGS[random.nextInt(LOGS.length)].defaultBlockState();
-        int height = 4 + random.nextInt(4);
-        for (int i = 0; i < height; i++) {
-            if (!free(level, pos.above(i))) {
+    /** A piece of wall in the middle of nowhere, and one of His maps hanging on it. */
+    private static void wallMap(WorldGenLevel level, RandomSource random, BlockPos pos) {
+        Direction facing = horizontal(random);
+        Direction along = facing.getClockWise();
+        for (int k = -1; k <= 1; k++) {
+            BlockPos base = pos.relative(along, k);
+            if (!ground(level, base) || !free(level, base) || !free(level, base.above())) {
                 return;
             }
-            set(level, pos.above(i), log);
         }
-        int branches = 1 + random.nextInt(3);
-        for (int b = 0; b < branches; b++) {
-            Direction side = horizontal(random);
-            BlockPos start = pos.above(height - 1 - random.nextInt(2));
-            int length = 1 + random.nextInt(2);
-            for (int i = 1; i <= length; i++) {
-                BlockPos branch = start.relative(side, i).above(i == length ? 1 : 0);
-                if (free(level, branch)) {
-                    set(level, branch, log.setValue(RotatedPillarBlock.AXIS, i == length ? Direction.Axis.Y : side.getAxis()));
-                }
-            }
+        BlockState[] materials = {Blocks.STONE_BRICKS.defaultBlockState(), Blocks.OAK_PLANKS.defaultBlockState(),
+                Blocks.WHITE_CONCRETE.defaultBlockState(), Blocks.SMOOTH_STONE.defaultBlockState()};
+        BlockState wall = materials[random.nextInt(materials.length)];
+        for (int k = -1; k <= 1; k++) {
+            set(level, pos.relative(along, k), wall);
+            set(level, pos.relative(along, k).above(), wall);
         }
+        mapFrame(level, random, pos.above().relative(facing), facing);
         if (random.nextInt(3) == 0) {
-            Direction facing = horizontal(random);
-            mapFrame(level, random, pos.above(1).relative(facing), facing);
+            BlockPos signPos = pos.relative(facing.getOpposite());
+            if (free(level, signPos)) {
+                set(level, signPos, Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, facing.getOpposite()));
+                writeSign(level, signPos, Signs.random(random));
+            }
         }
     }
 
-    /** A door standing in the grass, leading nowhere. */
+    /** A door standing in the open, leading nowhere. */
     private static void door(WorldGenLevel level, RandomSource random, BlockPos pos) {
         if (!ground(level, pos) || !free(level, pos) || !free(level, pos.above())) {
             return;
@@ -495,7 +490,7 @@ public final class FadedDecorator {
             for (int dz = -2; dz <= 2; dz++) {
                 BlockPos at = surface(level, pos.getX() + dx, pos.getZ() + dz);
                 if (!level.getBlockState(at).isAir() && free(level, at)) {
-                    set(level, at, Blocks.AIR.defaultBlockState()); // no grass to spread to
+                    set(level, at, Blocks.AIR.defaultBlockState()); // nothing to spread to
                 }
                 BlockPos groundPos = at.below();
                 if (level.getBlockState(groundPos).is(Blocks.GRASS_BLOCK)) {

@@ -106,7 +106,7 @@ Uno yo-yo arcobaleno gigante (1,25 blocchi), per Forge 1.20.1. Jar: `rainbowyoyo
 
 ![Il mondo sbiadito e Lui](docs/below-bedrock-preview.png)
 
-Una mod misteriosa per **Fabric 1.21.1**: serve anche **Fabric API**. Jar: `belowbedrock-1.0.0.jar` nelle [Releases](../../releases). Va installata anche sul server, in multiplayer.
+Una mod misteriosa per **Fabric 1.21.1**: serve anche **Fabric API**. Jar: `belowbedrock-1.1.0.jar` nelle [Releases](../../releases). Va installata anche sul server, in multiplayer.
 
 - **Piccone di diamante glitchato**: la ricetta del piccone di diamante, ma al contrario. La texture ogni tanto si glitcha e una lettera del nome non si legge mai.
   ```
@@ -116,8 +116,8 @@ Una mod misteriosa per **Fabric 1.21.1**: serve anche **Fabric API**. Jar: `belo
   ```
 - È l'unico attrezzo che **rompe la bedrock** (circa 4 secondi a blocco), solo nel mondo normale e in quello sbiadito.
 - **Buttati nel vuoto**: non muori. Cadi per 30-40 secondi nel buio, con il vento, un disco suonato troppo lento, un battito che accelera, voci e glitch. Poi diventa tutto nero...
-- ...e ti svegli nel **mondo sbiadito**: è la mappa del tuo mondo (stesso seme, infinita come quella normale), ma senza colori, senza sole, senza animali né mostri, sempre di giorno, nella nebbia. E la tua casa non c'è.
-- In giro trovi dettagli inquietanti: cartelli che sanno troppo, alberi senza foglie, tunnel 2x2, piramidi di sabbia nel mare, porte in mezzo al nulla, letti nell'erba, fuochi eterni, accampamenti abbandonati, bauli sepolti sotto un cartello "QUI", stanze vuote (gialle, bianche o camere da letto), pozzi dritti fino alla bedrock, figure ferme nella nebbia. E le **mappe**: 9 immagini di Lui, appese agli alberi, nelle stanze e nei bauli, insieme al diario di chi è caduto prima di te.
+- ...e ti svegli nel **mondo sbiadito**: è la mappa del tuo mondo (stesso seme, infinita come quella normale), ma senza colori, senza sole, senza animali né mostri, sempre di giorno, nella nebbia. E non ci cresce niente: niente alberi, niente erba, niente fiori, funghi o alghe; il terreno è terra nuda e nei villaggi i campi sono vuoti. E la tua casa non c'è.
+- In giro trovi dettagli inquietanti: cartelli che sanno troppo, pezzi di muro in mezzo al nulla, tunnel 2x2, piramidi di sabbia nel mare, porte che non portano da nessuna parte, letti all'aperto, fuochi eterni, accampamenti abbandonati, bauli sepolti sotto un cartello "QUI", stanze vuote (gialle, bianche o camere da letto), pozzi dritti fino alla bedrock, figure ferme nella nebbia. E le **mappe**: 9 immagini di Lui, appese ai muri e nelle stanze o chiuse nei bauli, insieme al diario di chi è caduto prima di te.
 - **Lui**: alto, pallido, occhi neri, braccia troppo lunghe, nessuna ombra. Non si può ferire.
   - ti guarda da lontano e sparisce se lo fissi;
   - compare con la coda dell'occhio;

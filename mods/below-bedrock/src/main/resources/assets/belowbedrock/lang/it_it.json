@@ -27,7 +27,7 @@
   "diary.belowbedrock.2": "Diario, seconda parte",
   "diary.belowbedrock.3": "Diario, ultima parte",
   "diary.belowbedrock.1.1": "Giorno 1.\n\nHo rotto la bedrock con quel piccone sbagliato. Sono caduto per un tempo lunghissimo.\n\nMi sono svegliato qui. È il mio mondo. Ma la mia casa non c'è.",
-  "diary.belowbedrock.1.2": "Giorno 2.\n\nNessun animale. Nessun mostro. Nessun suono.\n\nIl sole non c'è, eppure è sempre giorno. I colori sono... stanchi.",
+  "diary.belowbedrock.1.2": "Giorno 2.\n\nNessun animale. Nessun albero. Nemmeno l'erba. Nessun suono.\n\nIl sole non c'è, eppure è sempre giorno. I colori sono... stanchi.",
   "diary.belowbedrock.1.3": "Giorno 3.\n\nHo trovato un cartello. C'era scritto quello che avevo pensato ieri, senza dirlo a nessuno.",
   "diary.belowbedrock.1.4": "Giorno 4.\n\nC'era qualcuno sulla collina. Alto. Bianco. Fermo.\n\nHo sbattuto le palpebre e non c'era più.",
   "diary.belowbedrock.2.1": "Giorno 6.\n\nMi lascia delle cose. Mappe. Sopra c'è disegnato lui.\n\nIn una c'ero anch'io, di spalle.",
@@ -126,5 +126,8 @@
   "gamerule.fadedSightings.description": "Dopo il ritorno, ogni tanto Lui appare in lontananza nel mondo normale.",
   "commands.belowbedrock.unknown": "\"%s\" non esiste. Scegli tra: %s",
   "commands.belowbedrock.nothing": "Non è successo niente (forse qui non si può).",
-  "commands.belowbedrock.done": "Fatto (%s giocatori)."
+  "commands.belowbedrock.done": "Fatto (%s giocatori).",
+  "sign.belowbedrock.nothing_grows.1": "qui non",
+  "sign.belowbedrock.nothing_grows.2": "cresce",
+  "sign.belowbedrock.nothing_grows.3": "niente"
 }
