@@ -1,0 +1,13 @@
+{
+  "parent": "belowbedrock:glitched_pickaxe",
+  "display": {
+    "icon": { "id": "minecraft:bedrock" },
+    "title": { "translate": "advancements.belowbedrock.break_bedrock.title" },
+    "description": { "translate": "advancements.belowbedrock.break_bedrock.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": { "done": { "trigger": "minecraft:impossible" } }
+}

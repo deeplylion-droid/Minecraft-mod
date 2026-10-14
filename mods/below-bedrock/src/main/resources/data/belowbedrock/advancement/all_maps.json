@@ -1,0 +1,166 @@
+{
+  "parent": "belowbedrock:seen_him",
+  "display": {
+    "icon": {
+      "id": "minecraft:filled_map"
+    },
+    "title": {
+      "translate": "advancements.belowbedrock.all_maps.title"
+    },
+    "description": {
+      "translate": "advancements.belowbedrock.all_maps.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "field": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"field\"}"
+            }
+          }
+        ]
+      }
+    },
+    "trees": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"trees\"}"
+            }
+          }
+        ]
+      }
+    },
+    "face": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"face\"}"
+            }
+          }
+        ]
+      }
+    },
+    "corridor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"corridor\"}"
+            }
+          }
+        ]
+      }
+    },
+    "behind": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"behind\"}"
+            }
+          }
+        ]
+      }
+    },
+    "window": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"window\"}"
+            }
+          }
+        ]
+      }
+    },
+    "hole": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"hole\"}"
+            }
+          }
+        ]
+      }
+    },
+    "drawing": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"drawing\"}"
+            }
+          }
+        ]
+      }
+    },
+    "watching": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:filled_map",
+            "predicates": {
+              "minecraft:custom_data": "{belowbedrock_picture:\"watching\"}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "field"
+    ],
+    [
+      "trees"
+    ],
+    [
+      "face"
+    ],
+    [
+      "corridor"
+    ],
+    [
+      "behind"
+    ],
+    [
+      "window"
+    ],
+    [
+      "hole"
+    ],
+    [
+      "drawing"
+    ],
+    [
+      "watching"
+    ]
+  ]
+}

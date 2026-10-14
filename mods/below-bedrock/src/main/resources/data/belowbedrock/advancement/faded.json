@@ -1,0 +1,18 @@
+{
+  "parent": "belowbedrock:break_bedrock",
+  "display": {
+    "icon": { "id": "minecraft:gray_stained_glass" },
+    "title": { "translate": "advancements.belowbedrock.faded.title" },
+    "description": { "translate": "advancements.belowbedrock.faded.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "entered": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": { "to": "belowbedrock:faded" }
+    }
+  }
+}

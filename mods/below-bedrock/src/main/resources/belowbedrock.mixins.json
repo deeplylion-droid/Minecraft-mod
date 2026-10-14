@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.belowbedrock.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BaseSpawnerMixin",
+    "BlockBehaviourMixin",
+    "ChunkGeneratorMixin",
+    "NaturalSpawnerMixin",
+    "TrialSpawnerMixin",
+    "WorldDimensionsMixin",
+    "WorldGenRegionMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

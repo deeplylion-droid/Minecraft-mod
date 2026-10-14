@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:story/mine_diamond",
+  "display": {
+    "icon": { "id": "belowbedrock:glitched_pickaxe" },
+    "title": { "translate": "advancements.belowbedrock.glitched_pickaxe.title" },
+    "description": { "translate": "advancements.belowbedrock.glitched_pickaxe.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "has_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [{ "items": "belowbedrock:glitched_pickaxe" }] }
+    }
+  }
+}
