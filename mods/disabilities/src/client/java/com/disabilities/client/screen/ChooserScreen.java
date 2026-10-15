@@ -4,6 +4,7 @@ import com.disabilities.Disabilities;
 import com.disabilities.client.Me;
 import com.disabilities.condition.Condition;
 import com.disabilities.net.Net;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -171,7 +172,7 @@ public class ChooserScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         Condition c = this.cardAt(event.x(), event.y());
-        if (c != null && event.button() == 0) {
+        if (c != null && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
             this.toggle(c);
             return true;
         }

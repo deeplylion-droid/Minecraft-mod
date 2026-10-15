@@ -166,7 +166,7 @@ Jumpscare da fare agli amici, per **Fabric 1.21.1**: serve anche **Fabric API**.
 
 ![La scelta obbligatoria e alcune disabilità, viste da dentro e da fuori](docs/disabilities-preview.png)
 
-Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
+Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.0.1.jar` nelle [Releases](../../releases) (la 1.0.0 non faceva cliccare le carte nella scelta: usate la 1.0.1). Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
 
 - **Alla prima entrata nel mondo è obbligatorio scegliere due disabilità** su 21, da una schermata che non si può chiudere (finché scegli non puoi essere ferito). Passando sopra una carta leggi cosa cambia per te e cosa vedono gli altri. Il pulsante *Casuale* sceglie per te.
 - **Ognuno le sue**: due giocatori non possono avere la stessa disabilità (con 8 giocatori se ne usano 16 su 21). Le carte già prese sono segnate *PRESA*; alcune coppie non vanno insieme (cieco + miope, sedia a rotelle + stampelle, stampelle + un braccio solo...).
@@ -208,3 +208,4 @@ Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0
   - I nomi da usare: `cieco`, `acromatopsia`, `miope`, `monocolo`, `albino`, `sordo`, `muto`, `dislessico`, `sedia`, `stampelle`, `monco`, `nano`, `obeso`, `parkinson`, `narcolessia`, `tourette`, `amnesia`, `vertigini`, `asma`, `emofilia`, `allergia` (il tab li suggerisce).
 - **Gamerule**: `/gamerule disabilities:unique false` (disabilità ripetibili), `/gamerule disabilities:reroll_on_death true` (quando muori riscegli), `/gamerule disabilities:episodes false` (mette in pausa sonni, tic, starnuti, blocchi, inciampi e dimenticanze).
 - In live: la mod non può spegnere il vostro microfono su Discord, quindi chi è muto o sordo deve stare al gioco.
+- **Se Minecraft si chiude da solo mentre carica** (con schede NVIDIA, codice `-1073741819` / `0xC0000005` nel log, senza errori Java): si rompe il driver video mentre il gioco prepara la grafica. Nelle impostazioni *Video* scegliete **Vulkan** come API grafica (o mettete `preferredGraphicsBackend:"vulkan"` in `options.txt`), oppure nel Pannello di controllo NVIDIA spegnete *Threaded optimization* per `javaw.exe`; con MultiMC conviene Prism Launcher.
