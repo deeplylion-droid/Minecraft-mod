@@ -684,25 +684,30 @@ public final class Ailments {
         player.sendOverlayMessage(Component.translatable("disabilities.msg.stumble").withStyle(ChatFormatting.DARK_AQUA));
     }
 
-    private static boolean allergen(BlockState state) {
-        return state.is(BlockTags.FLOWERS) || state.is(BlockTags.LEAVES) || state.is(Blocks.SHORT_GRASS) || state.is(Blocks.TALL_GRASS)
-                || state.is(Blocks.FERN) || state.is(Blocks.LARGE_FERN) || state.is(Blocks.BUSH) || state.is(Blocks.HAY_BLOCK);
+    /** How much pollen or hay a block gives off (0 = none). */
+    private static float allergen(BlockState state) {
+        if (state.is(BlockTags.FLOWERS) || state.is(Blocks.HAY_BLOCK)) {
+            return 1.0F;
+        }
+        if (state.is(Blocks.SHORT_GRASS) || state.is(Blocks.TALL_GRASS) || state.is(Blocks.FERN) || state.is(Blocks.LARGE_FERN)
+                || state.is(Blocks.BUSH)) {
+            return 0.6F;
+        }
+        return state.is(BlockTags.LEAVES) ? 0.35F : 0.0F;
     }
 
     private static void tickAllergy(ServerPlayer player, Tracker t, long now) {
         ServerLevel level = player.level();
         RandomSource random = player.getRandom();
         BlockPos center = player.blockPosition();
-        int found = 0;
+        float found = 0.0F;
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int i = 0; i < 48; i++) {
             pos.set(center.getX() + random.nextInt(11) - 5, center.getY() + random.nextInt(6) - 2, center.getZ() + random.nextInt(11) - 5);
-            if (allergen(level.getBlockState(pos))) {
-                found++;
-            }
+            found += allergen(level.getBlockState(pos));
         }
         int animals = level.getEntitiesOfClass(Animal.class, new AABB(center).inflate(6)).size();
-        float exposure = Mth.clamp(found / 10.0F + animals * 0.25F, 0.0F, 1.0F);
+        float exposure = Mth.clamp(found / 8.0F + animals * 0.25F, 0.0F, 1.0F);
         t.allergen = t.allergen * 0.7F + exposure * 0.3F;
         if (t.allergen > 0.12F && now - t.lastSneeze > 80 && random.nextFloat() < t.allergen * 0.14F) {
             t.lastSneeze = now;

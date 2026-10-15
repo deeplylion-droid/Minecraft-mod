@@ -161,3 +161,50 @@ Jumpscare da fare agli amici, per **Fabric 1.21.1**: serve anche **Fabric API**.
 - **Comando** (da operatore, o con i trucchi attivi): `/jumpscare <giocatori> [clown|dama|ragno|cadavere|demone|casuale] [secondi]`. Con i secondi parte più tardi, così hai il tempo di fare l'indifferente. Il messaggio di conferma lo vedi solo tu.
 - **Multiplayer**: chi è vicino vede il mostro saltare in faccia alla vittima, lo sente urlare... e a un certo punto il mostro gira la testa e fissa anche lui.
 - Accessibilità: *Effetti di distorsione* attenua il tremolio, *Lampi nel cielo attenuati* attenua i flash.
+
+### Disabilità (`mods/disabilities/`)
+
+![La scelta obbligatoria e alcune disabilità, viste da dentro e da fuori](docs/disabilities-preview.png)
+
+Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
+
+- **Alla prima entrata nel mondo è obbligatorio scegliere due disabilità** su 21, da una schermata che non si può chiudere (finché scegli non puoi essere ferito). Passando sopra una carta leggi cosa cambia per te e cosa vedono gli altri. Il pulsante *Casuale* sceglie per te.
+- **Ognuno le sue**: due giocatori non possono avere la stessa disabilità (con 8 giocatori se ne usano 16 su 21). Le carte già prese sono segnate *PRESA*; alcune coppie non vanno insieme (cieco + miope, sedia a rotelle + stampelle, stampelle + un braccio solo...).
+- Quando qualcuno sceglie, in chat compare per tutti: "*Mario ha scelto: ♿ Paraplegia e 🔇 Sordità*" (passa sopra i nomi per la descrizione).
+- **Le icone delle disabilità** stanno dopo il nome di ognuno: sopra la testa, nella lista giocatori (Tab), in chat e nei messaggi di morte. Le tue sono anche in alto a sinistra.
+- Gli effetti sulla vista restano anche nascondendo l'HUD (F1) e in terza persona: niente trucchi.
+
+| Disabilità | Cosa cambia per te | Cosa vedono gli altri |
+|---|---|---|
+| Cecità | Vedi solo a 3 blocchi, cielo compreso; chi fa rumore si illumina per un attimo. Col **bastone bianco** (tasto destro) per qualche secondo vedi intorno | Occhiali scuri, il bastone che batte a terra mentre cammini |
+| Acromatopsia | Tutto in bianco e nero, inventario compreso | Occhiali con le lenti rosa |
+| Miopia grave | Oltre pochi blocchi è tutto sfocato | Occhiali spessi |
+| Cieco da un occhio | Metà sinistra dello schermo buia | Benda sull'occhio |
+| Albinismo | Di giorno all'aperto il sole ti abbaglia e, senza elmo, ti brucia | Capelli bianchi e pelle pallidissima (dalla tua skin); fumi al sole |
+| Sordità | Nessun suono, neanche la musica | Apparecchi acustici |
+| Mutismo | Non puoi scrivere in chat (né /msg, /me...): fai i **gesti** col tasto **G** (Ciao, Sì, No, Vieni qui, Aiuto, Pericolo, Grazie, Seguimi) | Il gesto con le braccia, un fumetto sopra la testa e una riga in chat per chi è vicino |
+| Dislessia | Tutte le scritte hanno le lettere che si mescolano (menu, chat, cartelli, inventario) | I tuoi messaggi in chat arrivano con le lettere scambiate |
+| Paraplegia | Sedia a rotelle: niente salti, niente scale a pioli, liane o impalcature; più basso. La vedi anche in prima persona | Seduto sulla sedia, le ruote girano mentre ti muovi |
+| Gamba amputata | Stampelle: più lento, niente corsa, salti bassi; **per usare le mani devi fermarti** | Una gamba sola e le stampelle che dondolano |
+| Braccio amputato | Niente mano secondaria; archi, balestre, tridenti e lance non si usano; scavi più piano | Un braccio solo |
+| Nanismo | Alto la metà, braccia corte (arrivi meno lontano), più lento | Sei piccolissimo |
+| Obesità | Più lento, fame doppia, dopo 4 secondi di corsa hai il fiatone, le cadute fanno più male; però ti spostano meno | Corporatura enorme, fiatone e sudore |
+| Parkinson | La mira trema sempre; ogni tanto le gambe si bloccano e ti scivola di mano quello che tieni | Testa e braccia che tremano |
+| Narcolessia | Ogni 3-6 minuti ti addormenti di colpo per qualche secondo (schermo nero), a volte anche quando vieni colpito. Un amico ti sveglia col tasto destro | Crolli a terra, russi, "Zzz" sopra la testa |
+| Sindrome di Tourette | Tic: scatti della testa, salti, colpi nel vuoto (a volte colpisci davvero chi hai davanti), giravolte, ammiccamenti, versi e parole a caso | Vedono i tic, sentono i versi, leggono le parole in chat e nel fumetto ("PATATA!") |
+| Amnesia | Niente F3 (coordinate), niente libro delle ricette e niente segnalini dei compagni; i nomi degli altri diventano "???"; ogni 5-9 minuti l'inventario si rimescola | Ti gratti la testa sotto un "?" |
+| Vertigini | Il mondo ondeggia, vicino ai burroni gira tutto (e lo zoom impazzisce), cammini storto e ogni tanto inciampi | Barcolli e inciampi |
+| Asma | Correre, saltare, nuotare e arrampicarti ti tolgono il fiato (le bollicine dell'aria); senza fiato vedi buio ai lati e rallenti. Hai un **inalatore** | Il respiro che fischia, la mano sul petto |
+| Emofilia | Ogni ferita continua a sanguinare (e intanto non guarisci) finché non usi una **benda** | Gocce di sangue, la mano sulla ferita; puoi fasciarli tu (tasto destro con la benda) |
+| Allergia | Vicino a fiori, erba, foglie e animali starnutisci: la testa scatta, gli occhi lacrimano e a volte ti cade quello che tieni | Starnuti fortissimi |
+
+- **Oggetti** (in Creativa nella scheda *Strumenti e utilità*; il bastone e l'inalatore te li dà la mod, e te li ridà quando rinasci):
+  - **Bastone bianco**: `bastone` + `bastone` + `colorante bianco`;
+  - **Inalatore** (16 spruzzi): `lingotto di ferro` + `ampolla di vetro`;
+  - **Benda** (×2): `carta` + `carta` + `filo`.
+- **Comando** `/disabilita`:
+  - per tutti: `/disabilita` (le tue), `/disabilita lista` (di tutti), `/disabilita info <disabilità>`;
+  - da operatore: `scegli [giocatori]` (fa riscegliere), `assegna <giocatori> <prima> <seconda>`, `casuale [giocatori]`, `togli <giocatori>` (nessuna disabilità, per esempio per chi fa le riprese), `evento <sonno|sveglia|tic|starnuto|inciampo|blocco|dimenticanza|ferita|fiato> [giocatori]` per far succedere subito un episodio.
+  - I nomi da usare: `cieco`, `acromatopsia`, `miope`, `monocolo`, `albino`, `sordo`, `muto`, `dislessico`, `sedia`, `stampelle`, `monco`, `nano`, `obeso`, `parkinson`, `narcolessia`, `tourette`, `amnesia`, `vertigini`, `asma`, `emofilia`, `allergia` (il tab li suggerisce).
+- **Gamerule**: `/gamerule disabilities:unique false` (disabilità ripetibili), `/gamerule disabilities:reroll_on_death true` (quando muori riscegli), `/gamerule disabilities:episodes false` (mette in pausa sonni, tic, starnuti, blocchi, inciampi e dimenticanze).
+- In live: la mod non può spegnere il vostro microfono su Discord, quindi chi è muto o sordo deve stare al gioco.

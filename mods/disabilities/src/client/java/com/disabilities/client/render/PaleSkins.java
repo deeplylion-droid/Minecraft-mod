@@ -65,10 +65,12 @@ public final class PaleSkins {
         RETRY.remove(source);
         try (NativeImage src = image) {
             NativeImage out = new NativeImage(src.getWidth(), src.getHeight(), true);
-            int headBottom = src.getHeight() / 4;
-            for (int y = 0; y < src.getHeight(); y++) {
-                for (int x = 0; x < src.getWidth(); x++) {
-                    out.setPixel(x, y, whiten(src.getPixel(x, y), y < headBottom));
+            int w = src.getWidth();
+            int h = src.getHeight();
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    // skins are 64 pixels wide (or a multiple): one skin pixel is w / 64 image pixels both ways
+                    out.setPixel(x, y, whiten(src.getPixel(x, y), region(x * 64 / w, y * 64 / w)));
                 }
             }
             String path = "pale/" + source.getNamespace() + "/" + source.getPath().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9/._-]", "_");
@@ -105,12 +107,27 @@ public final class PaleSkins {
         return null;
     }
 
-    /** ARGB in, ARGB out. */
-    private static int whiten(int argb, boolean head) {
+    private static final int OTHER = 0;
+    private static final int HEAD = 1;
+    private static final int ARM = 2;
+
+    /** Which part of the body a pixel of the 64x64 skin layout belongs to (old 64x32 skins have no left arm). */
+    private static int region(int x, int y) {
+        if (y < 16) {
+            return HEAD;
+        }
+        boolean rightArm = x >= 40 && x < 56 && y >= 16 && y < 48;
+        boolean leftArm = x >= 32 && y >= 48;
+        return rightArm || leftArm ? ARM : OTHER;
+    }
+
+    /** ARGB in, ARGB out: the whole head (hair and face) turns white and pale, bare arms turn pale. */
+    private static int whiten(int argb, int region) {
         int a = argb >>> 24;
-        if (a == 0) {
+        if (a == 0 || region == OTHER) {
             return argb;
         }
+        boolean head = region == HEAD;
         float r = (argb >> 16 & 255) / 255.0F;
         float g = (argb >> 8 & 255) / 255.0F;
         float b = (argb & 255) / 255.0F;

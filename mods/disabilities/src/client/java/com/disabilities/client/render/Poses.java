@@ -48,17 +48,20 @@ public final class Poses {
         boolean leftFree = freeArm(s, false);
 
         if (v.has(Condition.OBESITY)) {
-            m.body.xScale = 1.42F;
-            m.body.zScale = 1.6F;
-            m.body.z -= 0.6F;
-            m.rightArm.x -= 1.7F;
-            m.leftArm.x += 1.7F;
-            m.rightArm.zRot += 0.12F;
-            m.leftArm.zRot -= 0.12F;
-            m.rightLeg.x -= 0.6F;
-            m.leftLeg.x += 0.6F;
-            m.rightLeg.xScale = m.leftLeg.xScale = 1.22F;
-            m.rightLeg.zScale = m.leftLeg.zScale = 1.25F;
+            m.body.xScale = 1.55F;
+            m.body.zScale = 1.8F;
+            m.body.z -= 0.8F;
+            m.rightArm.x -= 2.2F;
+            m.leftArm.x += 2.2F;
+            m.rightArm.xScale = m.leftArm.xScale = 1.2F;
+            m.rightArm.zScale = m.leftArm.zScale = 1.2F;
+            m.rightArm.zRot += 0.18F;
+            m.leftArm.zRot -= 0.18F;
+            m.rightLeg.x -= 0.8F;
+            m.leftLeg.x += 0.8F;
+            m.rightLeg.xScale = m.leftLeg.xScale = 1.3F;
+            m.rightLeg.zScale = m.leftLeg.zScale = 1.35F;
+            m.head.y += 0.6F;
         }
 
         if (v.has(Condition.WHEELCHAIR) && !special) {
