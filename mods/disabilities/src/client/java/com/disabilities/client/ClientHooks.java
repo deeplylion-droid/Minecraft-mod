@@ -98,7 +98,7 @@ public final class ClientHooks {
         for (Condition c : Picks.list(mask)) {
             glyphs.append(c.glyph());
         }
-        Component name = Component.literal("???").withStyle(ChatFormatting.GRAY);
+        Component name = Component.literal("???");
         return glyphs.isEmpty() ? name : Component.empty().append(name).append(Component.literal(" ")).append(Chooser.badge(glyphs.toString()));
     }
 

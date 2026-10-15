@@ -19,8 +19,8 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Albinism: a whitened copy of the player's own skin. Hair and face (the head) turn white and
- * pale, bare skin elsewhere turns pale; clothes keep their colours.
+ * Albinism: a whitened copy of the player's own skin. Skin turns pale pink, hair white, eyes
+ * pink-red; clothes keep their colours.
  */
 public final class PaleSkins {
     private PaleSkins() {
@@ -67,10 +67,11 @@ public final class PaleSkins {
             NativeImage out = new NativeImage(src.getWidth(), src.getHeight(), true);
             int w = src.getWidth();
             int h = src.getHeight();
+            // skins are 64 pixels wide (or a multiple): one skin pixel is w / 64 image pixels both ways
+            float[] skin = skinColour(src, Math.max(1, w / 64));
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
-                    // skins are 64 pixels wide (or a multiple): one skin pixel is w / 64 image pixels both ways
-                    out.setPixel(x, y, whiten(src.getPixel(x, y), region(x * 64 / w, y * 64 / w)));
+                    out.setPixel(x, y, whiten(src.getPixel(x, y), x * 64 / w, y * 64 / w, skin));
                 }
             }
             String path = "pale/" + source.getNamespace() + "/" + source.getPath().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9/._-]", "_");
@@ -121,30 +122,112 @@ public final class PaleSkins {
         return rightArm || leftArm ? ARM : OTHER;
     }
 
-    /** ARGB in, ARGB out: the whole head (hair and face) turns white and pale, bare arms turn pale. */
-    private static int whiten(int argb, int region) {
+    /** Where the eyes usually are: the middle of the face, around row 12. */
+    private static boolean eye(int x, int y) {
+        return x >= 9 && x <= 14 && y >= 11 && y <= 13;
+    }
+
+    /** The lower middle of the face: nose and mouth. */
+    private static boolean face(int x, int y) {
+        return x >= 9 && x <= 14 && y >= 12 && y <= 15;
+    }
+
+    /** The skin's own colour: the most common colour of the lower face (r, g, b, luminance), or null. */
+    private static float[] skinColour(NativeImage src, int scale) {
+        Map<Integer, Integer> counts = new HashMap<>();
+        int best = -1;
+        int bestCount = 0;
+        for (int y = 12; y < 15; y++) {
+            for (int x = 9; x < 15; x++) {
+                int argb = src.getPixel(x * scale, y * scale);
+                if (argb >>> 24 < 128) {
+                    continue;
+                }
+                int bin = argb & 0xE0E0E0;
+                int n = counts.merge(bin, 1, Integer::sum);
+                if (n > bestCount) {
+                    bestCount = n;
+                    best = bin;
+                }
+            }
+        }
+        if (best < 0) {
+            return null;
+        }
+        float r = 0;
+        float g = 0;
+        float b = 0;
+        int n = 0;
+        for (int y = 12; y < 15; y++) {
+            for (int x = 9; x < 15; x++) {
+                int argb = src.getPixel(x * scale, y * scale);
+                if (argb >>> 24 >= 128 && (argb & 0xE0E0E0) == best) {
+                    r += (argb >> 16 & 255) / 255.0F;
+                    g += (argb >> 8 & 255) / 255.0F;
+                    b += (argb & 255) / 255.0F;
+                    n++;
+                }
+            }
+        }
+        r /= n;
+        g /= n;
+        b /= n;
+        return new float[]{r, g, b, 0.299F * r + 0.587F * g + 0.114F * b};
+    }
+
+    /**
+     * ARGB in, ARGB out. Skin (anything close to the face's colour, on the head and the arms) turns
+     * pale pink, keeping its shading, and so do nose and mouth; the eyes turn pink-red; the rest of
+     * the head (hair, eyebrows, beard) turns white; clothes keep their colours.
+     */
+    private static int whiten(int argb, int x, int y, float[] skin) {
         int a = argb >>> 24;
+        int region = region(x, y);
         if (a == 0 || region == OTHER) {
             return argb;
         }
-        boolean head = region == HEAD;
         float r = (argb >> 16 & 255) / 255.0F;
         float g = (argb >> 8 & 255) / 255.0F;
         float b = (argb & 255) / 255.0F;
-        float max = Math.max(r, Math.max(g, b));
-        float min = Math.min(r, Math.min(g, b));
         float lum = 0.299F * r + 0.587F * g + 0.114F * b;
-        boolean skinTone = r >= g && g >= b && max > 0.3F && (max - min) / Math.max(max, 1.0E-4F) < 0.65F;
-        if (!head && !skinTone) {
+        if (skin != null) {
+            float dr = r - skin[0];
+            float dg = g - skin[1];
+            float db = b - skin[2];
+            float distance = (float) Math.sqrt(dr * dr + dg * dg + db * db);
+            if (distance < (region == HEAD ? 0.2F : 0.17F)) {
+                return paleSkin(a, lum, skin, 0.7F);
+            }
+        }
+        if (region == ARM) {
             return argb;
         }
-        // light, almost colourless, a touch of pink
-        float target = 0.68F + 0.32F * lum;
-        float keep = head ? 0.12F : 0.25F;
-        float nr = target * (1.0F - keep) + r * keep + 0.03F;
-        float ng = target * (1.0F - keep) + g * keep - 0.01F;
-        float nb = target * (1.0F - keep) + b * keep - 0.01F;
-        return a << 24 | channel(nr) << 16 | channel(ng) << 8 | channel(nb);
+        if (skin != null && eye(x, y)) {
+            float max = Math.max(r, Math.max(g, b));
+            float min = Math.min(r, Math.min(g, b));
+            if (y == 12 && lum > 0.7F && max - min < 0.15F) {
+                // the white of the eye
+                return colour(a, 0.97F, 0.96F, 0.96F);
+            }
+            if (y == 12 || r < g || r < b) {
+                float shade = 0.8F + 0.2F * lum;
+                return colour(a, 0.9F * shade, 0.34F * shade, 0.42F * shade);
+            }
+        }
+        if (skin != null && face(x, y) && r > b && lum >= skin[3] * 0.4F) {
+            return paleSkin(a, lum, skin, 0.6F);
+        }
+        float shade = 0.8F + 0.2F * lum;
+        return colour(a, shade, 0.98F * shade, 0.91F * shade);
+    }
+
+    private static int paleSkin(int a, float lum, float[] skin, float darkest) {
+        float shade = Math.max(darkest, Math.min(1.0F, 0.92F + (lum - skin[3]) * 0.8F));
+        return colour(a, shade, 0.87F * shade, 0.84F * shade);
+    }
+
+    private static int colour(int a, float r, float g, float b) {
+        return a << 24 | channel(r) << 16 | channel(g) << 8 | channel(b);
     }
 
     private static int channel(float v) {
