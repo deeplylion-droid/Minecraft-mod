@@ -22,9 +22,9 @@ public abstract class FogRendererMixin {
         FogData fog = cir.getReturnValue();
         if (Me.has(Condition.BLIND)) {
             float radius = Fx.blindRadius(delta.getGameTimeDeltaPartialTick(false));
-            fog.environmentalStart = 0.0F;
+            fog.environmentalStart = 0.4F;
             fog.environmentalEnd = radius;
-            fog.renderDistanceStart = 0.0F;
+            fog.renderDistanceStart = 0.4F;
             fog.renderDistanceEnd = radius;
             fog.skyEnd = radius;
             fog.cloudEnd = radius;

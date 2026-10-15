@@ -31,7 +31,7 @@ public final class Fx {
     // ---------------------------------------------------------------- blindness
 
     /** How far a blind player sees, in blocks. */
-    public static final float BLIND_RADIUS = 2.6F;
+    public static final float BLIND_RADIUS = 3.2F;
     private static int sonarAge = -1;
     private static int tapAge = -1;
     /** Entities that just made a sound: a blind player sees their outline for a moment. */

@@ -5,6 +5,7 @@ import com.disabilities.Sided;
 import com.disabilities.client.hud.Overlays;
 import com.disabilities.client.render.Accessories;
 import com.disabilities.client.render.ConditionLayer;
+import com.disabilities.client.render.FirstPersonAids;
 import com.disabilities.client.render.PaleSkins;
 import com.disabilities.client.screen.ChooserScreen;
 import com.disabilities.client.screen.GestureScreen;
@@ -110,7 +111,7 @@ public class DisabilitiesClient implements ClientModInitializer {
             }
         });
         ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(Accessories.ID, Accessories.INSTANCE);
-        Overlays.init();
+        FirstPersonAids.init();
     }
 
     private static void muteHint() {

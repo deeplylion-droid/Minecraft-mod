@@ -455,8 +455,17 @@ public final class Ailments {
         if (now % 3 == 0) {
             RandomSource random = player.getRandom();
             double y = player.getY() + player.getBbHeight() * (0.3 + random.nextDouble() * 0.5);
-            level.sendParticles(new DustParticleOptions(0x8A0303, 1.1F), player.getX(), y, player.getZ(), 2, 0.22, 0.1, 0.22, 0.0);
-            level.sendParticles(ParticleTypes.DRIPPING_DRIPSTONE_LAVA, player.getX(), y, player.getZ(), 1, 0.2, 0.1, 0.2, 0.0);
+            DustParticleOptions blood = new DustParticleOptions(0x8A0303, 1.1F);
+            // the others see the blood on the body; the bleeding player only sees drops at their feet
+            for (ServerPlayer viewer : level.players()) {
+                if (viewer == player) {
+                    level.sendParticles(viewer, blood, false, false, player.getX(), player.getY() + 0.15, player.getZ(), 1, 0.25, 0.05, 0.25, 0.0);
+                } else if (viewer.distanceToSqr(player) < 48 * 48) {
+                    level.sendParticles(viewer, blood, false, false, player.getX(), y, player.getZ(), 2, 0.22, 0.1, 0.22, 0.0);
+                    level.sendParticles(viewer, ParticleTypes.DRIPPING_DRIPSTONE_LAVA, false, false, player.getX(), y, player.getZ(), 1, 0.2, 0.1, 0.2,
+                            0.0);
+                }
+            }
         }
         if (now % 40 == 0) {
             player.hurtServer(level, level.damageSources().source(ModDamage.BLEEDING), 1.0F);

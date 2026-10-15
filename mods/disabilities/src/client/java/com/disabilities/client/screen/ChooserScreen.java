@@ -61,11 +61,11 @@ public class ChooserScreen extends Screen {
     @Override
     protected void init() {
         this.cardW = Math.max(46, Math.min(72, (this.width - 16) / COLUMNS));
-        this.cardH = Math.max(40, Math.min(50, (this.height - 128) / 3));
+        this.gridY = 29;
+        this.cardH = Math.max(34, Math.min(50, (this.height - this.gridY - 4 - 54 - 28) / 3));
         int gridW = this.cardW * COLUMNS;
         this.gridX = (this.width - gridW) / 2;
-        this.gridY = 34;
-        this.infoY = this.gridY + this.cardH * 3 + 6;
+        this.infoY = this.gridY + this.cardH * 3 + 3;
         int buttonY = this.height - 26;
         this.random = this.addRenderableWidget(Button.builder(Component.translatable("disabilities.chooser.random"), b -> this.pickRandom())
                 .bounds(this.width / 2 - 154, buttonY, 100, 20).build());
@@ -202,8 +202,8 @@ public class ChooserScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
-        g.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFFFF);
-        g.centeredText(this.font, Component.translatable("disabilities.chooser.subtitle"), this.width / 2, 20, 0xFFB0B0B0);
+        g.centeredText(this.font, this.title, this.width / 2, 6, 0xFFFFFFFF);
+        g.centeredText(this.font, Component.translatable("disabilities.chooser.subtitle"), this.width / 2, 17, 0xFFB0B0B0);
 
         Condition hovered = this.cardAt(mouseX, mouseY);
         for (Condition c : Condition.values()) {
@@ -247,7 +247,7 @@ public class ChooserScreen extends Screen {
             g.outline(x, y, w, h, 0xFF2A2A30);
         }
         float alpha = taken ? 0.25F : blocked ? 0.45F : 1.0F;
-        int iconSize = h >= 46 ? 32 : 24;
+        int iconSize = h >= 46 ? 32 : h >= 38 ? 24 : 20;
         int ix = x + (w - iconSize) / 2;
         int iy = y + 3;
         g.blit(RenderPipelines.GUI_TEXTURED, icon(c), ix, iy, 0, 0, iconSize, iconSize, 16, 16, 16, 16, ARGB.white(alpha));
@@ -262,7 +262,7 @@ public class ChooserScreen extends Screen {
         if (taken) {
             Component label = Component.translatable("disabilities.chooser.taken_label");
             g.pose().pushMatrix();
-            g.pose().translate(x + w / 2.0F, y + iy - y + iconSize / 2.0F - 3);
+            g.pose().translate(x + w / 2.0F, iy + iconSize / 2.0F - 3);
             g.pose().scale(0.75F, 0.75F);
             g.centeredText(this.font, label, 0, 0, 0xFFFF5050);
             g.pose().popMatrix();
@@ -276,28 +276,32 @@ public class ChooserScreen extends Screen {
     private void drawInfo(GuiGraphicsExtractor g, Condition c) {
         int x = Math.max(8, this.gridX);
         int w = Math.min(this.width - 16, this.cardW * COLUMNS);
-        int bottom = this.height - 32;
+        int bottom = this.height - 28;
         g.fill(x, this.infoY, x + w, bottom, 0xA0000000);
         g.outline(x, this.infoY, w, bottom - this.infoY, 0xFF000000 | c.color);
-        g.blit(RenderPipelines.GUI_TEXTURED, icon(c), x + 4, this.infoY + 4, 0, 0, 16, 16, 16, 16);
-        g.text(this.font, c.displayName(), x + 24, this.infoY + 8, 0xFF000000 | c.color);
-        int y = this.infoY + 24;
-        int textW = w - 12;
-        Component you = Component.translatable("disabilities.chooser.you").append(c.forYou());
-        Component others = Component.translatable("disabilities.chooser.others").append(c.forOthers());
-        for (FormattedCharSequence line : this.font.split(you, textW)) {
-            if (y + 9 > bottom - 2) {
-                return;
+        g.blit(RenderPipelines.GUI_TEXTURED, icon(c), x + 4, this.infoY + 3, 0, 0, 12, 12, 16, 16, 16, 16);
+        g.text(this.font, c.displayName(), x + 20, this.infoY + 5, 0xFF000000 | c.color);
+        float scale = 0.8F;
+        int textW = (int) ((w - 12) / scale);
+        int maxLines = (int) ((bottom - this.infoY - 19) / (9 * scale));
+        java.util.List<FormattedCharSequence> you = this.font.split(Component.translatable("disabilities.chooser.you").append(c.forYou()), textW);
+        java.util.List<FormattedCharSequence> others = this.font.split(Component.translatable("disabilities.chooser.others").append(c.forOthers()), textW);
+        g.pose().pushMatrix();
+        g.pose().translate(x + 6, this.infoY + 18);
+        g.pose().scale(scale, scale);
+        int line = 0;
+        for (FormattedCharSequence l : you) {
+            if (line >= maxLines) {
+                break;
             }
-            g.text(this.font, line, x + 6, y, 0xFFE0E0E0);
-            y += 10;
+            g.text(this.font, l, 0, line++ * 9, 0xFFE0E0E0);
         }
-        for (FormattedCharSequence line : this.font.split(others, textW)) {
-            if (y + 9 > bottom - 2) {
-                return;
+        for (FormattedCharSequence l : others) {
+            if (line >= maxLines) {
+                break;
             }
-            g.text(this.font, line, x + 6, y, 0xFF9AA0A8);
-            y += 10;
+            g.text(this.font, l, 0, line++ * 9, 0xFF9AA8B8);
         }
+        g.pose().popMatrix();
     }
 }

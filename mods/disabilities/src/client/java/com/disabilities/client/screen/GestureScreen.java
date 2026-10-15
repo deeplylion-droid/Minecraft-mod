@@ -92,7 +92,12 @@ public class GestureScreen extends Screen {
         Gesture hovered = this.at(mouseX, mouseY);
         int cx = this.cx();
         int cy = this.cy();
-        g.centeredText(this.font, this.title, cx, cy - RADIUS - 40, 0xFFFFFFFF);
+        g.centeredText(this.font, this.title, cx, cy - RADIUS - 42, 0xFFFFFFFF);
+        g.pose().pushMatrix();
+        g.pose().translate(cx, cy - RADIUS - 31);
+        g.pose().scale(0.75F, 0.75F);
+        g.centeredText(this.font, Component.translatable("disabilities.gestures.hint"), 0, 0, 0xFFA0A0A0);
+        g.pose().popMatrix();
         Gesture[] all = Gesture.values();
         for (int i = 0; i < all.length; i++) {
             Gesture gesture = all[i];
@@ -115,8 +120,6 @@ public class GestureScreen extends Screen {
         }
         if (hovered != null) {
             g.centeredText(this.font, hovered.displayName(), cx, cy - 4, 0xFFFFFF80);
-        } else {
-            g.centeredText(this.font, Component.translatable("disabilities.gestures.hint"), cx, cy - 4, 0xFFA0A0A0);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
     }

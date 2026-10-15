@@ -7,7 +7,6 @@ import com.disabilities.client.screen.ChooserScreen;
 import com.disabilities.condition.Condition;
 import com.disabilities.condition.Picks;
 import com.disabilities.condition.Status;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -41,10 +40,7 @@ public final class Overlays {
     private static long sleepStart = -1;
     private static int ticks;
 
-    public static void init() {
-        HudElementRegistry.addFirst(Disabilities.id("vision"), Overlays::vision);
-        HudElementRegistry.addLast(Disabilities.id("blackout"), Overlays::blackout);
-    }
+    // drawn from HudMixin, so they stay on screen with F1 too (no peeking with the HUD hidden)
 
     /** Every client tick: smooth values that should not jump. */
     public static void tick(Minecraft mc) {
@@ -75,7 +71,8 @@ public final class Overlays {
         g.blit(RenderPipelines.GUI_TEXTURED, texture, 0, 0, 0, 0, g.guiWidth(), g.guiHeight(), texW, texH, texW, texH, color);
     }
 
-    private static void vision(GuiGraphicsExtractor g, DeltaTracker delta) {
+    /** Under everything else: what the eyes see. */
+    public static void vision(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null || player.isSpectator()) {
@@ -110,7 +107,7 @@ public final class Overlays {
             if (air < 0.5F && !player.isUnderWater()) {
                 float k = (0.5F - air) / 0.5F;
                 float breath = 0.5F + 0.5F * Mth.sin(t * 0.35F);
-                full(g, TUNNEL, 256, 256, ARGB.black(Mth.clamp(k * (0.55F + 0.3F * breath), 0.0F, 0.92F)));
+                full(g, TUNNEL, 256, 256, ARGB.black(Mth.clamp(k * (0.7F + 0.25F * breath), 0.0F, 0.95F)));
             }
         }
         if (status.winded(now)) {
@@ -119,7 +116,8 @@ public final class Overlays {
         }
         if (status.bleeding(now)) {
             float beat = heartbeat(t);
-            full(g, VIGNETTE, 256, 256, ARGB.color(0.3F + 0.35F * beat, 0xFFB00000));
+            full(g, VIGNETTE, 256, 256, ARGB.color(0.5F + 0.45F * beat, 0xFFC00000));
+            full(g, VIGNETTE, 256, 256, ARGB.color(0.25F * beat, 0xFFFF2020));
         }
         float fear = Fx.fear(partial);
         if (fear > 0.02F) {
@@ -156,7 +154,8 @@ public final class Overlays {
         }
     }
 
-    private static void blackout(GuiGraphicsExtractor g, DeltaTracker delta) {
+    /** Over everything else: sleep, blinks, the amnesia flash. */
+    public static void blackout(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player == null) {
