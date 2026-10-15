@@ -1,0 +1,31 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "disabilities:font/badges.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\ue000\ue001\ue002\ue003\ue004\ue005\ue006\ue007\ue008\ue009\ue00a\ue00b\ue00c\ue00d\ue00e\ue00f\ue010\ue011\ue012\ue013\ue014"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "disabilities:font/gestures.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\ue100\ue101\ue102\ue103\ue104\ue105\ue106\ue107"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "disabilities:font/extra.png",
+      "height": 9,
+      "ascent": 8,
+      "chars": [
+        "\ue200\ue201"
+      ]
+    }
+  ]
+}
