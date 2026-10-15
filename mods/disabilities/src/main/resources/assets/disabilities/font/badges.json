@@ -1,6 +1,10 @@
 {
   "providers": [
     {
+      "type": "reference",
+      "id": "minecraft:include/space"
+    },
+    {
       "type": "bitmap",
       "file": "disabilities:font/badges.png",
       "height": 9,

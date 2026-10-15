@@ -3,7 +3,23 @@
   "minVersion": "0.8",
   "package": "com.disabilities.client.mixin",
   "compatibilityLevel": "JAVA_25",
-  "client": [],
+  "client": [
+    "AvatarRendererMixin",
+    "CameraMixin",
+    "DebugScreenOverlayMixin",
+    "FogRendererMixin",
+    "FontMixin",
+    "GameRendererMixin",
+    "KeyboardHandlerMixin",
+    "KeyboardInputMixin",
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "MouseHandlerMixin",
+    "PlayerModelMixin",
+    "PlayerTabOverlayMixin",
+    "RecipeBookComponentMixin",
+    "SoundEngineMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

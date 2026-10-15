@@ -1,0 +1,95 @@
+{
+  "cane_tap": {
+    "sounds": [
+      "disabilities:cane_tap1",
+      "disabilities:cane_tap2",
+      "disabilities:cane_tap3"
+    ],
+    "subtitle": "subtitles.disabilities.cane_tap"
+  },
+  "sonar": {
+    "sounds": [
+      "disabilities:echo"
+    ],
+    "subtitle": "subtitles.disabilities.sonar"
+  },
+  "sneeze": {
+    "sounds": [
+      "disabilities:sneeze1",
+      "disabilities:sneeze2"
+    ],
+    "subtitle": "subtitles.disabilities.sneeze"
+  },
+  "snore": {
+    "sounds": [
+      "disabilities:snore"
+    ],
+    "subtitle": "subtitles.disabilities.snore"
+  },
+  "yawn": {
+    "sounds": [
+      "disabilities:yawn"
+    ],
+    "subtitle": "subtitles.disabilities.yawn"
+  },
+  "gasp": {
+    "sounds": [
+      "disabilities:gasp"
+    ],
+    "subtitle": "subtitles.disabilities.gasp"
+  },
+  "wheeze": {
+    "sounds": [
+      "disabilities:wheeze"
+    ],
+    "subtitle": "subtitles.disabilities.wheeze"
+  },
+  "inhaler": {
+    "sounds": [
+      "disabilities:inhaler"
+    ],
+    "subtitle": "subtitles.disabilities.inhaler"
+  },
+  "pant": {
+    "sounds": [
+      "disabilities:pant"
+    ],
+    "subtitle": "subtitles.disabilities.pant"
+  },
+  "tic_hm": {
+    "sounds": [
+      "disabilities:tic_hm"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  },
+  "tic_whistle": {
+    "sounds": [
+      "disabilities:tic_whistle"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  },
+  "tic_hey": {
+    "sounds": [
+      "disabilities:tic_hey"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  },
+  "tic_click": {
+    "sounds": [
+      "disabilities:tic_click"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  },
+  "tic_sniff": {
+    "sounds": [
+      "disabilities:tic_sniff"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  },
+  "tic_grunt": {
+    "sounds": [
+      "disabilities:tic_grunt"
+    ],
+    "subtitle": "subtitles.disabilities.tic"
+  }
+}
