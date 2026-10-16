@@ -22,7 +22,7 @@ public final class ModRules {
     /** Seconds a downed player waits for the partner (0 = no downed state, you just die). */
     public static final GameRule<Integer> REVIVE_SECONDS = GameRuleBuilder.forInteger(30).range(0, 300).category(GameRuleCategory.PLAYER)
             .buildAndRegister(FiloRosso.id("revive_seconds"));
-    /** Lo Spezzacuori's servants come at night. */
+    /** Recisione's servants come at night. */
     public static final GameRule<Boolean> SERVANTS = GameRuleBuilder.forBoolean(true).category(GameRuleCategory.SPAWNING)
             .buildAndRegister(FiloRosso.id("servants"));
     /** The rope hits mobs. */

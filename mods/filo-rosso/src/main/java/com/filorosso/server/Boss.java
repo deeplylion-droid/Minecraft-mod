@@ -3,7 +3,7 @@ package com.filorosso.server;
 import com.filorosso.data.Couple;
 import com.filorosso.data.CoupleBook;
 import com.filorosso.entity.ModEntities;
-import com.filorosso.entity.Spezzacuori;
+import com.filorosso.entity.Recisione;
 import com.filorosso.item.ModItems;
 import com.filorosso.sound.ModSounds;
 import com.filorosso.util.Text;
@@ -16,8 +16,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -27,7 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/** Calling Lo Spezzacuori, and the end of the fight. */
+/** Calling Recisione, and the end of the fight. */
 public final class Boss {
     private Boss() {
     }
@@ -40,7 +38,7 @@ public final class Boss {
         ALIVE.removeIf(id -> {
             for (ServerLevel level : server.getAllLevels()) {
                 var e = level.getEntity(id);
-                if (e instanceof Spezzacuori s && s.isAlive()) {
+                if (e instanceof Recisione s && s.isAlive()) {
                     return false;
                 }
             }
@@ -65,7 +63,7 @@ public final class Boss {
         }
         BlockPos at = BlockPos.containing(near);
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, at.getX(), at.getZ());
-        Spezzacuori boss = ModEntities.SPEZZACUORI.create(level, EntitySpawnReason.TRIGGERED);
+        Recisione boss = ModEntities.RECISIONE.create(level, EntitySpawnReason.TRIGGERED);
         if (boss == null) {
             return false;
         }
@@ -79,26 +77,23 @@ public final class Boss {
         boss.rise();
         level.addFreshEntity(boss);
         ALIVE.add(boss.getUUID());
-        for (int i = 0; i < 3; i++) {
-            LightningBolt bolt = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
-            if (bolt != null) {
-                bolt.setPos(boss.getX() + (i - 1) * 4, y, boss.getZ() + (i % 2) * 3);
-                bolt.setVisualOnly(true);
-                level.addFreshEntity(bolt);
+        // no thunder: a bell that everyone hears, wherever they are, and the dark
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            Bonds.hear(p, ModSounds.BOSS_BELL, 1.0F, 1.0F);
+            if (p.level() != level) {
+                continue;
             }
-        }
-        for (ServerPlayer p : level.players()) {
-            Bonds.title(p, Component.translatable("filorosso.title.boss").withStyle(ChatFormatting.DARK_RED),
-                    Component.translatable("filorosso.title.boss.sub").withStyle(ChatFormatting.GRAY), 10, 80, 20);
-            p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 100, 0));
-            Bonds.sound(p, ModSounds.BOSS_ROAR, 0.6F);
+            Bonds.title(p, Recisione.glitchName(1 + p.getRandom().nextInt(7)),
+                    Component.translatable("filorosso.title.boss.sub").withStyle(ChatFormatting.DARK_GRAY), 10, 80, 20);
+            p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 160, 0));
+            p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 30, 0));
         }
         server.getPlayerList().broadcastSystemMessage(Component.empty().append(Text.icon(Text.BROKEN, 0xC02040)).append(Component.literal(" "))
                 .append(Component.translatable("filorosso.msg.boss_arrived").withStyle(ChatFormatting.DARK_RED)), false);
         return true;
     }
 
-    public static void onDeath(MinecraftServer server, Spezzacuori boss) {
+    public static void onDeath(MinecraftServer server, Recisione boss) {
         ALIVE.remove(boss.getUUID());
         CoupleBook book = CoupleBook.get(server);
         book.bossBeaten = true;

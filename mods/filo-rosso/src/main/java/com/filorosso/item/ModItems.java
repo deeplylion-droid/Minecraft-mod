@@ -16,14 +16,14 @@ public final class ModItems {
     private ModItems() {
     }
 
-    /** Dropped by Lo Spezzacuori's servants. */
+    /** Dropped by Recisione's servants. */
     public static final Item HEART_SHARD = register("heart_shard", Item::new, new Item.Properties().rarity(Rarity.UNCOMMON));
-    /** Eight shards around a gold block: use it at night to call Lo Spezzacuori. */
+    /** Eight shards around a gold block: use it at night to call Recisione. */
     public static final Item BROKEN_HEART = register("broken_heart", BrokenHeartItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
-    /** The trophy of whoever defeats him. */
+    /** The trophy of whoever defeats it. */
     public static final Item GOLDEN_HEART = register("golden_heart", Item::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
             .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
-    /** What his scissors look like when they fly. */
+    /** The servants' scissors. */
     public static final Item SCISSORS = register("scissors", Item::new, new Item.Properties().stacksTo(1));
 
     private static Item register(String name, Function<Item.Properties, Item> factory, Item.Properties properties) {

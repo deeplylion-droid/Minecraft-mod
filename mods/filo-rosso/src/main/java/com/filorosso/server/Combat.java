@@ -3,7 +3,7 @@ package com.filorosso.server;
 import com.filorosso.data.BondType;
 import com.filorosso.data.Couple;
 import com.filorosso.data.ModData;
-import com.filorosso.entity.Spezzacuori;
+import com.filorosso.entity.Recisione;
 import com.filorosso.net.Net;
 import com.filorosso.sound.ModSounds;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -26,7 +26,7 @@ import java.util.UUID;
 
 /**
  * Damage rules of the bond: couple hits (both partners hit the same target within a second: more
- * damage, and the only real way to hurt Lo Spezzacuori), shared hearts, the fire bond's immunity.
+ * damage, and the only real way to hurt the boss), the shield and fire fates.
  */
 public final class Combat {
     private Combat() {
@@ -37,7 +37,6 @@ public final class Combat {
     /** Last couple hit on each target: one every half second at most (no farming a mob with fast clicks). */
     private static final Map<Integer, Long> LAST_COMBO = new HashMap<>();
     public static final int COMBO_WINDOW = 25;
-    private static boolean sharing;
 
     public static void init() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(Combat::allow);
@@ -83,7 +82,7 @@ public final class Combat {
 
     /**
      * Changes the damage about to be dealt (called from the LivingEntity mixin). Couple hits do more,
-     * Lo Spezzacuori only really takes couple hits, shared hearts split the damage between partners.
+     * the boss only really takes couple hits, the shield fate protects partners standing close.
      */
     public static float modify(LivingEntity target, DamageSource source, float amount) {
         if (!(target.level() instanceof ServerLevel level) || amount <= 0.0F) {
@@ -99,8 +98,7 @@ public final class Combat {
             if (couple != null) {
                 UUID partner = couple.other(attacker.getUUID());
                 Long last = LAST_COMBO.get(target.getId());
-                combo = hitBy(target, partner, now, COMBO_WINDOW) && !target.getUUID().equals(partner) && (last == null || now - last >= 10)
-                        && target.getInvulnerableTime() <= 10;
+                combo = hitBy(target, partner, now, COMBO_WINDOW) && !target.getUUID().equals(partner) && (last == null || now - last >= 10);
                 if (combo) {
                     LAST_COMBO.put(target.getId(), now);
                 }
@@ -110,29 +108,19 @@ public final class Combat {
                 out *= 1.4F + 0.15F * couple.level().ordinal();
                 comboFx(server, attacker, target, couple);
             }
-            if (target instanceof Spezzacuori boss) {
+            if (target instanceof Recisione boss) {
                 out = boss.adjustDamage(out, combo, couple);
             }
-        } else if (target instanceof Spezzacuori boss && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        } else if (target instanceof Recisione boss && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             out = boss.adjustDamage(out, false, null);
         }
-        if (target instanceof ServerPlayer player && !sharing && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !ModData.downed(player)
-                && !player.isCreative() && !player.isSpectator() && player.getInvulnerableTime() <= 10 && !player.isInvulnerableTo(level, source)) {
+        // the shield fate: close together, the couple takes less damage
+        if (target instanceof ServerPlayer player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             Couple couple = Bonds.coupleOf(player);
-            if (couple != null && couple.bondType() == BondType.SHARED) {
+            if (couple != null && couple.bondType() == BondType.SHIELD) {
                 ServerPlayer partner = Bonds.partner(player);
-                if (partner != null && partner.isAlive() && !ModData.downed(partner) && partner.level() == player.level()) {
-                    // the partner takes half, but is never knocked down by it: whoever was hit falls first
-                    float half = Math.min(out / 2.0F, Math.max(0.0F, partner.getHealth() - 2.0F));
-                    out -= half;
-                    if (half > 0.0F) {
-                        sharing = true;
-                        try {
-                            partner.hurtServer(level, source, half);
-                        } finally {
-                            sharing = false;
-                        }
-                    }
+                if (partner != null && partner.level() == player.level() && partner.distanceTo(player) < 4.0) {
+                    out *= 0.7F;
                 }
             }
         }

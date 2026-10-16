@@ -142,7 +142,7 @@ public final class Net {
     /**
      * Server to clients: something happens to a thread between two players (for the animation).
      *
-     * @param kind {@link #SNAP} (break up), {@link #CUT} (scissors), {@link #COMBO} (couple hit on a target, {@code b} = target)
+     * @param kind {@link #SNAP} (break up), {@link #CUT} (scissors, Recisione), {@link #COMBO} (couple hit on a target, {@code b} = target)
      */
     public record ThreadFx(int kind, int a, int b) implements CustomPacketPayload {
         public static final int SNAP = 0;

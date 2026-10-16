@@ -14,15 +14,18 @@ public final class ModEntities {
     private ModEntities() {
     }
 
-    /** Lo Spezzacuori's servants ("gli Spaiati"): they come at night and cut threads. */
+    /** Recisione's servants ("gli Spaiati"): they come at night and cut threads. */
     public static final EntityType<Servant> SERVANT = register("servant",
             EntityType.Builder.<Servant>of(Servant::new, MobCategory.MONSTER).sized(0.6F, 1.95F).eyeHeight(1.74F).clientTrackingRange(8));
-    /** The giant that hates love. */
-    public static final EntityType<Spezzacuori> SPEZZACUORI = register("spezzacuori",
-            EntityType.Builder.<Spezzacuori>of(Spezzacuori::new, MobCategory.MONSTER).sized(2.2F, 7.2F).eyeHeight(6.4F).fireImmune().clientTrackingRange(16));
-    /** His thrown scissors. */
-    public static final EntityType<Scissors> SCISSORS = register("scissors",
-            EntityType.Builder.<Scissors>of(Scissors::new, MobCategory.MISC).sized(0.8F, 0.8F).clientTrackingRange(8).updateInterval(2));
+    /** The black giant made of broken threads. */
+    public static final EntityType<Recisione> RECISIONE = register("recisione",
+            EntityType.Builder.<Recisione>of(Recisione::new, MobCategory.MONSTER).sized(2.0F, 9.6F).eyeHeight(9.0F).fireImmune().clientTrackingRange(16));
+    /** Its missiles from the sky. */
+    public static final EntityType<Missile> MISSILE = register("missile",
+            EntityType.Builder.<Missile>of(Missile::new, MobCategory.MISC).sized(0.9F, 0.9F).clientTrackingRange(10).updateInterval(2).noSave());
+    /** Its hand coming out of the ground. */
+    public static final EntityType<Grasp> GRASP = register("grasp",
+            EntityType.Builder.<Grasp>of(Grasp::new, MobCategory.MISC).sized(1.0F, 3.0F).clientTrackingRange(10).updateInterval(20).noSave().noSummon());
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, FiloRosso.id(name));
@@ -31,6 +34,6 @@ public final class ModEntities {
 
     public static void init() {
         FabricDefaultAttributeRegistry.register(SERVANT, Servant.createServantAttributes());
-        FabricDefaultAttributeRegistry.register(SPEZZACUORI, Spezzacuori.createBossAttributes());
+        FabricDefaultAttributeRegistry.register(RECISIONE, Recisione.createBossAttributes());
     }
 }

@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * /filo: everybody can see their couple and the leaderboard; operators can tie, untie, shuffle,
- * set fates, start events, start a new live, add affinity and call Lo Spezzacuori.
+ * set fates, start events, start a new live, add affinity and call Recisione.
  */
 public final class FiloCommand {
     private FiloCommand() {

@@ -47,7 +47,7 @@ public final class Couple {
     public final Map<String, Integer> progress = new HashMap<>();
     /** Challenges this couple finished this session. */
     public final Set<String> done = new HashSet<>();
-    /** Couple hits on Lo Spezzacuori (for the final reward). */
+    /** Couple hits on Recisione (for the final reward). */
     public int bossHits;
     /** Game time until which the thread is cut (not saved). */
     public long cutUntil;

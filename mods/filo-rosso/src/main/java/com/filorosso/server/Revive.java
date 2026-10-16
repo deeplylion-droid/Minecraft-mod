@@ -86,6 +86,7 @@ public final class Revive {
         }
         long now = server.overworld().getGameTime();
         player.setHealth(1.0F);
+        SharedLife.onDowned(partner);
         player.clearFire();
         player.setAttached(ModData.STATUS, new Status(now + seconds(server) * 20L, 0));
         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, seconds(server) * 20 + 40, 0, false, false));
@@ -152,6 +153,7 @@ public final class Revive {
         HOLDING.remove(player.getUUID());
         slow(player, false);
         player.setHealth(Math.min(player.getMaxHealth(), 8.0F));
+        SharedLife.onRevived(player, partner);
         player.removeEffect(MobEffects.FIRE_RESISTANCE);
         player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 60, 2, false, true));
         Bonds.sound(player, ModSounds.REVIVE, 1.0F);

@@ -405,6 +405,13 @@ public final class Bonds {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), sound, SoundSource.PLAYERS, 1.0F, pitch);
     }
 
+    /** A sound only this player hears, right where they are (the bell: everyone hears it once). */
+    public static void hear(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
+        player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
+                net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), SoundSource.HOSTILE,
+                player.getX(), player.getEyeY(), player.getZ(), volume, pitch, player.getRandom().nextLong()));
+    }
+
     public static void hearts(ServerPlayer player, int count) {
         ((ServerLevel) player.level()).sendParticles(ParticleTypes.HEART, player.getX(), player.getY() + 1.2, player.getZ(), count, 0.6, 0.5, 0.6, 0.1);
     }

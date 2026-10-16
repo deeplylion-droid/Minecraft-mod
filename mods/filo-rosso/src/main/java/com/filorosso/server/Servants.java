@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.levelgen.Heightmap;
 
-/** At night Lo Spezzacuori sends his servants after the couples (a few at a time). */
+/** At night Recisione sends its servants after the couples (a few at a time). */
 public final class Servants {
     private Servants() {
     }

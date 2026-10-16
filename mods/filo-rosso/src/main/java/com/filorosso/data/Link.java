@@ -17,7 +17,7 @@ import java.util.UUID;
  * @param color     the couple's colour (index into {@link Palette})
  * @param xp        affinity
  * @param type      {@link BondType} ordinal for this session
- * @param cutUntil  game time until which the thread is cut (Spezzacuori, his servants)
+ * @param cutUntil  game time until which the thread is cut (Recisione, its servants)
  * @param bondedAt  game time of the bond (the thread grows from one pinky to the other)
  */
 public record Link(Optional<UUID> partner, String partnerName, int color, int xp, int type, long cutUntil, long bondedAt) {

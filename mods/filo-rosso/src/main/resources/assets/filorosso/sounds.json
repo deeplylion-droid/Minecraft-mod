@@ -131,6 +131,36 @@
     ],
     "subtitle": "subtitles.filorosso.boss_death"
   },
+  "boss_bell": {
+    "sounds": [
+      "filorosso:boss_bell"
+    ],
+    "subtitle": "subtitles.filorosso.boss_bell"
+  },
+  "boss_glitch": {
+    "sounds": [
+      "filorosso:boss_glitch"
+    ],
+    "subtitle": "subtitles.filorosso.boss_glitch"
+  },
+  "missile": {
+    "sounds": [
+      "filorosso:missile"
+    ],
+    "subtitle": "subtitles.filorosso.missile"
+  },
+  "missile_hit": {
+    "sounds": [
+      "filorosso:missile_hit"
+    ],
+    "subtitle": "subtitles.filorosso.missile_hit"
+  },
+  "grasp": {
+    "sounds": [
+      "filorosso:grasp"
+    ],
+    "subtitle": "subtitles.filorosso.grasp"
+  },
   "scissors": {
     "sounds": [
       "filorosso:scissors"

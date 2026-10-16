@@ -17,6 +17,7 @@ import com.filorosso.server.ModRules;
 import com.filorosso.server.Revive;
 import com.filorosso.server.Scores;
 import com.filorosso.server.Servants;
+import com.filorosso.server.SharedLife;
 import com.filorosso.server.Tether;
 import com.filorosso.sound.ModSounds;
 import net.fabricmc.api.ModInitializer;
@@ -48,6 +49,7 @@ public class FiloRosso implements ModInitializer {
         Combat.init();
         Abilities.init();
         Revive.init();
+        SharedLife.init();
         Joining.init();
         FiloCommand.init();
 
@@ -64,6 +66,7 @@ public class FiloRosso implements ModInitializer {
                 Affinity.tick(server);
                 Destiny.tick(server);
                 Revive.tick(server);
+                SharedLife.tick(server);
                 Challenges.tick(server);
                 Servants.tick(server);
             } catch (RuntimeException e) {

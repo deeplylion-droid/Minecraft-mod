@@ -98,9 +98,9 @@ public final class Tether {
                 continue;
             }
             double d = a.position().distanceTo(b.position());
-            if (d > max + 8.0) {
+            if (d > max + 4.0) {
                 int apart = APART.merge(key, 1, Integer::sum);
-                if (apart > 20) {
+                if (apart > 30) {
                     reunite(a, b, now);
                     APART.remove(key);
                 }
@@ -230,7 +230,7 @@ public final class Tether {
         }
     }
 
-    /** Is this point near the thread between these two? (scissors, lightning) */
+    /** Is this point near the thread between these two? (missiles, lightning) */
     public static double distanceToThread(Entity a, Entity b, Vec3 point) {
         Vec3 from = a.position().add(0.0, 1.0, 0.0);
         Vec3 to = b.position().add(0.0, 1.0, 0.0);
@@ -240,7 +240,7 @@ public final class Tether {
         return from.add(ab.scale(t)).distanceTo(point);
     }
 
-    /** Cuts a couple's thread for a while (Spezzacuori's servants and scissors). */
+    /** Cuts a couple's thread for a while (Recisione, its missiles and its servants). */
     public static void cut(MinecraftServer server, Couple couple, int ticks) {
         long now = server.overworld().getGameTime();
         if (couple.cutUntil > now) {

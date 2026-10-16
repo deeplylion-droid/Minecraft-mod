@@ -2,8 +2,11 @@ package com.filorosso.client;
 
 import com.filorosso.FiloRosso;
 import com.filorosso.client.hud.CoupleHud;
+import com.filorosso.client.hud.BossFx;
+import com.filorosso.client.render.GraspRenderer;
+import com.filorosso.client.render.MissileRenderer;
+import com.filorosso.client.render.RecisioneRenderer;
 import com.filorosso.client.render.ServantRenderer;
-import com.filorosso.client.render.SpezzacuoriRenderer;
 import com.filorosso.client.render.ThreadRenderer;
 import com.filorosso.client.screen.BreakUpScreen;
 import com.filorosso.client.screen.ChoiceScreen;
@@ -22,7 +25,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.player.Player;
 
@@ -75,6 +77,7 @@ public class FiloRossoClient implements ClientModInitializer {
             ThreadRenderer.clear();
             ThreadPhysics.reset();
             CoupleHud.reset();
+            BossFx.reset();
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(FiloRossoClient::tick);
@@ -82,13 +85,15 @@ public class FiloRossoClient implements ClientModInitializer {
         ThreadRenderer.init();
 
         EntityRendererRegistry.register(ModEntities.SERVANT, ServantRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SPEZZACUORI, SpezzacuoriRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SCISSORS, context -> new ThrownItemRenderer<>(context, 2.5F, false));
+        EntityRendererRegistry.register(ModEntities.RECISIONE, RecisioneRenderer::new);
+        EntityRendererRegistry.register(ModEntities.MISSILE, MissileRenderer::new);
+        EntityRendererRegistry.register(ModEntities.GRASP, GraspRenderer::new);
     }
 
     private static void tick(Minecraft mc) {
         LocalPlayer player = mc.player;
         CoupleHud.tick(mc);
+        BossFx.tick(mc);
         if (player == null || mc.level == null) {
             return;
         }

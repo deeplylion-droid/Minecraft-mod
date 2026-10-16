@@ -24,8 +24,8 @@ public final class ThreadPhysics {
 
     /** Beyond the length by this much, the correction is immediate. */
     private static final double HARD = 0.8;
-    /** Further than this something went wrong (teleport, lag): the server brings them together. */
-    private static final double GIVE_UP = 12.0;
+    /** Stretched further than this (a pearl, lag): no yanking, the server brings the two together. */
+    private static final double GIVE_UP = 4.0;
 
     /** Most a correction or a drag may move a player in one tick (blocks). */
     private static final double MAX_STEP = 0.9;
@@ -138,7 +138,7 @@ public final class ThreadPhysics {
         Vec3 b = center(other);
         Vec3 delta = b.subtract(a);
         double d = delta.length();
-        if (d < 1.0E-4 || d > length * 1.5 + GIVE_UP) {
+        if (d < 1.0E-4) {
             return;
         }
         Vec3 n = delta.scale(1.0 / d);
@@ -147,6 +147,9 @@ public final class ThreadPhysics {
         double share = share(me, other);
         boolean elastic = !tie.extra() && tie.type() == BondType.ELASTIC;
         double limit = elastic ? length * 1.5 : length;
+        if (d > limit + GIVE_UP) {
+            return;
+        }
         Events.Kind event = ClientState.event();
 
         // the fates of the bond

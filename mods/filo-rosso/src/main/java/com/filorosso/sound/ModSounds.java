@@ -33,6 +33,11 @@ public final class ModSounds {
     public static final SoundEvent BOSS_SCREAM = register("boss_scream");
     public static final SoundEvent BOSS_HURT = register("boss_hurt");
     public static final SoundEvent BOSS_DEATH = register("boss_death");
+    public static final SoundEvent BOSS_BELL = register("boss_bell");
+    public static final SoundEvent BOSS_GLITCH = register("boss_glitch");
+    public static final SoundEvent MISSILE = register("missile");
+    public static final SoundEvent MISSILE_HIT = register("missile_hit");
+    public static final SoundEvent GRASP = register("grasp");
     public static final SoundEvent SCISSORS = register("scissors");
     public static final SoundEvent MINION_AMBIENT = register("minion_ambient");
     public static final SoundEvent MINION_HURT = register("minion_hurt");

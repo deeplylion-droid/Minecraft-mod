@@ -93,6 +93,8 @@ public final class CoupleHud {
         Status status = Me.status();
         Player partner = Me.partner();
 
+        // near Recisione the picture breaks up (under the couple's HUD, over everything else)
+        BossFx.draw(g);
         if (status.downed()) {
             downed(g, font, w, h, t, now, status, link);
         } else if (partner != null && ModData.downed(partner)) {

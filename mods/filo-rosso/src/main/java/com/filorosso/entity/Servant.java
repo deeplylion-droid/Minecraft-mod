@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * "Uno Spaiato": a grey, lonely servant of Lo Spezzacuori with a cracked heart in the chest. It
+ * "Uno Spaiato": a black, faceless servant of Recisione with dark red eyes. It
  * hunts couples at night and cuts the threads it gets close to; it burns in the sun and drops
  * heart shards (the way to call its master).
  */
@@ -58,7 +58,7 @@ public class Servant extends Zombie {
         super.setBaby(false);
     }
 
-    /** They carry a pair of their master's scissors (never dropped). */
+    /** They carry a pair of scissors (never dropped). */
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new net.minecraft.world.item.ItemStack(com.filorosso.item.ModItems.SCISSORS));

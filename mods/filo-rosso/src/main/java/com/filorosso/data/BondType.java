@@ -13,7 +13,7 @@ public enum BondType {
     MAGNET("magnetico", 0xA060FF, 3),
     SWAP("scambio", 0x40E080, 3),
     JEALOUS("geloso", 0x70D020, 3),
-    SHARED("cuori_uniti", 0xFF5090, 3);
+    SHIELD("scudo", 0x60A0FF, 3);
 
     public static final BondType[] ALL = values();
 

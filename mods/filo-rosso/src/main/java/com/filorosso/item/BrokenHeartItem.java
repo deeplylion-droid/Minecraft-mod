@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-/** "Cuore spezzato": used at night under the open sky, it calls Lo Spezzacuori. */
+/** "Cuore spezzato": used at night under the open sky, it calls Recisione. */
 public class BrokenHeartItem extends Item {
     public BrokenHeartItem(Properties properties) {
         super(properties);
