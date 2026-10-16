@@ -58,8 +58,11 @@ public class Servant extends Zombie {
         super.setBaby(false);
     }
 
+    /** They carry a pair of their master's scissors (never dropped). */
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
+        this.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new net.minecraft.world.item.ItemStack(com.filorosso.item.ModItems.SCISSORS));
+        this.setDropChance(net.minecraft.world.entity.EquipmentSlot.MAINHAND, 0.0F);
     }
 
     @Override

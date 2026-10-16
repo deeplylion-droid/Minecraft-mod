@@ -39,8 +39,9 @@ public final class Tether {
     private static final Map<UUID, Long> LAST_JUMP = new HashMap<>();
     /** Players held up by the thread right now (game time). */
     private static final Map<UUID, Long> HELD = new HashMap<>();
-    /** How far they fell before the thread caught them. */
-    private static final Map<UUID, Double> FALLING = new HashMap<>();
+    /** Ticks spent hanging from a taut thread, and who was hanging over a real drop. */
+    private static final Map<UUID, Integer> HANGING = new HashMap<>();
+    private static final java.util.Set<UUID> DROP = new java.util.HashSet<>();
     /** Ticks a pair has been too far apart. */
     private static final Map<String, Integer> APART = new HashMap<>();
     /** Mobs hit by a thread recently (entity id, game time). */
@@ -65,7 +66,8 @@ public final class Tether {
     public static void forget(ServerPlayer player) {
         LAST_POS.remove(player.getUUID());
         HELD.remove(player.getUUID());
-        FALLING.remove(player.getUUID());
+        HANGING.remove(player.getUUID());
+        DROP.remove(player.getUUID());
     }
 
     private static String key(Links.Pair p) {
@@ -117,19 +119,28 @@ public final class Tether {
         }
     }
 
-    /** Hanging from a taut thread: no fall damage, no "flying" kick, and a reward for the catch. */
+    /**
+     * In the air below a partner who stands firm: no fall damage (the thread holds you), no
+     * "flying" kick while hanging, and a reward for a real catch: hanging over a drop for a while,
+     * then back on your feet.
+     */
     private static void holdUp(ServerPlayer p, ServerPlayer other, double d, double max, long now) {
         boolean below = other.getY() - p.getY() > 0.6;
-        if (!p.onGround() && below && d >= max - 0.6) {
-            double fell = p.fallDistance;
-            if (fell > 0.0) {
-                FALLING.merge(p.getUUID(), fell, Math::max);
-            }
+        boolean steady = other.onGround() || other.isInWater() || other.isPassenger();
+        boolean air = !p.onGround() && !p.isInWater() && !p.onClimbable();
+        if (air && below && steady) {
             p.resetFallDistance();
             HELD.put(p.getUUID(), now);
-        } else if (p.onGround() || p.isInWater()) {
-            Double fell = FALLING.remove(p.getUUID());
-            if (fell != null && fell > 4.0 && held(p)) {
+            if (d >= max - 0.8) {
+                int hang = HANGING.merge(p.getUUID(), 1, Integer::sum);
+                if (hang % 5 == 1 && overDrop(p)) {
+                    DROP.add(p.getUUID());
+                }
+            }
+        } else if (!air) {
+            Integer hang = HANGING.remove(p.getUUID());
+            boolean drop = DROP.remove(p.getUUID());
+            if (hang != null && hang >= 10 && drop) {
                 Couple couple = Bonds.coupleOf(p);
                 if (couple != null && couple.has(other.getUUID())) {
                     Affinity.add(p.level().getServer(), couple, 12, true);
@@ -138,6 +149,18 @@ public final class Tether {
                 }
             }
         }
+    }
+
+    /** At least four blocks of nothing under the feet. */
+    private static boolean overDrop(ServerPlayer p) {
+        net.minecraft.core.BlockPos.MutableBlockPos pos = p.blockPosition().mutable();
+        for (int i = 0; i < 4; i++) {
+            pos.move(net.minecraft.core.Direction.DOWN);
+            if (!p.level().getBlockState(pos).getCollisionShape(p.level(), pos).isEmpty() || !p.level().getFluidState(pos).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** The one left behind is pulled to the one who jumped (pearl, portal, teleport...). */

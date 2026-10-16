@@ -107,6 +107,9 @@ public final class Affinity {
         if (killed instanceof Enemy) {
             Challenges.add(killer.level().getServer(), couple, Challenges.KILLS, 1);
         }
+        if (killed instanceof com.filorosso.entity.Servant) {
+            Challenges.add(killer.level().getServer(), couple, Challenges.SHARDS, 1);
+        }
     }
 
     /** Feeding the partner by hand. */

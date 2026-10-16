@@ -70,6 +70,7 @@ public class Spezzacuori extends Monster {
     private boolean screamed33;
     private int farTicks;
     private int hintCooldown;
+    private boolean lastCombo;
 
     public Spezzacuori(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -133,6 +134,7 @@ public class Spezzacuori extends Monster {
 
     /** Only couple hits count fully; while rising he cannot be hurt. */
     public float adjustDamage(float amount, boolean combo, Couple couple) {
+        this.lastCombo = combo;
         if (this.action() == RISE || this.isDeadOrDying()) {
             return 0.0F;
         }
@@ -148,7 +150,7 @@ public class Spezzacuori extends Monster {
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         boolean hurt = super.hurtServer(level, source, amount);
-        if (hurt && source.getEntity() instanceof ServerPlayer player && this.hintCooldown <= 0 && amount < 3.0F) {
+        if (hurt && source.getEntity() instanceof ServerPlayer player && this.hintCooldown <= 0 && !this.lastCombo) {
             this.hintCooldown = 100;
             player.sendSystemMessage(Component.translatable("filorosso.msg.boss_hint").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         }

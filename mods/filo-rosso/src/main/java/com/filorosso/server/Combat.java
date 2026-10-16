@@ -34,6 +34,8 @@ public final class Combat {
 
     /** Who hit what, when: target entity id, attacker, game time. */
     private static final Map<Integer, Map<UUID, Long>> HITS = new HashMap<>();
+    /** Last couple hit on each target: one every half second at most (no farming a mob with fast clicks). */
+    private static final Map<Integer, Long> LAST_COMBO = new HashMap<>();
     public static final int COMBO_WINDOW = 25;
     private static boolean sharing;
 
@@ -96,7 +98,12 @@ public final class Combat {
             boolean combo = false;
             if (couple != null) {
                 UUID partner = couple.other(attacker.getUUID());
-                combo = hitBy(target, partner, now, COMBO_WINDOW) && !target.getUUID().equals(partner);
+                Long last = LAST_COMBO.get(target.getId());
+                combo = hitBy(target, partner, now, COMBO_WINDOW) && !target.getUUID().equals(partner) && (last == null || now - last >= 10)
+                        && target.getInvulnerableTime() <= 10;
+                if (combo) {
+                    LAST_COMBO.put(target.getId(), now);
+                }
             }
             HITS.computeIfAbsent(target.getId(), k -> new HashMap<>()).put(attacker.getUUID(), now);
             if (combo) {
@@ -109,7 +116,8 @@ public final class Combat {
         } else if (target instanceof Spezzacuori boss && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             out = boss.adjustDamage(out, false, null);
         }
-        if (target instanceof ServerPlayer player && !sharing && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        if (target instanceof ServerPlayer player && !sharing && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !ModData.downed(player)
+                && !player.isCreative() && !player.isSpectator() && player.getInvulnerableTime() <= 10 && !player.isInvulnerableTo(level, source)) {
             Couple couple = Bonds.coupleOf(player);
             if (couple != null && couple.bondType() == BondType.SHARED) {
                 ServerPlayer partner = Bonds.partner(player);
@@ -126,6 +134,7 @@ public final class Combat {
             }
         }
         if (now % 600 == 0) {
+            LAST_COMBO.values().removeIf(t -> now - t > 200);
             HITS.values().removeIf(m -> {
                 m.values().removeIf(t -> now - t > 200);
                 return m.isEmpty();
