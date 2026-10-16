@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.filorosso.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "BossHealthOverlayAccessor",
+    "HudMixin",
+    "KeyboardInputMixin",
+    "MinecraftMixin",
+    "PlayerTabOverlayMixin",
+    "PreferredGraphicsApiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
