@@ -12,6 +12,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 /**
  * Shared life: the two partners have one life. What one loses the other loses too, what one gets
  * back the other gets back. A deadly hit only knocks down whoever takes it and leaves the partner
@@ -22,10 +25,25 @@ public final class SharedLife {
     }
 
     private static boolean sharing;
+    /** Health right before a hit: what is shared is what was really lost (after armor, resistance, absorption). */
+    private static final Map<ServerPlayer, Float> BEFORE = new WeakHashMap<>();
+
+    /** From the LivingEntity mixin, at the start of every hit. */
+    public static void beforeHurt(LivingEntity entity) {
+        if (entity instanceof ServerPlayer player) {
+            BEFORE.put(player, player.getHealth());
+        }
+    }
 
     public static void init() {
         ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseTaken, taken, blocked) -> {
-            if (sharing || taken <= 0.0F || !(entity instanceof ServerPlayer player)) {
+            if (sharing || !(entity instanceof ServerPlayer player)) {
+                return;
+            }
+            // the event's amount is before armor and resistance: count the hearts that really went
+            Float before = BEFORE.remove(player);
+            float lost = before == null ? 0.0F : before - player.getHealth();
+            if (lost <= 0.0F) {
                 return;
             }
             ServerPlayer partner = partner(player);
@@ -33,7 +51,7 @@ public final class SharedLife {
                 return;
             }
             // whoever was hit falls first: the shared damage never kills
-            float amount = Math.min(taken, partner.getHealth() - 1.0F);
+            float amount = Math.min(lost, partner.getHealth() - 1.0F);
             if (amount <= 0.0F) {
                 return;
             }

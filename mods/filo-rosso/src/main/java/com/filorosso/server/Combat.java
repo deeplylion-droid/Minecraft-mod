@@ -120,7 +120,7 @@ public final class Combat {
             if (couple != null && couple.bondType() == BondType.SHIELD) {
                 ServerPlayer partner = Bonds.partner(player);
                 if (partner != null && partner.level() == player.level() && partner.distanceTo(player) < 4.0) {
-                    out *= 0.7F;
+                    out *= 0.67F;
                 }
             }
         }

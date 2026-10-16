@@ -95,13 +95,16 @@ public class Missile extends ThrowableProjectile {
             }
         }
         if (this.landing != Vec3.ZERO && this.tickCount % 2 == 0) {
-            // the warning: a dark red ring where it will land
-            int n = 14;
-            double spin = this.tickCount * 0.15;
+            // the warning: a dark red ring where it will land, and black smoke in the middle
+            int n = 12;
+            double spin = this.tickCount * 0.12;
             for (int i = 0; i < n; i++) {
                 double a = spin + i * Math.PI * 2.0 / n;
-                level.sendParticles(new DustParticleOptions(0x9a1018, 1.3F), this.landing.x + Math.cos(a) * RADIUS * 0.8, this.landing.y + 0.15,
+                level.sendParticles(new DustParticleOptions(0xB01020, 1.5F), this.landing.x + Math.cos(a) * RADIUS * 0.8, this.landing.y + 0.1,
                         this.landing.z + Math.sin(a) * RADIUS * 0.8, 1, 0.0, 0.0, 0.0, 0.0);
+            }
+            if (this.tickCount % 4 == 0) {
+                level.sendParticles(ParticleTypes.LARGE_SMOKE, this.landing.x, this.landing.y + 0.1, this.landing.z, 2, 0.4, 0.0, 0.4, 0.01);
             }
         }
         // threads it flies through are severed

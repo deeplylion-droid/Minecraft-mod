@@ -25,7 +25,7 @@ public final class ModEntities {
             EntityType.Builder.<Missile>of(Missile::new, MobCategory.MISC).sized(0.9F, 0.9F).clientTrackingRange(10).updateInterval(2).noSave());
     /** Its hand coming out of the ground. */
     public static final EntityType<Grasp> GRASP = register("grasp",
-            EntityType.Builder.<Grasp>of(Grasp::new, MobCategory.MISC).sized(1.0F, 3.0F).clientTrackingRange(10).updateInterval(20).noSave().noSummon());
+            EntityType.Builder.<Grasp>of(Grasp::new, MobCategory.MISC).sized(1.0F, 3.0F).clientTrackingRange(10).updateInterval(20).noSave());
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, FiloRosso.id(name));

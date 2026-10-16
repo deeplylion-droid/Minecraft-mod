@@ -86,7 +86,7 @@ public final class BossFx {
         }
         // the edges go dark
         int edge = Math.max(24, Math.min(w, h) / 3);
-        float a = 0.55F * s;
+        float a = 0.4F * s;
         g.fillGradient(0, 0, w, edge, ARGB.color(a, 0x000000), ARGB.color(0.0F, 0x000000));
         g.fillGradient(0, h - edge, w, h, ARGB.color(0.0F, 0x000000), ARGB.color(a, 0x000000));
         for (int i = 0; i < edge; i += 2) {

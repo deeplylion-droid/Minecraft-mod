@@ -4,6 +4,7 @@ import com.filorosso.data.BondLevel;
 import com.filorosso.data.BondType;
 import com.filorosso.data.Couple;
 import com.filorosso.data.CoupleBook;
+import com.filorosso.entity.Recisione;
 import com.filorosso.util.Text;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -107,7 +108,15 @@ public final class FiloCommand {
                 .then(Commands.literal("taglia").requires(op)
                         .then(Commands.argument("giocatore", EntityArgument.player())
                                 .executes(c -> cut(c.getSource(), EntityArgument.getPlayer(c, "giocatore")))))
-                .then(Commands.literal("boss").requires(op).executes(c -> boss(c.getSource())))
+                .then(Commands.literal("boss").requires(op).executes(c -> boss(c.getSource()))
+                        // for testing and for videos: make it attack now, or skip to a later form
+                        .then(Commands.literal("attacco")
+                                .then(Commands.argument("attacco", StringArgumentType.word())
+                                        .suggests((c, b) -> SharedSuggestionProvider.suggest(Arrays.stream(Recisione.ACTION_NAMES).filter(n -> !n.isEmpty()), b))
+                                        .executes(c -> bossAttack(c.getSource(), StringArgumentType.getString(c, "attacco")))))
+                        .then(Commands.literal("fase")
+                                .then(Commands.argument("fase", IntegerArgumentType.integer(2, 3))
+                                        .executes(c -> bossPhase(c.getSource(), IntegerArgumentType.getInteger(c, "fase"))))))
                 .then(Commands.literal("servo").requires(op).executes(c -> servant(c.getSource()))));
     }
 
@@ -266,6 +275,42 @@ public final class FiloCommand {
         if (!Boss.summon(p.level().getServer(), (net.minecraft.server.level.ServerLevel) p.level(), p.position().add(p.getLookAngle().scale(12.0)))) {
             throw error("filorosso.command.boss_failed");
         }
+        return 1;
+    }
+
+    /** The Recisione closest to whoever runs the command. */
+    private static Recisione nearestBoss(CommandSourceStack source) throws CommandSyntaxException {
+        Recisione best = null;
+        double bestD = Double.MAX_VALUE;
+        for (net.minecraft.server.level.ServerLevel level : source.getServer().getAllLevels()) {
+            for (net.minecraft.world.entity.Entity e : level.getAllEntities()) {
+                if (e instanceof Recisione r && r.isAlive()) {
+                    double d = level == source.getLevel() ? r.distanceToSqr(source.getPosition()) : Double.MAX_VALUE / 2;
+                    if (d < bestD) {
+                        bestD = d;
+                        best = r;
+                    }
+                }
+            }
+        }
+        if (best == null) {
+            throw error("filorosso.command.no_boss");
+        }
+        return best;
+    }
+
+    private static int bossAttack(CommandSourceStack source, String name) throws CommandSyntaxException {
+        int action = Arrays.asList(Recisione.ACTION_NAMES).indexOf(name.toLowerCase(java.util.Locale.ROOT));
+        if (action <= 0) {
+            throw new SimpleCommandExceptionType(Component.translatable("filorosso.command.unknown_attack", name)).create();
+        }
+        nearestBoss(source).force(action);
+        return 1;
+    }
+
+    private static int bossPhase(CommandSourceStack source, int phase) throws CommandSyntaxException {
+        Recisione boss = nearestBoss(source);
+        boss.setHealth(Math.min(boss.getHealth(), boss.getMaxHealth() * (phase == 3 ? 0.3F : 0.6F)));
         return 1;
     }
 

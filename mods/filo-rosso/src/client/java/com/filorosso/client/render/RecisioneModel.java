@@ -38,6 +38,8 @@ public class RecisioneModel extends EntityModel<RecisioneRenderState> {
     private final ModelPart[] box = new ModelPart[BOXES];
     /** Parts that may drop out for a glitch frame or while it falls apart (never the trunk). */
     private final ModelPart[] loose;
+    /** Every part: resetPose() does not touch visibility, so each frame starts with all of them shown. */
+    private final ModelPart[] all;
 
     /** How hard the tendrils bend forward (strikes) and how much they curl (0 = straight up). */
     private float tendrilBend;
@@ -88,6 +90,7 @@ public class RecisioneModel extends EntityModel<RecisioneRenderState> {
         loose.add(this.shin[0]);
         loose.add(this.shin[1]);
         this.loose = loose.toArray(new ModelPart[0]);
+        this.all = baked.parts().values().toArray(new ModelPart[0]);
     }
 
     // ------------------------------------------------------------------ helpers
@@ -146,6 +149,9 @@ public class RecisioneModel extends EntityModel<RecisioneRenderState> {
     @Override
     public void setupAnim(RecisioneRenderState s) {
         super.setupAnim(s);
+        for (ModelPart part : this.all) {
+            part.visible = true;
+        }
         float age = s.ageInTicks;
         int seed = s.seed;
         float walk = s.walkAnimationPos * 0.33F;
@@ -457,6 +463,6 @@ public class RecisioneModel extends EntityModel<RecisioneRenderState> {
         this.neck.xRot += (hash(seed + 6, frame) - 0.5F) * 30.0F * D;
         int i = frame & 1;
         this.arm[i].zRot += (hash(seed + 7, frame) - 0.5F) * 50.0F * D;
-        this.eyes.visible = hash(seed + 8, frame) > 0.4F;
+        this.eyes.visible &= hash(seed + 8, frame) > 0.4F;
     }
 }

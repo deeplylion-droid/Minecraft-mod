@@ -85,8 +85,8 @@ public final class Boss {
             }
             Bonds.title(p, Recisione.glitchName(1 + p.getRandom().nextInt(7)),
                     Component.translatable("filorosso.title.boss.sub").withStyle(ChatFormatting.DARK_GRAY), 10, 80, 20);
-            p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 160, 0));
-            p.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 30, 0));
+            // dark for a moment, then you can watch it climb out of the ground
+            p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 50, 0));
         }
         server.getPlayerList().broadcastSystemMessage(Component.empty().append(Text.icon(Text.BROKEN, 0xC02040)).append(Component.literal(" "))
                 .append(Component.translatable("filorosso.msg.boss_arrived").withStyle(ChatFormatting.DARK_RED)), false);

@@ -67,6 +67,8 @@ public class Recisione extends Monster {
     public static final int BLINK = 7;
 
     private static final int[] DURATION = {0, 24, 44, 34, 30, 60, 70, 16};
+    /** The names /filo boss attacco knows them by (empty: cannot be forced). */
+    public static final String[] ACTION_NAMES = {"", "colpo", "radici", "missili", "presa", "campana", "", "salto"};
 
     private static final EntityDataAccessor<Integer> DATA_ACTION = SynchedEntityData.defineId(Recisione.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ACTION_START = SynchedEntityData.defineId(Recisione.class, EntityDataSerializers.INT);
@@ -186,13 +188,23 @@ public class Recisione extends Monster {
         if (this.level().isClientSide() && !this.isDeadOrDying()) {
             // black dust coming off its body, more in its later forms
             for (int i = 0; i < this.phase(); i++) {
-                this.level().addParticle(new DustParticleOptions(0x050505, 1.4F + this.random.nextFloat() * 1.2F), this.getRandomX(1.6),
+                this.level().addParticle(new DustParticleOptions(0x050505, 0.9F + this.random.nextFloat() * 0.9F), this.getRandomX(1.6),
                         this.getY() + this.random.nextDouble() * 9.5, this.getRandomZ(1.6), 0.0, 0.03, 0.0);
             }
             if (this.random.nextInt(4) == 0) {
                 this.level().addParticle(ParticleTypes.ASH, this.getRandomX(3.0), this.getY() + this.random.nextDouble() * 10.0, this.getRandomZ(3.0),
                         0.0, 0.0, 0.0);
             }
+        }
+    }
+
+    /** /filo boss attacco: this attack, right now (not while it climbs out or falls apart). */
+    public void force(int action) {
+        if (this.action() != RISE && !this.isDeadOrDying()) {
+            if (this.getTarget() == null && this.level() instanceof ServerLevel level) {
+                this.setTarget(this.pickTarget(level));
+            }
+            this.start(action);
         }
     }
 
@@ -589,7 +601,7 @@ public class Recisione extends Monster {
                     this.playSound(ModSounds.BOSS_SCREAM, 6.0F, 1.0F);
                     this.lifted.clear();
                     for (ServerPlayer p : this.playersNear(level, 48.0)) {
-                        p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 140, 0));
+                        p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 60, 0));
                         // gravity turns upside down for a moment
                         p.addEffect(new MobEffectInstance(MobEffects.LEVITATION, this.phase() == 3 ? 40 : 30, 2));
                         this.lifted.add(p);
