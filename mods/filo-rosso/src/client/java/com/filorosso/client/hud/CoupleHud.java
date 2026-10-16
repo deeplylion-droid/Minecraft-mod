@@ -274,8 +274,12 @@ public final class CoupleHud {
         if (ThreadPhysics.hanging) {
             hint = Component.translatable("filorosso.hud.hanging", mc.options.keyJump.getTranslatedKeyMessage());
         } else if (ThreadPhysics.holding) {
-            hint = Component.translatable("filorosso.hud.holding", mc.options.keyShift.getTranslatedKeyMessage(), link.partnerName());
-            color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.5F), 0xFFFFE070, 0xFFFFFFFF);
+            if (mc.player != null && mc.player.isShiftKeyDown()) {
+                hint = Component.translatable("filorosso.hud.holding_on", link.partnerName());
+            } else {
+                hint = Component.translatable("filorosso.hud.holding", mc.options.keyShift.getTranslatedKeyMessage(), link.partnerName());
+                color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.5F), 0xFFFFE070, 0xFFFFFFFF);
+            }
         } else if (ThreadPhysics.jealous) {
             hint = Component.translatable("filorosso.hud.jealous", link.partnerName());
             color = 0xFF90E040;

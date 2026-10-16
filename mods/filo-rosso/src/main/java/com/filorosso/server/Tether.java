@@ -204,14 +204,14 @@ public final class Tether {
         }
         AABB box = new AABB(from, to).inflate(0.5);
         boolean fire = couple.bondType() == BondType.FIRE;
-        float damage = 2.0F + couple.level().ordinal() + (fire ? 1.0F : 0.0F);
+        float damage = 1.5F + 0.75F * couple.level().ordinal() + (fire ? 1.0F : 0.0F);
         Vec3 push = lastMid == null ? Vec3.ZERO : mid.subtract(lastMid);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> e.isAlive() && !(e instanceof Player) && !(e instanceof ArmorStand))) {
             if (e.getBoundingBox().inflate(0.2).clip(from, to).isEmpty() && !e.getBoundingBox().inflate(0.2).contains(mid)) {
                 continue;
             }
             Long last = HIT.get(e.getId());
-            if (last != null && last > now - 10) {
+            if (last != null && last > now - 20) {
                 continue;
             }
             HIT.put(e.getId(), now);

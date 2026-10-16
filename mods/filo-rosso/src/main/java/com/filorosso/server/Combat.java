@@ -122,13 +122,16 @@ public final class Combat {
             if (couple != null && couple.bondType() == BondType.SHARED) {
                 ServerPlayer partner = Bonds.partner(player);
                 if (partner != null && partner.isAlive() && !ModData.downed(partner) && partner.level() == player.level()) {
-                    float half = out / 2.0F;
+                    // the partner takes half, but is never knocked down by it: whoever was hit falls first
+                    float half = Math.min(out / 2.0F, Math.max(0.0F, partner.getHealth() - 2.0F));
                     out -= half;
-                    sharing = true;
-                    try {
-                        partner.hurtServer(level, source, half);
-                    } finally {
-                        sharing = false;
+                    if (half > 0.0F) {
+                        sharing = true;
+                        try {
+                            partner.hurtServer(level, source, half);
+                        } finally {
+                            sharing = false;
+                        }
                     }
                 }
             }

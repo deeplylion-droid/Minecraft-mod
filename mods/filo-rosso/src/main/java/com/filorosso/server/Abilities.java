@@ -122,7 +122,7 @@ public final class Abilities {
         if (d < 1.5) {
             return false;
         }
-        Vec3 v = dir.normalize().scale(Math.min(1.6, 0.5 + d * 0.12)).add(0.0, 0.42, 0.0);
+        Vec3 v = dir.normalize().scale(Math.min(1.2, 0.3 + d * 0.09)).add(0.0, 0.35, 0.0);
         partner.setDeltaMovement(v);
         partner.connection.send(new ClientboundSetEntityMotionPacket(partner));
         partner.resetFallDistance();

@@ -27,7 +27,15 @@ public final class ThreadPhysics {
     /** Further than this something went wrong (teleport, lag): the server brings them together. */
     private static final double GIVE_UP = 12.0;
 
+    /** Most a correction or a drag may move a player in one tick (blocks). */
+    private static final double MAX_STEP = 0.9;
+    /** After a teleport (yours or your partner's) the thread waits a moment: positions are still arriving. */
+    private static final int SETTLE_TICKS = 10;
+
     private static long lastTautSound;
+    private static net.minecraft.world.phys.Vec3 lastMine;
+    private static final java.util.Map<Integer, net.minecraft.world.phys.Vec3> LAST_OTHER = new java.util.HashMap<>();
+    private static int settle;
     /** True while the local player is hanging from the thread (HUD hint, sounds). */
     public static boolean hanging;
     /** True while the partner hangs from the local player (HUD hint: crouch to hold them). */
@@ -52,10 +60,38 @@ public final class ThreadPhysics {
             }
         }
         float length = ClientState.length();
-        for (ThreadLinks.Tie tie : ThreadLinks.of(me)) {
+        // teleports (commands, pearls, the server bringing partners together) are not movement
+        Vec3 here = me.position();
+        if (lastMine != null && lastMine.distanceToSqr(here) > 4.5 * 4.5) {
+            settle = SETTLE_TICKS;
+        }
+        lastMine = here;
+        java.util.List<ThreadLinks.Tie> ties = ThreadLinks.of(me);
+        for (ThreadLinks.Tie tie : ties) {
+            Player other = tie.other(me);
+            Vec3 there = other.position();
+            Vec3 before = LAST_OTHER.put(other.getId(), there);
+            if (before != null && before.distanceToSqr(there) > 4.5 * 4.5) {
+                settle = SETTLE_TICKS;
+            }
+        }
+        if (settle > 0) {
+            settle--;
+            return;
+        }
+        for (ThreadLinks.Tie tie : ties) {
             Player other = tie.other(me);
             apply(mc, me, body, other, tie, length);
         }
+        if (me.level().getGameTime() % 200 == 0) {
+            LAST_OTHER.keySet().removeIf(id -> me.level().getEntity(id) == null);
+        }
+    }
+
+    public static void reset() {
+        lastMine = null;
+        LAST_OTHER.clear();
+        settle = 0;
     }
 
     private static boolean airborne(Player p) {
@@ -115,8 +151,8 @@ public final class ThreadPhysics {
 
         // the fates of the bond
         if (!tie.extra()) {
-            if (tie.type() == BondType.MAGNET && d > 2.0) {
-                v = v.add(n.scale(me.onGround() ? 0.02 : 0.006));
+            if (tie.type() == BondType.MAGNET && d > 3.0) {
+                v = v.add(n.scale(me.onGround() ? 0.008 : 0.003));
             }
             if (tie.type() == BondType.JEALOUS) {
                 for (Player p : me.level().players()) {
@@ -144,7 +180,7 @@ public final class ThreadPhysics {
             double excess = d - limit;
             // pulled back within reach (with collisions: never through walls)
             double k = excess > HARD ? 1.0 : 0.5;
-            body.move(MoverType.SELF, n.scale(excess * share * k));
+            body.move(MoverType.SELF, n.scale(Math.min(MAX_STEP, excess * share * k)));
             // no more moving away; dragged along by a partner who walks away
             double myOut = -v.dot(n);
             if (myOut > 0.0) {
@@ -152,7 +188,7 @@ public final class ThreadPhysics {
             }
             double theirOut = otherVel.dot(n);
             double toward = v.dot(n);
-            double follow = theirOut * Math.min(1.0, share * 2.0);
+            double follow = Math.min(MAX_STEP, theirOut * Math.min(1.0, share * 2.0));
             if (follow > toward) {
                 v = v.add(n.scale(follow - toward));
             }

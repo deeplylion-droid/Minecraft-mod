@@ -13,6 +13,7 @@ import com.filorosso.entity.ModEntities;
 import com.filorosso.net.Net;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -72,10 +73,12 @@ public class FiloRossoClient implements ClientModInitializer {
             pendingBreakUp = null;
             ClientState.reset();
             ThreadRenderer.clear();
+            ThreadPhysics.reset();
             CoupleHud.reset();
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(FiloRossoClient::tick);
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> GraphicsFallback.started());
         ThreadRenderer.init();
 
         EntityRendererRegistry.register(ModEntities.SERVANT, ServantRenderer::new);

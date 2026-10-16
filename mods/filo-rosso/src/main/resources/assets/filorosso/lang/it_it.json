@@ -77,6 +77,7 @@
   "filorosso.hud.challenges": "Imprese · %s punti · %s° su %s",
   "filorosso.hud.hanging": "Tieni premuto %s per arrampicarti sul filo",
   "filorosso.hud.holding": "Accovacciati (%s) per reggere %s!",
+  "filorosso.hud.holding_on": "Stai reggendo %s: tieni duro!",
   "filorosso.hud.jealous": "Gelosia! Qualcuno è troppo vicino a %s",
   "filorosso.hud.downed": "SEI A TERRA",
   "filorosso.hud.downed.wait": "%s può rialzarti: %s",

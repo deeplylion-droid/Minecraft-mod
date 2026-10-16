@@ -45,6 +45,12 @@ public class SpezzacuoriRenderer extends MobRenderer<Spezzacuori, SpezzacuoriRen
         return TEXTURE;
     }
 
+    /** The model is drawn a third bigger: about seven blocks from his feet to his crown. */
+    @Override
+    protected void scale(SpezzacuoriRenderState state, PoseStack poseStack) {
+        poseStack.scale(1.35F, 1.35F, 1.35F);
+    }
+
     /** No sideways flip when he dies: he falls on his knees (in the model). */
     @Override
     protected float getFlipDegrees() {
@@ -58,7 +64,7 @@ public class SpezzacuoriRenderer extends MobRenderer<Spezzacuori, SpezzacuoriRen
             // he climbs out of the ground
             float k = Mth.clamp(state.actionTime / 55.0F, 0.0F, 1.0F);
             k = k * k * (3.0F - 2.0F * k);
-            poseStack.translate(0.0F, -(1.0F - k) * 7.6F, 0.0F);
+            poseStack.translate(0.0F, -(1.0F - k) * 9.5F, 0.0F);
         }
         if (state.raging) {
             poseStack.translate((Mth.sin(state.ageInTicks * 2.1F) * 0.02F), 0.0F, 0.0F);
@@ -67,6 +73,6 @@ public class SpezzacuoriRenderer extends MobRenderer<Spezzacuori, SpezzacuoriRen
 
     @Override
     protected AABB getBoundingBoxForCulling(Spezzacuori entity, float partialTicks) {
-        return super.getBoundingBoxForCulling(entity, partialTicks).inflate(4.0, 2.0, 4.0);
+        return super.getBoundingBoxForCulling(entity, partialTicks).inflate(6.0, 3.0, 6.0);
     }
 }
