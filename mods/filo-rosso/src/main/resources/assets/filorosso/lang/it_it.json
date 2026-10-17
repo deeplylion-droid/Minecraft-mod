@@ -218,7 +218,7 @@
   "filorosso.command.event_failed": "Servono coppie online (catena e scambio: almeno due)",
   "filorosso.command.boss_failed": "Non si riesce a evocare Recisione qui",
   "filorosso.command.no_boss": "Recisione non è qui",
-  "filorosso.command.unknown_attack": "Attacco sconosciuto: %s (colpo, radici, missili, presa, campana, salto)",
+  "filorosso.command.unknown_attack": "Attacco sconosciuto: %s (frusta, radici, missili, presa, campana, salto)",
   "subtitles.filorosso.proposal": "Una proposta",
   "subtitles.filorosso.bond": "Il filo rosso lega due cuori",
   "subtitles.filorosso.refuse": "Un rifiuto",

@@ -300,7 +300,9 @@ public final class FiloCommand {
     }
 
     private static int bossAttack(CommandSourceStack source, String name) throws CommandSyntaxException {
-        int action = Arrays.asList(Recisione.ACTION_NAMES).indexOf(name.toLowerCase(java.util.Locale.ROOT));
+        String key = name.toLowerCase(java.util.Locale.ROOT);
+        // "colpo" was the name of the first boss's arm swing: it still works for the strings' lash
+        int action = Arrays.asList(Recisione.ACTION_NAMES).indexOf(key.equals("colpo") ? "frusta" : key);
         if (action <= 0) {
             throw new SimpleCommandExceptionType(Component.translatable("filorosso.command.unknown_attack", name)).create();
         }

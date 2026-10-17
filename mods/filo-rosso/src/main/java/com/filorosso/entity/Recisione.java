@@ -44,14 +44,15 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Recisione: a pitch-black giant, thin as wire, made of the black threads of every couple that ever
- * broke. An upside-down triangle for a head, faded red eyes, a hollow ribcage; in its second form
- * tendrils with eyes grow from its shoulders and black boxes glitch around it, in the last one it
- * grows and its spine opens its eyes. A bell rings when it comes. Only couple hits really hurt it.
+ * Recisione, la Marionetta: a giant puppet of black cord, ten blocks tall, made of the threads of every
+ * couple that ever broke. An iron cage for a head with three empty red eyes inside, a knot of red
+ * thread for a heart, arms down to its knees; the strings that held it were cut, and they still rise
+ * from its shoulders: that is what it whips with. Black boxes glitch around it, more in its later
+ * forms; in the last one it grows. A bell rings when it comes. Only couple hits really hurt it.
  */
 public class Recisione extends Monster {
     public static final int NONE = 0;
-    /** An arm whips down in front of it. */
+    /** The cut strings lash down in front of it, the right ones first, then the left ones. */
     public static final int SLAM = 1;
     /** Both hands into the ground: a ring of roots runs out across the ground. */
     public static final int ROOTS = 2;
@@ -66,9 +67,14 @@ public class Recisione extends Monster {
     /** It glitches away and appears next to its target. */
     public static final int BLINK = 7;
 
-    private static final int[] DURATION = {0, 24, 44, 34, 30, 60, 70, 16};
+    /** Ticks each action lasts (SLAM is the model's attack1 animation, 2 s). */
+    private static final int[] DURATION = {0, 40, 44, 34, 30, 60, 70, 16};
+    /** When the two lashes of SLAM land (the model's attack1 at 0.70 s and 0.83 s). */
+    private static final int LASH_RIGHT = 14, LASH_LEFT = 17;
+    /** How far in front the strings reach (blocks from its centre). */
+    private static final double LASH_REACH = 6.5;
     /** The names /filo boss attacco knows them by (empty: cannot be forced). */
-    public static final String[] ACTION_NAMES = {"", "colpo", "radici", "missili", "presa", "campana", "", "salto"};
+    public static final String[] ACTION_NAMES = {"", "frusta", "radici", "missili", "presa", "campana", "", "salto"};
 
     private static final EntityDataAccessor<Integer> DATA_ACTION = SynchedEntityData.defineId(Recisione.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_ACTION_START = SynchedEntityData.defineId(Recisione.class, EntityDataSerializers.INT);
@@ -141,6 +147,11 @@ public class Recisione extends Monster {
     }
 
     // ------------------------------------------------------------------ state shared with the renderer
+
+    /** How many ticks an action lasts. */
+    public static int duration(int action) {
+        return action >= 0 && action < DURATION.length ? DURATION[action] : 0;
+    }
 
     public int action() {
         return this.entityData.get(DATA_ACTION);
@@ -314,18 +325,32 @@ public class Recisione extends Monster {
         }
     }
 
-    /** Pulled up into the sky, falling apart into black dust (the renderer lifts it); the threads it was made of turn back into hearts. */
+    /**
+     * The strings snap, it collapses like a puppet (the model's death animation, 64 ticks), then it
+     * falls apart into black dust; the threads it was made of turn back into hearts.
+     */
     @Override
     protected void tickDeath() {
         this.deathTime++;
         if (this.level() instanceof ServerLevel level) {
-            double y = this.getY() + Math.max(0, this.deathTime - 30) * Math.max(0, this.deathTime - 30) * 0.004;
-            if (this.deathTime % 2 == 0) {
-                level.sendParticles(ParticleTypes.SQUID_INK, this.getX(), y + 5.0, this.getZ(), 10, 0.8, 3.0, 0.8, 0.02);
-                level.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX(), y + 4.0, this.getZ(), 4, 0.6, 2.5, 0.6, 0.01);
+            if (this.deathTime == 8) {
+                // its strings snap
+                this.playSound(ModSounds.SNAP, 5.0F, 0.55F);
+                this.playSound(ModSounds.SNAP, 5.0F, 0.8F);
+                level.sendParticles(ParticleTypes.SQUID_INK, this.getX(), this.getY() + 8.5, this.getZ(), 30, 1.2, 0.8, 1.2, 0.06);
             }
-            if (this.deathTime == 30) {
-                this.playSound(ModSounds.BOSS_SCREAM, 5.0F, 0.6F);
+            if (this.deathTime == 22) {
+                // and it hits the ground
+                this.playSound(ModSounds.BOSS_SLAM, 5.0F, 0.55F);
+                this.ground(level, this.getX(), this.getZ(), 60, 2.0);
+            }
+            if (this.deathTime > 22 && this.deathTime % 2 == 0) {
+                int dust = this.deathTime > 64 ? 12 : 3;
+                level.sendParticles(ParticleTypes.SQUID_INK, this.getX(), this.getY() + 1.2, this.getZ(), dust, 1.6, 0.6, 1.6, 0.02);
+                level.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 1.0, this.getZ(), dust / 3, 1.4, 0.5, 1.4, 0.01);
+            }
+            if (this.deathTime == 40) {
+                this.playSound(ModSounds.BOSS_SCREAM, 4.0F, 0.5F);
             }
             if (this.deathTime == 92) {
                 // the bell, one last time
@@ -396,8 +421,8 @@ public class Recisione extends Monster {
         if (this.bellCooldown <= 0) {
             this.bellCooldown = 900;
             this.start(BELL);
-        } else if (d < 5.0 && this.slamCooldown <= 0) {
-            this.slamCooldown = 34;
+        } else if (d < 6.0 && this.slamCooldown <= 0) {
+            this.slamCooldown = 40;
             this.start(SLAM);
         } else if (d < 9.0 && this.rootsCooldown <= 0) {
             this.rootsCooldown = 200;
@@ -491,17 +516,13 @@ public class Recisione extends Monster {
                 if (t == 2) {
                     this.playSound(ModSounds.BOSS_GLITCH, 2.0F, 1.3F);
                 }
-                if (t == 11) {
-                    Vec3 front = this.position().add(this.forward().scale(2.8));
-                    this.playSound(ModSounds.BOSS_SLAM, 3.0F, 1.0F);
-                    level.sendParticles(ParticleTypes.SQUID_INK, front.x, front.y + 0.5, front.z, 30, 0.8, 0.3, 0.8, 0.1);
-                    this.ground(level, front.x, front.z, 40, 1.0);
-                    for (ServerPlayer p : this.playersNear(level, 7.0)) {
-                        if (p.position().distanceTo(front) < 3.4) {
-                            this.strike(level, p, this.phase() == 3 ? 12.0F : 9.0F);
-                            fling(p, p.position().subtract(this.position()).multiply(1, 0, 1).normalize().scale(1.2).add(0, 0.5, 0));
-                        }
-                    }
+                // it turns to face its target while the strings curl back (its body does not always face where its head looks)
+                LivingEntity target = this.getTarget();
+                if (target != null && t < LASH_RIGHT) {
+                    this.turnTowards(target, 24.0F);
+                }
+                if (t == LASH_RIGHT || t == LASH_LEFT) {
+                    this.lash(level, t == LASH_RIGHT ? 1.0 : -1.0);
                 }
             }
             case ROOTS -> {
@@ -648,6 +669,49 @@ public class Recisione extends Monster {
             }
             default -> {
             }
+        }
+    }
+
+    /** Turns its body and head towards something, at most {@code step} degrees this tick. */
+    private void turnTowards(Entity e, float step) {
+        float want = (float) (Mth.atan2(e.getZ() - this.getZ(), e.getX() - this.getX()) * Mth.RAD_TO_DEG) - 90.0F;
+        float yaw = Mth.approachDegrees(this.yBodyRot, want, step);
+        this.setYRot(yaw);
+        this.yBodyRot = yaw;
+        this.yHeadRot = yaw;
+    }
+
+    /**
+     * One lash of the strings (side: 1 = its right, -1 = its left): everyone in front of it within
+     * reach, on that side or straight ahead, is hit and thrown back.
+     */
+    private void lash(ServerLevel level, double side) {
+        Vec3 fwd = this.forward();
+        Vec3 right = new Vec3(-fwd.z, 0.0, fwd.x);
+        // the strings come down slanting across the front, so each lash covers the middle too
+        Vec3 land = this.position().add(fwd.scale(4.3)).add(right.scale(side * 1.2));
+        this.playSound(ModSounds.SNAP, 4.0F, side > 0 ? 0.7F : 0.6F);
+        this.playSound(ModSounds.BOSS_SLAM, 2.5F, 1.2F);
+        for (int i = 0; i < 6; i++) {
+            Vec3 at = this.position().add(fwd.scale(2.0 + i * 0.75)).add(right.scale(side * (0.4 + i * 0.25)));
+            level.sendParticles(ParticleTypes.SQUID_INK, at.x, at.y + 0.6, at.z, 6, 0.3, 0.3, 0.3, 0.05);
+        }
+        this.ground(level, land.x, land.z, 30, 1.2);
+        // a lash is its own hit: both can catch the same couple (one partner each time)
+        this.couplesHit.clear();
+        for (ServerPlayer p : this.playersNear(level, LASH_REACH + 1.0)) {
+            Vec3 to = p.position().subtract(this.position()).multiply(1, 0, 1);
+            double ahead = to.dot(fwd);
+            double across = to.dot(right) * side;
+            if (ahead < 0.3 || ahead > LASH_REACH || across < -1.6 || Math.abs(to.dot(right)) > 3.2 || p.getY() - this.getY() > 4.5
+                    || p.getY() - this.getY() < -2.0) {
+                continue;
+            }
+            // the second lash comes three ticks after the first: it must not be eaten by the hurt cooldown
+            p.damageCooldownTime = 0;
+            this.strike(level, p, this.phase() == 3 ? 6.0F : 4.5F);
+            Vec3 push = to.lengthSqr() < 0.01 ? fwd : to.normalize();
+            fling(p, push.scale(1.0).add(right.scale(side * 0.35)).add(0, 0.45, 0));
         }
     }
 

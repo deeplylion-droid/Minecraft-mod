@@ -16,4 +16,6 @@ public class RecisioneRenderState extends LivingEntityRenderState {
     public int seed;
     /** Chance that a frame skips (more in the later forms, when hurt, when it rings or blinks away). */
     public float glitch;
+    /** Its eyes and heart are dark this frame. */
+    public boolean glowOff;
 }

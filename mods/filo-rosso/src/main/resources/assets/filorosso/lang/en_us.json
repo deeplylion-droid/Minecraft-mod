@@ -218,7 +218,7 @@
   "filorosso.command.event_failed": "Couples must be online (chain and swap: at least two)",
   "filorosso.command.boss_failed": "Recisione cannot be summoned here",
   "filorosso.command.no_boss": "Recisione is not here",
-  "filorosso.command.unknown_attack": "Unknown attack: %s (colpo, radici, missili, presa, campana, salto)",
+  "filorosso.command.unknown_attack": "Unknown attack: %s (frusta, radici, missili, presa, campana, salto)",
   "subtitles.filorosso.proposal": "A proposal",
   "subtitles.filorosso.bond": "The red thread ties two hearts",
   "subtitles.filorosso.refuse": "A refusal",
