@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "chiappe",
+  "version": "${version}",
+  "name": "Chiappe Colossali",
+  "description": "Every player gets a pair of big cheeks that grow with every XP level, up to ten blocks each at level 25. Press Z to fart: an area attack that hits harder with every level and, at level 25, one-shots the Ender Dragon.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/chiappe/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.chiappe.Chiappe"
+    ],
+    "client": [
+      "com.chiappe.client.ChiappeClient"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "chiappe.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

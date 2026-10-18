@@ -1,0 +1,39 @@
+{
+  "fart_small": {
+    "subtitle": "subtitles.chiappe.fart",
+    "sounds": [
+      "chiappe:fart_small1",
+      "chiappe:fart_small2",
+      "chiappe:fart_small3"
+    ]
+  },
+  "fart_medium": {
+    "subtitle": "subtitles.chiappe.fart",
+    "sounds": [
+      "chiappe:fart_medium1",
+      "chiappe:fart_medium2",
+      "chiappe:fart_medium3"
+    ]
+  },
+  "fart_big": {
+    "subtitle": "subtitles.chiappe.fart_big",
+    "sounds": [
+      "chiappe:fart_big1",
+      "chiappe:fart_big2",
+      "chiappe:fart_big3"
+    ]
+  },
+  "fart_atomic": {
+    "subtitle": "subtitles.chiappe.fart_atomic",
+    "sounds": [
+      {
+        "name": "chiappe:fart_atomic1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "chiappe:fart_atomic2",
+        "attenuation_distance": 24
+      }
+    ]
+  }
+}

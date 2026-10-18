@@ -1,0 +1,11 @@
+{
+  "key.category.chiappe.main": "Colossal Cheeks",
+  "key.chiappe.fart": "Fart",
+  "chiappe.hint": "Colossal Cheeks: they grow with every XP level (the biggest at level 25). Press %s to fart!",
+  "death.attack.chiappe.fart": "%1$s was blown away by %2$s's fart",
+  "death.attack.chiappe.fart.player": "%1$s was blown away by a fart while fighting %2$s",
+  "subtitles.chiappe.fart": "Fart",
+  "subtitles.chiappe.fart_big": "Huge fart",
+  "subtitles.chiappe.fart_atomic": "Atomic fart",
+  "death.attack.chiappe.fart.item": "%1$s was blown away by %2$s's fart using %3$s"
+}

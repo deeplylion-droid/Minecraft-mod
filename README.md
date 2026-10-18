@@ -232,3 +232,29 @@ Ognuno è legato alla sua anima gemella da un **filo rosso del destino lungo 6 b
 - **Gamerule**: `filorosso:length` (lunghezza del filo, 6), `filorosso:events` e `filorosso:event_minutes` (20), `filorosso:revive_seconds` (30, 0 = niente "a terra"), `filorosso:servants` (Spaiati di notte), `filorosso:thread_hits` (il filo colpisce i mostri).
 - I tasti J, Y, U, I sono scelti per non scontrarsi con Iris e Simple Voice Chat; si cambiano nei Controlli.
 - **Grafica senza sbattimenti**: su Windows, con l'API grafica *Predefinita*, la mod fa partire il gioco con **Vulkan** (alcuni driver NVIDIA si chiudono caricando in OpenGL). Se un avvio si blocca mentre carica, quello dopo prova da solo l'altra API.
+
+### Chiappe Colossali (`mods/chiappe-colossali/`)
+
+![Le chiappe dal livello 0 al 25 e la scoreggia atomica](docs/chiappe-colossali-preview.png)
+
+Per **Fabric 26.3**: serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `chiappe-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori (chi non ce l'ha non vede le chiappe).
+
+- **Le chiappe**: ogni giocatore ha due grosse chiappe tonde, vestite con i pantaloni della sua skin. A **ogni livello di esperienza crescono** (circa del 13% a livello): al livello 0 sono già bei mezzi blocchi, al **livello 25 sono colossali, 10 blocchi di diametro per chiappa**, appoggiate a terra con il giocatore nella fessura. Dopo il 25 non crescono più; se perdi livelli (incantando o morendo) si sgonfiano.
+- **Ballano**: rimbalzano a ogni passo, quando salti e atterri, quando ti giri, quando parti e ti fermi; quelle grandi sono più lente e pesanti. Quando sali di livello si gonfiano con un *boing*. Si vedono anche da lontano, e in terza persona la telecamera si allontana man mano che crescono.
+- **La scoreggia** (tasto **Z**): le chiappe si stringono, poi esce una nuvola di gas verde che colpisce **tutto quello che c'è intorno** (mob, giocatori, il drago), lo respinge e gli dà la Nausea. Raggio e danno crescono con il livello:
+
+  | Livello | Chiappe (diametro) | Raggio | Danno |
+  |---|---|---|---|
+  | 0 | 0,45 blocchi | 2,8 blocchi | 2 (1 cuore) |
+  | 5 | 0,8 | 3,1 | 5 |
+  | 10 | 1,6 | 3,7 | 12 |
+  | 15 | 2,9 | 4,7 | 31 |
+  | 20 | 5,4 | 6,5 | 77 |
+  | 24 | 8,8 | 9,1 | 159 |
+  | **25** | **10** | **10** | **1000** |
+
+  Il danno è pieno fino a 3/5 del raggio, poi scende fino a metà sul bordo. Non colpisce chi scoreggia né i suoi animali.
+- **Al livello 25 è atomica**: esplosioni, un fungo di gas sopra le chiappe, lo schermo che trema a chi è vicino, e **l'Ender Dragon muore con una scoreggia** (al livello 24 resta vivo, con 41 di vita su 200).
+- **In aria fa da razzo**: ti spinge in alto (oltre 4 blocchi con un salto) e azzera il danno da caduta.
+- Ricarica da 2 secondi (livello 0) a 4,5 (livello 25), con una barretta sotto il mirino; ogni scoreggia fa venire un po' di fame. Suoni sintetizzati, dalle scoreggette alle atomiche (che si sentono da lontanissimo). Messaggio di morte: *Luigi è stato steso dalla scoreggia di Mario*.
+- In 26.3 la **G** è già di vanilla (azioni rapide), per questo il tasto è la **Z**; si cambia nei Controlli, categoria *Chiappe Colossali*.
