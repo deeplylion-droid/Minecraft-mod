@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "ctest",
+  "version": "1.0.0",
+  "name": "Test driver",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ctest.CTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "~26.3"
+  },
+  "mixins": [
+    "ctest.mixins.json"
+  ]
+}

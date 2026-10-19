@@ -4,6 +4,8 @@ Repository di mod per **Minecraft Forge 1.20.1** fatte con Claude per deeplylion
 
 ## Regole del repository
 
+- Prima di fare o cambiare una mod leggi la skill `.claude/skills/mod-minecraft/` (come lavoro con l'utente, le mod fatte, le API di 26.3, le prove con server e due client veri e i file pronti per farle).
+
 - **Non cancellare mai niente**: né mod esistenti, né file, né Release o tag su GitHub. L'utente l'ha chiesto esplicitamente.
 - Il **Würstel Gigante** resta nella radice del repository (`src/`, `build.gradle`, `gradle.properties`).
 - Ogni **nuova mod** va in una cartella sua, `mods/<nome-mod>/`, come progetto Gradle autonomo: `settings.gradle`, `build.gradle`, `gradle.properties` (con `mod_id`, `mod_name`, `mod_version`, `minecraft_version`, `forge_version`), `src/`. Usa il Gradle wrapper della radice: `./gradlew -p mods/<nome-mod> build`. Copia la struttura del Würstel (stesso build.gradle).
