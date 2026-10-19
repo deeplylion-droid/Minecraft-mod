@@ -15,6 +15,7 @@ Le mod 26.3 del repository sono `mods/chiappe-colossali/` (la più piccola: è i
 10. Comandi ed eventi
 11. Camera, culling, inventario e altri mixin
 12. Trappole
+13. Cose non ancora usate nel repository
 
 ## 1. Toolchain e file del progetto
 - Minecraft 26.3 **non è offuscato**: niente mappature né remap, dipendenze con `implementation` (non `modImplementation`), nomi di Mojang.
@@ -488,7 +489,7 @@ Altri bersagli di mixin che funzionano:
 - **Attachment**: sono record immutabili, e senza un `setAttached` di un valore nuovo i client non vedono niente. Gli altri giocatori lo vedono solo con `AttachmentSyncPredicate.all()` (o `allButTarget()`); l'XP degli altri giocatori in vanilla non arriva ai client, per questo Chiappe copia il livello in un attachment.
 
 
-## Cose non ancora usate nel repository (verifica nei sorgenti)
+## 13. Cose non ancora usate nel repository (verifica nei sorgenti)
 
 Queste non ci sono in nessuna mod 26.3: prima di scriverle, cerca la firma vera nei sorgenti decompilati (`grep -rn "nome" <sorgenti>/common/net/minecraft/...`) e prendi come modello una classe vanilla simile.
 - **Uso tenuto premuto** (archi, tridente, cariche): `Item.use` → `player.startUsingItem(hand)`, `getUseDuration`, `getUseAnimation` (`ItemUseAnimation`), `onUseTick`, `releaseUsing`; guarda `BowItem` e `TridentItem`. Lo yo-yo (Forge) evitava `startUsingItem` perché rallenta il giocatore.
