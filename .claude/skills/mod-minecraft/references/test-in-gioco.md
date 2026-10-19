@@ -36,7 +36,7 @@ Crea in `$SCRATCH/test`:
 - `options.txt` dei client (italiano, GUI scala 2, niente schermate di benvenuto, `pauseOnLostFocus:false`).
 - `ctest/`: la mod di test compilata con il jar della mod (`-PmodJar=...`), così può leggere le sue classi.
 
-La prima volta Gradle scarica Minecraft e gli asset per ogni copia: ci vogliono minuti e la rete. Le volte dopo lo script usa `--offline`.
+La prima volta Gradle scarica Minecraft e gli asset per ogni copia: ci vogliono minuti e la rete. Lo script usa sempre `--offline`, quindi in un container nuovo la prima prova va lanciata da una copia senza `--offline` (dopo `./gradlew downloadAssets` nella cartella della mod): altrimenti `runServer` si ferma perché mancano `dev-launch-injector` e `fabric-log4j-util`. Le volte dopo va bene offline. Se Maven Central risponde `429`, aggiungi ai comandi Gradle `-Dorg.gradle.internal.repository.max.tentatives=8 -Dorg.gradle.internal.repository.initial.backoff=2000`.
 
 ## 3. Scrivere e lanciare lo script
 
