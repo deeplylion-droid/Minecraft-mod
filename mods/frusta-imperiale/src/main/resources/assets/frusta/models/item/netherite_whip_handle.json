@@ -1,0 +1,7 @@
+{
+  "parent": "frusta:item/whip_handle",
+  "textures": {
+    "handle": "frusta:item/netherite_whip_handle",
+    "particle": "frusta:item/netherite_whip_handle"
+  }
+}

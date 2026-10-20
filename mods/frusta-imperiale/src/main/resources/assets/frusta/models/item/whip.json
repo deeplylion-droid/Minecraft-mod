@@ -1,0 +1,21 @@
+{
+  "loader": "forge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "frusta:item/whip_handle"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": { "layer0": "frusta:item/whip" }
+    },
+    "ground": {
+      "parent": "minecraft:item/generated",
+      "textures": { "layer0": "frusta:item/whip" }
+    },
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": { "layer0": "frusta:item/whip" }
+    }
+  }
+}

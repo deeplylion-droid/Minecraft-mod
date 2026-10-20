@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_whip": { "trigger": "minecraft:inventory_changed", "conditions": { "items": [ { "items": ["frusta:whip"] } ] } },
+    "has_the_recipe": { "trigger": "minecraft:recipe_unlocked", "conditions": { "recipe": "frusta:diamond_whip" } }
+  },
+  "requirements": [ [ "has_whip", "has_the_recipe" ] ],
+  "rewards": { "recipes": [ "frusta:diamond_whip" ] }
+}

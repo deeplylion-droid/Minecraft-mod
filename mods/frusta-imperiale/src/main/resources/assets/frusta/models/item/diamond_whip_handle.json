@@ -1,0 +1,7 @@
+{
+  "parent": "frusta:item/whip_handle",
+  "textures": {
+    "handle": "frusta:item/diamond_whip_handle",
+    "particle": "frusta:item/diamond_whip_handle"
+  }
+}

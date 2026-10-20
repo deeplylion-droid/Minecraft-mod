@@ -1,0 +1,14 @@
+{
+  "type": "frusta:whip_upgrade",
+  "category": "equipment",
+  "pattern": [
+    " D ",
+    "DWD",
+    " D "
+  ],
+  "key": {
+    "D": { "item": "minecraft:diamond" },
+    "W": { "item": "frusta:whip" }
+  },
+  "result": { "item": "frusta:diamond_whip" }
+}

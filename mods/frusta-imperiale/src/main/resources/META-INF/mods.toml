@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+issueTrackerURL="https://github.com/deeplylion-droid/minecraft-mod/issues"
+
+[[mods]]
+modId="frusta"
+version="${file.jarVersion}"
+displayName="Frusta Imperiale"
+authors="deeplylion-droid"
+logoFile="frusta_logo.png"
+description='''
+A black leather whip, five to six blocks long, that drags behind you and cracks louder than anything else in the game. Lash with the attack key, spin it over your head and let go for the Imperial Crack, sneak and use to wrap it around a friend and pull them in. Upgrade it to diamond and netherite and enchant it with Sottomissione: every level doubles the damage and whoever you whip falls to their knees. A netherite whip with Sottomissione V kills the Ender Dragon in one lash.
+'''
+
+[[dependencies.frusta]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.frusta]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"

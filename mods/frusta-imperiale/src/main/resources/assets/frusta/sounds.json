@@ -1,0 +1,34 @@
+{
+  "crack": {
+    "subtitle": "subtitles.frusta.crack",
+    "sounds": ["frusta:crack1", "frusta:crack2", "frusta:crack3", "frusta:crack4"]
+  },
+  "crack_imperial": {
+    "subtitle": "subtitles.frusta.crack_imperial",
+    "sounds": ["frusta:crack_imperial1", "frusta:crack_imperial2"]
+  },
+  "whoosh": {
+    "subtitle": "subtitles.frusta.whoosh",
+    "sounds": ["frusta:whoosh1", "frusta:whoosh2", "frusta:whoosh3"]
+  },
+  "twirl": {
+    "subtitle": "subtitles.frusta.twirl",
+    "sounds": ["frusta:twirl"]
+  },
+  "hit": {
+    "subtitle": "subtitles.frusta.hit",
+    "sounds": ["frusta:hit1", "frusta:hit2", "frusta:hit3"]
+  },
+  "wrap": {
+    "subtitle": "subtitles.frusta.wrap",
+    "sounds": ["frusta:wrap1", "frusta:wrap2"]
+  },
+  "yank": {
+    "subtitle": "subtitles.frusta.yank",
+    "sounds": ["frusta:yank1", "frusta:yank2"]
+  },
+  "kneel": {
+    "subtitle": "subtitles.frusta.kneel",
+    "sounds": ["frusta:kneel1", "frusta:kneel2"]
+  }
+}

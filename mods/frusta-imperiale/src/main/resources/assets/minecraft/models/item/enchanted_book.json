@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/enchanted_book"
+  },
+  "overrides": [
+    { "predicate": { "frusta:sottomissione": 1 }, "model": "frusta:item/sottomissione_book" }
+  ]
+}

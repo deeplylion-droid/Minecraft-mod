@@ -258,3 +258,36 @@ Per **Fabric 26.3**: serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `chia
 - **In aria fa da razzo**: ti spinge in alto (oltre 4 blocchi con un salto) e azzera il danno da caduta.
 - Ricarica da 2 secondi (livello 0) a 4,5 (livello 25), con una barretta sotto il mirino; ogni scoreggia fa venire un po' di fame. Suoni sintetizzati, dalle scoreggette alle atomiche (che si sentono da lontanissimo). Messaggio di morte: *Luigi è stato steso dalla scoreggia di Mario*.
 - In 26.3 la **G** è già di vanilla (azioni rapide), per questo il tasto è la **Z**; si cambia nei Controlli, categoria *Chiappe Colossali*.
+
+### Frusta Imperiale (`mods/frusta-imperiale/`)
+
+![La frusta da ferma, la frustata, lo Schiocco Imperiale e chi finisce in ginocchio](docs/frusta-imperiale-preview.png)
+
+Una frusta di pelle nera lunga da 5 a 6 blocchi, per **Forge 1.20.1** (47.x). Jar: `frusta-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+
+- **Ricetta** (banco da lavoro):
+  ```
+                     cuoio              filo
+  cuoio              colorante nero     cuoio
+  lingotto d'oro     cuoio
+  ```
+- **Da ferma** pende dalla mano e striscia per terra per tutta la sua lunghezza: ti segue quando cammini, si trascina, ondeggia quando ti giri. La vedono tutti.
+- **Tasto sinistro: frustata.** Ogni volta da un'angolazione diversa (dall'alto, da destra, di rovescio, in diagonale): la frusta va indietro, poi parte in avanti con un'onda che corre fino alla punta e **schiocca** dove guardi, con un lampo, un anello d'aria e scintille. Colpisce il primo che trova sulla sua strada, fino a 5-6 blocchi.
+- **Tasto destro tenuto: la fai roteare** sopra la testa, sempre più veloce (la barretta sotto il mirino si riempie in 1,5 secondi). **Lascia: Schiocco Imperiale**: la frusta si abbatte davanti a te e colpisce **tutti quelli che hai davanti** (un cono largo fino a 40° per lato), li scaraventa via e li solleva, con un'esplosione d'aria, un'onda d'urto per terra e lo schermo che trema. Se lasci subito parte una frustata normale.
+- **Accovacciato + tasto destro: presa.** La frusta si avvolge intorno a chi hai davanti (mob o giocatore, non i boss) e con uno strattone **te lo tira ai piedi**.
+- **Lo schiocco sovrasta ogni altro suono**: è fortissimo, si sente fino a 64 blocchi, e a chi è vicino abbassa per un attimo tutti gli altri suoni del gioco. Lo Schiocco Imperiale è un tuono che rimbomba per 5 secondi e si sente fino a 128 blocchi.
+- **Frusta di diamante**: al banco da lavoro, 4 diamanti a croce intorno alla frusta. **Frusta di netherite**: al tavolo da forgia, modello di potenziamento + frusta di diamante + lingotto di netherite. Incantesimi e nome restano.
+- **Sottomissione (I–V)**, incantesimo solo per le fruste (libri incantati, tavolo per incantesimi, incudine; in Creativa i libri I–V sono nella scheda *Combattimento*):
+  - ogni livello **raddoppia il danno** (I ×2, II ×4, III ×8, IV ×16, V ×32);
+  - chi viene frustato **cade in ginocchio**: non può camminare né saltare per 1 secondo (I) fino a 3 secondi (V); sopra la barra legge "In ginocchio davanti a Mario!", e tu "Luigi si inginocchia davanti a te!".
+
+| Frusta | Lunghezza | Danno | Con Sottomissione V |
+|---|---|---|---|
+| Pelle nera | 5 blocchi | 4 (2 cuori) | 128 |
+| Diamante | 5,5 blocchi | 6 (3 cuori) | 192 |
+| Netherite | 6 blocchi | 8 (4 cuori) | **256: uccide l'Ender Dragon con una frustata** |
+
+Il drago ha 200 di vita: la frusta di netherite con Sottomissione IV (128) e quella di diamante con Sottomissione V (192) lo lasciano vivo. Lo Schiocco Imperiale fa lo stesso danno della frustata, ma a tutti quelli che prende. La frusta non si rompe mai.
+
+- Messaggi di morte: *Luigi è stato frustato a morte da Mario*, *Luigi è stato annientato dallo Schiocco Imperiale di Mario*.
+- Config: `saves/<mondo>/serverconfig/frusta-server.toml` (`[whip]` danni delle tre fruste e spinta, `[sottomissione]` moltiplicatore per livello e ginocchio sì/no, `[imperial]` larghezza del cono e spinta, `[grab]` presa sì/no e forza) e `config/frusta-client.toml` (impugnatura che si muove in prima persona, scie, particelle, tremolio dello schermo, abbassare gli altri suoni e di quanto).
