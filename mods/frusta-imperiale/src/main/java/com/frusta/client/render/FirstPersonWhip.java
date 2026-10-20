@@ -1,5 +1,6 @@
 package com.frusta.client.render;
 
+import com.frusta.FrustaMod;
 import com.frusta.client.WhipAnims;
 import com.frusta.client.WhipPoses;
 import com.frusta.config.FrustaConfig;
@@ -7,8 +8,11 @@ import com.frusta.item.WhipItem;
 import com.frusta.motion.V3;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import java.lang.reflect.Field;
+import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
@@ -19,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.ViewportEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -41,8 +46,14 @@ public final class FirstPersonWhip {
 
     private static double worldFov = 70.0;
     private static double handFov = 70.0;
-    /** Vanilla's equip animation of the main hand, as of the last hand frame. */
+    /** Vanilla's equip animation of the main hand, as of the last hand frame (used if it cannot be read). */
     private static float equip;
+    /** {@code ItemInHandRenderer.mainHandHeight} and {@code oMainHandHeight}, read to know the equip animation now. */
+    @Nullable
+    private static Field mainHandHeight;
+    @Nullable
+    private static Field oMainHandHeight;
+    private static boolean unreadable;
 
     private FirstPersonWhip() {
     }
@@ -77,7 +88,7 @@ public final class FirstPersonWhip {
         ItemDisplayContext context = left ? ItemDisplayContext.FIRST_PERSON_LEFT_HAND : ItemDisplayContext.FIRST_PERSON_RIGHT_HAND;
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
-        handTransform(poseStack, player, event.getItemStack(), event.getPartialTick(), equip);
+        handTransform(poseStack, player, event.getItemStack(), event.getPartialTick(), equipProgress(player, event.getPartialTick()));
         mc.getItemRenderer().renderStatic(player, event.getItemStack(), context, left, poseStack, event.getMultiBufferSource(),
                 player.level(), event.getPackedLight(), OverlayTexture.NO_OVERLAY, player.getId() + context.ordinal());
         poseStack.popPose();
@@ -102,7 +113,7 @@ public final class FirstPersonWhip {
         float yBob = Mth.lerp(partialTick, player.yBobO, player.yBob);
         poseStack.mulPose(Axis.XP.rotationDegrees((player.getViewXRot(partialTick) - xBob) * 0.1F));
         poseStack.mulPose(Axis.YP.rotationDegrees((player.getViewYRot(partialTick) - yBob) * 0.1F));
-        handTransform(poseStack, player, whip, partialTick, equip);
+        handTransform(poseStack, player, whip, partialTick, equipProgress(player, partialTick));
         itemTransform(poseStack, player, whip, left);
         Matrix4f m = poseStack.last().pose();
         Vector3f tip = m.transformPosition(new Vector3f(TIP));
@@ -112,6 +123,32 @@ public final class FirstPersonWhip {
         tip.mul(k, k, 1.0F);
         dir.mul(k, k, 1.0F);
         WhipAnims.anchor(player, ViewSpace.toWorld(tip), ViewSpace.dirToWorld(dir).normalize(new V3(0, -1, 0)));
+    }
+
+    /**
+     * How far down vanilla's equip animation has the hand this frame (0 = all the way up), the same for
+     * the hand pass and for the world pass that comes before it. During the moves it is 0: pressing use
+     * makes vanilla dip the held item ({@code ItemInHandRenderer.itemUsed}), but the moves raise the arm
+     * themselves, and a dip would only pull the handle away from the whip.
+     */
+    private static float equipProgress(LocalPlayer player, float partialTick) {
+        if (WhipPoses.isMoving(player)) {
+            return 0.0F;
+        }
+        if (!unreadable) {
+            try {
+                if (mainHandHeight == null || oMainHandHeight == null) {
+                    mainHandHeight = ObfuscationReflectionHelper.findField(ItemInHandRenderer.class, "f_109302_");
+                    oMainHandHeight = ObfuscationReflectionHelper.findField(ItemInHandRenderer.class, "f_109303_");
+                }
+                ItemInHandRenderer renderer = Minecraft.getInstance().gameRenderer.itemInHandRenderer;
+                return 1.0F - Mth.lerp(partialTick, oMainHandHeight.getFloat(renderer), mainHandHeight.getFloat(renderer));
+            } catch (Exception e) {
+                unreadable = true;
+                FrustaMod.LOGGER.warn("Cannot read the first-person hand height, using the last frame's", e);
+            }
+        }
+        return equip;
     }
 
     /** Vanilla's place for a held item, then the whip moves: the handle turns about the fist like the arm. */

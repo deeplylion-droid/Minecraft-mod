@@ -22,6 +22,8 @@ public final class WhipShape {
     /** Radius of the loop when the stroke starts and when it reaches the tip, blocks. */
     private static final double LOOP_START = 0.55;
     private static final double LOOP_END = 0.07;
+    /** How much of the whip, from the handle, goes along with the hand at once when a move starts, blocks. */
+    private static final double HAND_FOLLOW = 1.2;
 
     /**
      * What is decided when a move starts.
@@ -93,7 +95,7 @@ public final class WhipShape {
             for (int i = 0; i < Whip.NODES; i++) {
                 double along = along(i, length);
                 V3 ready = loop(hand, f, u, 0, LOOP_START, along);
-                out[i] = start[i].lerp(ready, Whip.smooth(q * 1.8 - 0.8 * along / length));
+                out[i] = fromStart(start, hand, i, length).lerp(ready, Whip.smooth(q * 1.8 - 0.8 * along / length));
             }
         } else if (t <= crack) {
             double p = (t - windup) / (crack - windup);
@@ -103,11 +105,12 @@ public final class WhipShape {
                 out[i] = loop(hand, f, u, a, r, along(i, length));
             }
         } else if (s.contact() || s.move() == Move.GRAB) {
-            // The loop ran into something: it bounces back a little and starts to fall.
+            // The loop ran into something: it bounces back a little and starts to fall (not the end in the hand).
             double e = t - crack;
             double a = Math.max(0, aEnd - 0.35 * Whip.smooth(e / 2));
             for (int i = 0; i < Whip.NODES; i++) {
-                out[i] = loop(hand, f, u, a, LOOP_END, along(i, length)).add(0, -0.08 * e * e, 0);
+                double along = along(i, length);
+                out[i] = loop(hand, f, u, a, LOOP_END, along).add(0, -0.08 * e * e * Whip.smooth(along / HAND_FOLLOW), 0);
             }
         } else {
             // The tip flips over the loop (the crack) and the whip ends up stretched out, then sags.
@@ -204,11 +207,22 @@ public final class WhipShape {
                 rho = radius;
                 theta = phi - 0.9 - (along - radius) / radius;
             }
-            double dy = 0.15 - droop * along * 0.55 + 0.07 * Math.sin(3 * phi + along * 2);
+            // a little above the hand and wavy, but the handle end stays right in the hand
+            double dy = (0.15 + 0.07 * Math.sin(3 * phi + along * 2)) * Whip.smooth(along / 0.6) - droop * along * 0.55;
             V3 spun = hand.add(Math.cos(theta) * rho * (1 - 0.3 * droop * g), dy, Math.sin(theta) * rho * (1 - 0.3 * droop * g));
-            out[i] = start[i].lerp(spun, Whip.smooth(lift * 1.6 - 0.6 * g));
+            out[i] = fromStart(start, hand, i, length).lerp(spun, Whip.smooth(lift * 1.6 - 0.6 * g));
         }
         return out;
+    }
+
+    /**
+     * Point {@code i} of the whip as it was when the move started, with its handle end brought to where
+     * the hand is now: near the handle it goes along with the hand at once (the arm moves fast at the
+     * start of a move, and the whip must never come off the handle), further away it stays where it was.
+     */
+    private static V3 fromStart(V3[] start, V3 hand, int i, double length) {
+        double follow = 1 - Whip.smooth(along(i, length) / HAND_FOLLOW);
+        return start[i].add(hand.sub(start[0]).scale(follow));
     }
 
     /** Angle of the spin (radians) after {@code t} ticks: from 0.6 to 2.2 turns a second while it charges. */

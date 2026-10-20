@@ -11,7 +11,7 @@ In ordine di tempo. Per ognuna: cosa ha chiesto l'utente, cosa c'è, cosa è eme
 | Disabilità | `mods/disabilities/` | `disabilities` | Fabric 26.3 | 1.0.1 |
 | Filo Rosso | `mods/filo-rosso/` | `filorosso` | Fabric 26.3 | 1.0.0 |
 | Chiappe Colossali | `mods/chiappe-colossali/` | `chiappe` | Fabric 26.3 | 1.0.0 |
-| Frusta Imperiale | `mods/frusta-imperiale/` | `frusta` | Forge 1.20.1 | 1.0.0 |
+| Frusta Imperiale | `mods/frusta-imperiale/` | `frusta` | Forge 1.20.1 | 1.0.1 |
 
 C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: modelli horror low-poly in Blockbench con tre bozze, texture, glow, animazioni e anteprime.
 
@@ -67,5 +67,5 @@ C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: m
 - **Richiesta** (la prima con il nuovo collaboratore): "una frusta che io possa usare per frustare i miei amici [...] imperiosa sia nell'aspetto da ferma, che nell'animazione e nel suono di schiocco, che deve **troneggiare potente su ogni altro suono** di minecraft [...] **pelle nera**, che si possa anche upgradare in **diamante e netherite**, con anche un libro di enchant personalizzato di **Sottomissione (I-V)**. La frusta in **netherite con Sottomissione V deve oneshottare l'enderdragon**. [...] Memorabile. Come dimensione deve estendersi almeno **4-6 blocchi**." Questa volta la versione l'ha detta lui: Forge 1.20.1.
 - Scelte (domande a opzioni, ha preso sempre la consigliata): tutti e tre i comandi (sinistro frustata, destro tenuto rotazione + Schiocco Imperiale, accovacciato + destro presa che tira a sé), da ferma "strascico a terra", Sottomissione = danno ×2 a livello + in ginocchio.
 - Lunga 5 / 5,5 / 6 blocchi; danno 4 / 6 / 8, con Sottomissione V 128 / 192 / 256: solo la netherite V uccide il drago. Lo schiocco abbassa per un attimo tutti gli altri suoni (`SoundDucker`).
-- **Stato**: prima mod Forge provata con server e due client veri (nato per lei il banco di prova `harness/forge/`): numeri, drago, presa, ginocchio, PvP verificati. Non ancora provata dall'utente; audio non verificato.
+- **Stato**: prima mod Forge provata con server e due client veri (nato per lei il banco di prova `harness/forge/`): numeri, drago, presa, ginocchio, PvP verificati. L'utente l'ha provata: "tutto bellissimo", tranne la frusta che durante la rotazione si staccava dal manico (corretto nella **1.0.1**: guarda sempre da vicino dove la frusta esce dall'impugnatura, anche nei primi tick delle mosse e in prima persona). Audio non verificato.
 

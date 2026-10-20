@@ -263,7 +263,7 @@ Per **Fabric 26.3**: serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `chia
 
 ![La frusta da ferma, la frustata, lo Schiocco Imperiale e chi finisce in ginocchio](docs/frusta-imperiale-preview.png)
 
-Una frusta di pelle nera lunga da 5 a 6 blocchi, per **Forge 1.20.1** (47.x). Jar: `frusta-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Una frusta di pelle nera lunga da 5 a 6 blocchi, per **Forge 1.20.1** (47.x). Jar: `frusta-1.0.1.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Ricetta** (banco da lavoro):
   ```
