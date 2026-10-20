@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "filorosso",
+  "version": "${version}",
+  "name": "Filo Rosso",
+  "description": "The red thread of fate: choose your soulmate and stay tied by a real 6-block thread. Bond levels, a different fate every session, events, revive your partner, couple challenges, a shared life, and Recisione: a giant made of the black threads of every couple that ever broke.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/filorosso/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.filorosso.FiloRosso"
+    ],
+    "client": [
+      "com.filorosso.client.FiloRossoClient"
+    ]
+  },
+  "mixins": [
+    "filorosso.mixins.json",
+    {
+      "config": "filorosso.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

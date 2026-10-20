@@ -1,0 +1,11 @@
+{
+  "key.category.chiappe.main": "Chiappe Colossali",
+  "key.chiappe.fart": "Scoreggia",
+  "chiappe.hint": "Chiappe Colossali: crescono a ogni livello di esperienza (al massimo al livello 25). Premi %s per scoreggiare!",
+  "death.attack.chiappe.fart": "%1$s è stato steso dalla scoreggia di %2$s",
+  "death.attack.chiappe.fart.player": "%1$s è stato steso da una scoreggia mentre combatteva contro %2$s",
+  "subtitles.chiappe.fart": "Scoreggia",
+  "subtitles.chiappe.fart_big": "Scoreggia enorme",
+  "subtitles.chiappe.fart_atomic": "Scoreggia atomica",
+  "death.attack.chiappe.fart.item": "%1$s è stato steso dalla scoreggia di %2$s usando %3$s"
+}

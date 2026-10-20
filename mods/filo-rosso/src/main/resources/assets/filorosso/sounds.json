@@ -1,0 +1,195 @@
+{
+  "proposal": {
+    "sounds": [
+      "filorosso:proposal"
+    ],
+    "subtitle": "subtitles.filorosso.proposal"
+  },
+  "bond": {
+    "sounds": [
+      "filorosso:bond"
+    ],
+    "subtitle": "subtitles.filorosso.bond"
+  },
+  "refuse": {
+    "sounds": [
+      "filorosso:refuse"
+    ],
+    "subtitle": "subtitles.filorosso.refuse"
+  },
+  "snap": {
+    "sounds": [
+      "filorosso:snap"
+    ],
+    "subtitle": "subtitles.filorosso.snap"
+  },
+  "cut": {
+    "sounds": [
+      "filorosso:cut"
+    ],
+    "subtitle": "subtitles.filorosso.cut"
+  },
+  "level_up": {
+    "sounds": [
+      "filorosso:level_up"
+    ],
+    "subtitle": "subtitles.filorosso.level_up"
+  },
+  "pull": {
+    "sounds": [
+      "filorosso:pull"
+    ],
+    "subtitle": "subtitles.filorosso.pull"
+  },
+  "teleport": {
+    "sounds": [
+      "filorosso:teleport"
+    ],
+    "subtitle": "subtitles.filorosso.teleport"
+  },
+  "gift": {
+    "sounds": [
+      "filorosso:gift"
+    ],
+    "subtitle": "subtitles.filorosso.gift"
+  },
+  "combo": {
+    "sounds": [
+      "filorosso:combo"
+    ],
+    "subtitle": "subtitles.filorosso.combo"
+  },
+  "heartbeat": {
+    "sounds": [
+      "filorosso:heartbeat"
+    ],
+    "subtitle": "subtitles.filorosso.heartbeat"
+  },
+  "downed": {
+    "sounds": [
+      "filorosso:downed"
+    ],
+    "subtitle": "subtitles.filorosso.downed"
+  },
+  "revive": {
+    "sounds": [
+      "filorosso:revive"
+    ],
+    "subtitle": "subtitles.filorosso.revive"
+  },
+  "event": {
+    "sounds": [
+      "filorosso:event"
+    ],
+    "subtitle": "subtitles.filorosso.event"
+  },
+  "swap": {
+    "sounds": [
+      "filorosso:swap"
+    ],
+    "subtitle": "subtitles.filorosso.swap"
+  },
+  "challenge": {
+    "sounds": [
+      "filorosso:challenge"
+    ],
+    "subtitle": "subtitles.filorosso.challenge"
+  },
+  "taut": {
+    "sounds": [
+      "filorosso:taut"
+    ],
+    "subtitle": "subtitles.filorosso.taut"
+  },
+  "boss_roar": {
+    "sounds": [
+      "filorosso:boss_roar"
+    ],
+    "subtitle": "subtitles.filorosso.boss_roar"
+  },
+  "boss_slam": {
+    "sounds": [
+      "filorosso:boss_slam"
+    ],
+    "subtitle": "subtitles.filorosso.boss_slam"
+  },
+  "boss_scream": {
+    "sounds": [
+      "filorosso:boss_scream"
+    ],
+    "subtitle": "subtitles.filorosso.boss_scream"
+  },
+  "boss_hurt": {
+    "sounds": [
+      "filorosso:boss_hurt"
+    ],
+    "subtitle": "subtitles.filorosso.boss_hurt"
+  },
+  "boss_death": {
+    "sounds": [
+      "filorosso:boss_death"
+    ],
+    "subtitle": "subtitles.filorosso.boss_death"
+  },
+  "boss_bell": {
+    "sounds": [
+      "filorosso:boss_bell"
+    ],
+    "subtitle": "subtitles.filorosso.boss_bell"
+  },
+  "boss_glitch": {
+    "sounds": [
+      "filorosso:boss_glitch"
+    ],
+    "subtitle": "subtitles.filorosso.boss_glitch"
+  },
+  "missile": {
+    "sounds": [
+      "filorosso:missile"
+    ],
+    "subtitle": "subtitles.filorosso.missile"
+  },
+  "missile_hit": {
+    "sounds": [
+      "filorosso:missile_hit"
+    ],
+    "subtitle": "subtitles.filorosso.missile_hit"
+  },
+  "grasp": {
+    "sounds": [
+      "filorosso:grasp"
+    ],
+    "subtitle": "subtitles.filorosso.grasp"
+  },
+  "scissors": {
+    "sounds": [
+      "filorosso:scissors"
+    ],
+    "subtitle": "subtitles.filorosso.scissors"
+  },
+  "minion_ambient": {
+    "sounds": [
+      "filorosso:minion_ambient1",
+      "filorosso:minion_ambient2"
+    ],
+    "subtitle": "subtitles.filorosso.minion_ambient"
+  },
+  "minion_hurt": {
+    "sounds": [
+      "filorosso:minion_hurt"
+    ],
+    "subtitle": "subtitles.filorosso.minion_hurt"
+  },
+  "minion_death": {
+    "sounds": [
+      "filorosso:minion_death"
+    ],
+    "subtitle": "subtitles.filorosso.minion_death"
+  },
+  "victory": {
+    "sounds": [
+      "filorosso:victory"
+    ],
+    "subtitle": "subtitles.filorosso.victory"
+  }
+}

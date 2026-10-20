@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "disabilities",
+  "version": "${version}",
+  "name": "Disabilità",
+  "description": "When you first spawn you must pick two disabilities, from twenty: blindness, a wheelchair, dyslexia, narcolepsy and more. Each one changes how you play and shows on your character.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/disabilities/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.disabilities.Disabilities"
+    ],
+    "client": [
+      "com.disabilities.client.DisabilitiesClient"
+    ]
+  },
+  "mixins": [
+    "disabilities.mixins.json",
+    {
+      "config": "disabilities.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

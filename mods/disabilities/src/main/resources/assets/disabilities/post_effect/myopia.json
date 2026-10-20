@@ -1,0 +1,73 @@
+{
+  "targets": {
+    "swap": {}
+  },
+  "passes": [
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "disabilities:post/myopia",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "output": "swap",
+      "uniforms": {
+        "MyopiaConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "name": "Strength",
+            "type": "float",
+            "value": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "disabilities:post/myopia",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap"
+        },
+        {
+          "sampler_name": "Depth",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "output": "minecraft:main",
+      "uniforms": {
+        "MyopiaConfig": [
+          {
+            "name": "BlurDir",
+            "type": "vec2",
+            "value": [
+              0.0,
+              1.0
+            ]
+          },
+          {
+            "name": "Strength",
+            "type": "float",
+            "value": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

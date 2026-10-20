@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SGS",
+    "SSS"
+  ],
+  "key": {
+    "S": "filorosso:heart_shard",
+    "G": "minecraft:gold_block"
+  },
+  "result": {
+    "id": "filorosso:broken_heart",
+    "count": 1
+  }
+}

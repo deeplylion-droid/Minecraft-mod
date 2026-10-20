@@ -1,0 +1,17 @@
+{
+  "providers": [
+    {
+      "type": "reference",
+      "id": "minecraft:include/space"
+    },
+    {
+      "type": "bitmap",
+      "file": "filorosso:font/icons.png",
+      "height": 8,
+      "ascent": 7,
+      "chars": [
+        ""
+      ]
+    }
+  ]
+}

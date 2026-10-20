@@ -161,3 +161,100 @@ Jumpscare da fare agli amici, per **Fabric 1.21.1**: serve anche **Fabric API**.
 - **Comando** (da operatore, o con i trucchi attivi): `/jumpscare <giocatori> [clown|dama|ragno|cadavere|demone|casuale] [secondi]`. Con i secondi parte più tardi, così hai il tempo di fare l'indifferente. Il messaggio di conferma lo vedi solo tu.
 - **Multiplayer**: chi è vicino vede il mostro saltare in faccia alla vittima, lo sente urlare... e a un certo punto il mostro gira la testa e fissa anche lui.
 - Accessibilità: *Effetti di distorsione* attenua il tremolio, *Lampi nel cielo attenuati* attenua i flash.
+
+### Disabilità (`mods/disabilities/`)
+
+![La scelta obbligatoria e alcune disabilità, viste da dentro e da fuori](docs/disabilities-preview.png)
+
+Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.0.1.jar` nelle [Releases](../../releases) (la 1.0.0 non faceva cliccare le carte nella scelta: usate la 1.0.1). Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
+
+- **Alla prima entrata nel mondo è obbligatorio scegliere due disabilità** su 21, da una schermata che non si può chiudere (finché scegli non puoi essere ferito). Passando sopra una carta leggi cosa cambia per te e cosa vedono gli altri. Il pulsante *Casuale* sceglie per te.
+- **Ognuno le sue**: due giocatori non possono avere la stessa disabilità (con 8 giocatori se ne usano 16 su 21). Le carte già prese sono segnate *PRESA*; alcune coppie non vanno insieme (cieco + miope, sedia a rotelle + stampelle, stampelle + un braccio solo...).
+- Quando qualcuno sceglie, in chat compare per tutti: "*Mario ha scelto: ♿ Paraplegia e 🔇 Sordità*" (passa sopra i nomi per la descrizione).
+- **Le icone delle disabilità** stanno dopo il nome di ognuno: sopra la testa, nella lista giocatori (Tab), in chat e nei messaggi di morte. Le tue sono anche in alto a sinistra.
+- Gli effetti sulla vista restano anche nascondendo l'HUD (F1) e in terza persona: niente trucchi.
+
+| Disabilità | Cosa cambia per te | Cosa vedono gli altri |
+|---|---|---|
+| Cecità | Vedi solo a 3 blocchi, cielo compreso; chi fa rumore si illumina per un attimo. Col **bastone bianco** (tasto destro) per qualche secondo vedi intorno | Occhiali scuri, il bastone che batte a terra mentre cammini |
+| Acromatopsia | Tutto in bianco e nero, inventario compreso | Occhiali con le lenti rosa |
+| Miopia grave | Oltre pochi blocchi è tutto sfocato | Occhiali spessi |
+| Cieco da un occhio | Metà sinistra dello schermo buia | Benda sull'occhio |
+| Albinismo | Di giorno all'aperto il sole ti abbaglia e, senza elmo, ti brucia | Capelli bianchi e pelle pallidissima (dalla tua skin); fumi al sole |
+| Sordità | Nessun suono, neanche la musica | Apparecchi acustici |
+| Mutismo | Non puoi scrivere in chat (né /msg, /me...): fai i **gesti** col tasto **G** (Ciao, Sì, No, Vieni qui, Aiuto, Pericolo, Grazie, Seguimi) | Il gesto con le braccia, un fumetto sopra la testa e una riga in chat per chi è vicino |
+| Dislessia | Tutte le scritte hanno le lettere che si mescolano (menu, chat, cartelli, inventario) | I tuoi messaggi in chat arrivano con le lettere scambiate |
+| Paraplegia | Sedia a rotelle: niente salti, niente scale a pioli, liane o impalcature; più basso. La vedi anche in prima persona | Seduto sulla sedia, le ruote girano mentre ti muovi |
+| Gamba amputata | Stampelle: più lento, niente corsa, salti bassi; **per usare le mani devi fermarti** | Una gamba sola e le stampelle che dondolano |
+| Braccio amputato | Niente mano secondaria; archi, balestre, tridenti e lance non si usano; scavi più piano | Un braccio solo |
+| Nanismo | Alto la metà, braccia corte (arrivi meno lontano), più lento | Sei piccolissimo |
+| Obesità | Più lento, fame doppia, dopo 4 secondi di corsa hai il fiatone, le cadute fanno più male; però ti spostano meno | Corporatura enorme, fiatone e sudore |
+| Parkinson | La mira trema sempre; ogni tanto le gambe si bloccano e ti scivola di mano quello che tieni | Testa e braccia che tremano |
+| Narcolessia | Ogni 3-6 minuti ti addormenti di colpo per qualche secondo (schermo nero), a volte anche quando vieni colpito. Un amico ti sveglia col tasto destro | Crolli a terra, russi, "Zzz" sopra la testa |
+| Sindrome di Tourette | Tic: scatti della testa, salti, colpi nel vuoto (a volte colpisci davvero chi hai davanti), giravolte, ammiccamenti, versi e parole a caso | Vedono i tic, sentono i versi, leggono le parole in chat e nel fumetto ("PATATA!") |
+| Amnesia | Niente F3 (coordinate), niente libro delle ricette e niente segnalini dei compagni; i nomi degli altri diventano "???"; ogni 5-9 minuti l'inventario si rimescola | Ti gratti la testa sotto un "?" |
+| Vertigini | Il mondo ondeggia, vicino ai burroni gira tutto (e lo zoom impazzisce), cammini storto e ogni tanto inciampi | Barcolli e inciampi |
+| Asma | Correre, saltare, nuotare e arrampicarti ti tolgono il fiato (le bollicine dell'aria); senza fiato vedi buio ai lati e rallenti. Hai un **inalatore** | Il respiro che fischia, la mano sul petto |
+| Emofilia | Ogni ferita continua a sanguinare (e intanto non guarisci) finché non usi una **benda** | Gocce di sangue, la mano sulla ferita; puoi fasciarli tu (tasto destro con la benda) |
+| Allergia | Vicino a fiori, erba, foglie e animali starnutisci: la testa scatta, gli occhi lacrimano e a volte ti cade quello che tieni | Starnuti fortissimi |
+
+- **Oggetti** (in Creativa nella scheda *Strumenti e utilità*; il bastone e l'inalatore te li dà la mod, e te li ridà quando rinasci):
+  - **Bastone bianco**: `bastone` + `bastone` + `colorante bianco`;
+  - **Inalatore** (16 spruzzi): `lingotto di ferro` + `ampolla di vetro`;
+  - **Benda** (×2): `carta` + `carta` + `filo`.
+- **Comando** `/disabilita`:
+  - per tutti: `/disabilita` (le tue), `/disabilita lista` (di tutti), `/disabilita info <disabilità>`;
+  - da operatore: `scegli [giocatori]` (fa riscegliere), `assegna <giocatori> <prima> <seconda>`, `casuale [giocatori]`, `togli <giocatori>` (nessuna disabilità, per esempio per chi fa le riprese), `evento <sonno|sveglia|tic|starnuto|inciampo|blocco|dimenticanza|ferita|fiato> [giocatori]` per far succedere subito un episodio.
+  - I nomi da usare: `cieco`, `acromatopsia`, `miope`, `monocolo`, `albino`, `sordo`, `muto`, `dislessico`, `sedia`, `stampelle`, `monco`, `nano`, `obeso`, `parkinson`, `narcolessia`, `tourette`, `amnesia`, `vertigini`, `asma`, `emofilia`, `allergia` (il tab li suggerisce).
+- **Gamerule**: `/gamerule disabilities:unique false` (disabilità ripetibili), `/gamerule disabilities:reroll_on_death true` (quando muori riscegli), `/gamerule disabilities:episodes false` (mette in pausa sonni, tic, starnuti, blocchi, inciampi e dimenticanze).
+- In live: la mod non può spegnere il vostro microfono su Discord, quindi chi è muto o sordo deve stare al gioco.
+- **Se Minecraft si chiude da solo mentre carica** (con schede NVIDIA, codice `-1073741819` / `0xC0000005` nel log, senza errori Java): si rompe il driver video mentre il gioco prepara la grafica. Nelle impostazioni *Video* scegliete **Vulkan** come API grafica (o mettete `preferredGraphicsBackend:"vulkan"` in `options.txt`), oppure nel Pannello di controllo NVIDIA spegnete *Threaded optimization* per `javaw.exe`; con MultiMC conviene Prism Launcher.
+
+### Filo Rosso (`mods/filo-rosso/`)
+
+![La scelta dell'anima gemella, il filo, la caduta, a terra e Recisione](docs/filo-rosso-preview.png)
+
+Per **Fabric 26.3**: serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `filorosso-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server **e da tutti i giocatori** (chi entra senza la mod viene rimandato indietro con un messaggio).
+
+Ognuno è legato alla sua anima gemella da un **filo rosso del destino lungo 6 blocchi**, che tutti vedono: non potete allontanarvi, e il filo diventa uno strumento.
+
+- **La scelta**: alla prima entrata si apre *Il Filo Rosso del Destino* con tutti i giocatori online. Clicca su chi vuoi: riceve la proposta (*Sì, lo voglio* / *No, grazie*). Se anche l'altra persona ha scelto te, il filo vi lega subito. La schermata si chiude con *Più tardi* e si riapre con **J**. Per lasciarvi: **J** → *Lasciarsi* (l'altra persona deve accettare).
+- **Il filo**: chi si allontana trascina l'altro; **chi si accovaccia tiene fermo** l'altro. Se il partner cade da un burrone resta **appeso al filo** senza danno da caduta e può **arrampicarsi tenendo premuto Salto** (accovacciati per reggerlo, altrimenti ti tira verso il bordo). Teso, il filo **colpisce i mostri** che attraversa. Se uno dei due prende una perla di ender o un portale, l'altro viene portato con sé.
+- **Livelli del legame** (l'affinità cresce stando vicini, combattendo insieme, imboccandovi col tasto destro, dormendo vicini, salvandovi): 1 *Filo*, 2 *Nastro* (sblocca **Tira a te**, tasto **Y**), 3 *Treccia* (**Dono del cuore**, tasto **U**: regali due cuori), 4 *Filo d'oro* (**Raggiungi**, tasto **I**: voli dal partner, ovunque sia), 5 *Filo di stelle* (il filo brilla e colpisce più forte). Il filo cambia aspetto a ogni livello. Colpire lo stesso mostro insieme è un **colpo di coppia**: fa più danno.
+- **Vita condivisa**: la coppia ha **una vita sola**. Quello che perde uno lo perde anche l'altro, e quando uno si cura (cibo, pozioni, rigenerazione) si cura anche l'altro.
+- **A terra, non morti**: un colpo mortale non uccide: chi lo prende cade a terra e il partner resta con **mezzo cuore**. Hai 30 secondi: il partner ti rialza accovacciandosi accanto a te (o tenendo premuto il tasto destro su di te). Se non arriva in tempo muori davvero, e rinasci accanto a lui o lei; se intanto colpiscono anche lui, cadete tutti e due.
+- **Il destino della live**: a ogni avvio del server ogni coppia riceve un destino a caso: *Classico*, *Elastico* (il filo si allunga fino a 9 blocchi e vi riporta indietro), *Fuoco* (il filo incendia i mostri, vicini non temete il fuoco), *Magnetico* (vi attirate), *Scambio* (ogni 5 minuti vi scambiate di posto), *Geloso* (se qualcuno si avvicina troppo alla tua dolce metà il filo ti trascina lì), *Scudo* (vicini, entro 4 blocchi, prendete un terzo di danni in meno).
+- **Capricci del destino**: ogni 20 minuti, per qualche minuto, succede qualcosa a tutti i fili: *Filo corto* (3 blocchi), *Tutti in catena*, *Libertà* (niente filo), *Scambio di coppia*, *Momento romantico* (affinità ×3), *Litigio* (il filo vi allontana), *Tempesta d'amore* (fulmini lungo i fili all'aperto).
+- **Imprese di coppia**: ogni live 3 sfide uguali per tutte le coppie (per esempio *Uccidete 20 mostri*, *Pescate 6 pesci*, *Salvate il partner da una caduta 3 volte*): la prima coppia che ne finisce una prende 3 punti, la seconda 2, le altre 1. La classifica *Coppie* è a destra; le imprese sono anche in alto a sinistra.
+- **Recisione, la Marionetta**: di notte arrivano gli **Spaiati**, figure nere senza volto con le forbici, che tagliano i fili per qualche secondo e lasciano **schegge di cuore**. Con 8 schegge intorno a un blocco d'oro si fa il **Cuore infranto**: usato di notte all'aperto suona una **campana** che sente tutto il server, e dal terreno esce **Recisione**, una marionetta gigante di corda nera intrecciata, alta 10 blocchi, fatta dei fili di tutte le coppie che si sono spezzate (nello stile dei boss di *The Broken Script*): al posto della testa una gabbia di ferro arrugginito con tre occhi rossi vuoti dentro, al posto del cuore un nodo di filo rosso che brilla tra le crepe, braccia fino alle ginocchia e dita lunghe. I fili che la reggevano sono stati tagliati, ma salgono ancora dalle spalle: li usa come una **frusta**, due sferzate davanti a sé. Cammina a passi lenti e storti, trascinando un piede. Attacca anche con un **anello di radici**, con **missili neri dal cielo** (un cerchio rosso a terra mostra dove cadono), con **mani che escono dal terreno** sotto di voi e vi strappano dal partner, con la **campana** che rovescia la gravità e chiama gli Spaiati; se vi allontanate sparisce e riappare vicino. Intorno le glitchano scatole nere, ogni tanto salta un fotogramma o la sua luce si spegne; a 2/3 e a 1/3 della vita suona la campana e diventa più veloce, all'ultimo terzo anche più grande. Quando muore i fili si spezzano e crolla a terra come una marionetta, poi si disfa in polvere. Vicino a lei lo schermo si riempie di disturbi. Le fanno davvero male **solo i colpi di coppia**. Chi la sconfigge riceve un **Cuore d'oro**. Il modello è un file Blockbench con texture, animazioni e anteprime in [`mods/filo-rosso/blockbench/`](mods/filo-rosso/blockbench/ISTRUZIONI.md).
+- **HUD** in alto a sinistra: il partner (faccia, vita, distanza e direzione), il livello, le abilità con i loro tasti, le imprese; in alto l'evento in corso. Il cuore della coppia compare dopo i nomi (sopra la testa, in chat, nella lista Tab).
+- **Comando** `/filo`: per tutti `/filo` (la tua coppia) e `/filo lista`; da operatore `lega <giocatore> <giocatore>`, `slega <giocatore>`, `casuale` (coppie a caso tra chi è single), `livello <giocatore> <1-5>`, `affinita <giocatore> <quanta>`, `destino [<tipo> <giocatore>]`, `evento <corto|catena|liberta|scambio|romantica|litigio|tempesta|fine>`, `nuovalive`, `imprese`, `punti <giocatore> <punti>`, `taglia <giocatore>`, `boss`, `boss attacco <frusta|radici|missili|presa|campana|salto>` e `boss fase <2|3>` (per provarlo o per i video), `servo`.
+- **Gamerule**: `filorosso:length` (lunghezza del filo, 6), `filorosso:events` e `filorosso:event_minutes` (20), `filorosso:revive_seconds` (30, 0 = niente "a terra"), `filorosso:servants` (Spaiati di notte), `filorosso:thread_hits` (il filo colpisce i mostri).
+- I tasti J, Y, U, I sono scelti per non scontrarsi con Iris e Simple Voice Chat; si cambiano nei Controlli.
+- **Grafica senza sbattimenti**: su Windows, con l'API grafica *Predefinita*, la mod fa partire il gioco con **Vulkan** (alcuni driver NVIDIA si chiudono caricando in OpenGL). Se un avvio si blocca mentre carica, quello dopo prova da solo l'altra API.
+
+### Chiappe Colossali (`mods/chiappe-colossali/`)
+
+![Le chiappe dal livello 0 al 25 e la scoreggia atomica](docs/chiappe-colossali-preview.png)
+
+Per **Fabric 26.3**: serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `chiappe-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori (chi non ce l'ha non vede le chiappe).
+
+- **Le chiappe**: ogni giocatore ha due grosse chiappe tonde, vestite con i pantaloni della sua skin. A **ogni livello di esperienza crescono** (circa del 13% a livello): al livello 0 sono già bei mezzi blocchi, al **livello 25 sono colossali, 10 blocchi di diametro per chiappa**, appoggiate a terra con il giocatore nella fessura. Dopo il 25 non crescono più; se perdi livelli (incantando o morendo) si sgonfiano.
+- **Ballano**: rimbalzano a ogni passo, quando salti e atterri, quando ti giri, quando parti e ti fermi; quelle grandi sono più lente e pesanti. Quando sali di livello si gonfiano con un *boing*. Si vedono anche da lontano, e in terza persona la telecamera si allontana man mano che crescono.
+- **La scoreggia** (tasto **Z**): le chiappe si stringono, poi esce una nuvola di gas verde che colpisce **tutto quello che c'è intorno** (mob, giocatori, il drago), lo respinge e gli dà la Nausea. Raggio e danno crescono con il livello:
+
+  | Livello | Chiappe (diametro) | Raggio | Danno |
+  |---|---|---|---|
+  | 0 | 0,45 blocchi | 2,8 blocchi | 2 (1 cuore) |
+  | 5 | 0,8 | 3,1 | 5 |
+  | 10 | 1,6 | 3,7 | 12 |
+  | 15 | 2,9 | 4,7 | 31 |
+  | 20 | 5,4 | 6,5 | 77 |
+  | 24 | 8,8 | 9,1 | 159 |
+  | **25** | **10** | **10** | **1000** |
+
+  Il danno è pieno fino a 3/5 del raggio, poi scende fino a metà sul bordo. Non colpisce chi scoreggia né i suoi animali.
+- **Al livello 25 è atomica**: esplosioni, un fungo di gas sopra le chiappe, lo schermo che trema a chi è vicino, e **l'Ender Dragon muore con una scoreggia** (al livello 24 resta vivo, con 41 di vita su 200).
+- **In aria fa da razzo**: ti spinge in alto (oltre 4 blocchi con un salto) e azzera il danno da caduta.
+- Ricarica da 2 secondi (livello 0) a 4,5 (livello 25), con una barretta sotto il mirino; ogni scoreggia fa venire un po' di fame. Suoni sintetizzati, dalle scoreggette alle atomiche (che si sentono da lontanissimo). Messaggio di morte: *Luigi è stato steso dalla scoreggia di Mario*.
+- In 26.3 la **G** è già di vanilla (azioni rapide), per questo il tasto è la **Z**; si cambia nei Controlli, categoria *Chiappe Colossali*.
