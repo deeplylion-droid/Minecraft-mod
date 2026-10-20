@@ -1,6 +1,6 @@
 ---
 name: mod-minecraft
-description: Come lavorare alle mod Minecraft del repository deeplylion-droid/Minecraft-mod nel modo in cui Claude le ha fatte finora con questo utente - le mod già fatte (Würstel Gigante, Yo-Yo Arcobaleno, Sotto la Bedrock, Jumpscare!, Disabilità, Filo Rosso, Chiappe Colossali), le tre toolchain (Forge 1.20.1, Fabric 1.21.1, Fabric 26.3) e le API di 26.3, le prove con un server e due client veri, texture/suoni/modelli generati, documentazione, Release e consegna del jar. Usare sempre quando si crea una mod nuova, si aggiorna o si corregge una mod, la si prova, si prepara una Release, si manda un jar o si risponde a domande su queste mod (ricette, comandi, come funziona), anche se l'utente non nomina la skill.
+description: Come lavorare alle mod Minecraft del repository deeplylion-droid/Minecraft-mod nel modo in cui Claude le ha fatte finora con questo utente - le mod già fatte (Würstel Gigante, Yo-Yo Arcobaleno, Sotto la Bedrock, Jumpscare!, Disabilità, Filo Rosso, Chiappe Colossali, Frusta Imperiale), le tre toolchain (Forge 1.20.1, Fabric 1.21.1, Fabric 26.3) e le API di 26.3, le prove con un server e due client veri, texture/suoni/modelli generati, documentazione, Release e consegna del jar. Usare sempre quando si crea una mod nuova, si aggiorna o si corregge una mod, la si prova, si prepara una Release, si manda un jar o si risponde a domande su queste mod (ricette, comandi, come funziona), anche se l'utente non nomina la skill.
 ---
 
 # Mod Minecraft per deeplylion-droid
@@ -8,10 +8,10 @@ description: Come lavorare alle mod Minecraft del repository deeplylion-droid/Mi
 Questa skill riassume come ho lavorato finora in questo repository: chi è l'utente, cosa abbiamo già fatto, come faccio una mod nuova dall'idea al jar consegnato, e gli errori che ho già pagato. Le note tecniche di ogni mod stanno nel `CLAUDE.md` del repository (leggilo sempre: è la fonte più dettagliata); qui c'è il metodo.
 
 File di supporto (leggili quando servono, non tutti subito):
-- `references/mod-fatte.md` - le 7 mod: cosa ha chiesto l'utente, cosa è venuto fuori, cosa gli è piaciuto o no, stato delle prove.
+- `references/mod-fatte.md` - le 8 mod: cosa ha chiesto l'utente, cosa è venuto fuori, cosa gli è piaciuto o no, stato delle prove.
 - `references/api-26.3.md` - Minecraft 26.3 + Fabric: nomi nuovi, schemi di codice veri presi dalle mod. Da leggere prima di scrivere codice 26.3.
 - `references/api-1.21.1-e-forge-1.20.1.md` - le due toolchain più vecchie, per aggiornare quelle mod.
-- `references/test-in-gioco.md` - come provo le mod: server dedicato + due client veri headless, input veri con `xdotool`, mod di test che scatta screenshot. I file pronti sono in `harness/`.
+- `references/test-in-gioco.md` - come provo le mod: server dedicato + due client veri headless, input veri con `xdotool`, mod di test che scatta screenshot. I file pronti sono in `harness/` (Fabric 26.3) e `harness/forge/` (Forge 1.20.1).
 - `references/asset.md` - come genero texture, suoni, icone, modelli e immagini di anteprima. Script di esempio in `scripts/`.
 
 ## L'utente
@@ -19,7 +19,7 @@ File di supporto (leggili quando servono, non tutti subito):
 - Scrive in **italiano**, spesso dal **telefono**: rispondi in italiano, breve, parole semplici, niente gergo. I numeri importanti in una tabellina.
 - Gioca con gli amici (live con circa 8 persone, video YouTube): vuole mod **d'impatto**, che si vedano e si sentano, divertenti o spaventose, che funzionino in **multiplayer**.
 - Nella richiesta mette spesso un numero preciso ("10 blocchi di diametro", "40 cuori", "one shotta l'Ender Dragon", "filo di 6 blocchi"): sono requisiti, non esempi. Verificali con una prova vera e scrivili nella sezione della mod in `CLAUDE.md`, così chi viene dopo non li rompe.
-- Corregge subito se sbagli strada (es. "Fermo non 1.20, 26.3"): fermati, cambia, non discutere. Il `CLAUDE.md` dice Forge 1.20.1 come default, ma **le ultime tre mod sono tutte Fabric 26.3** e l'utente mi ha corretto quando ho usato 1.20.1: se la versione non è detta, chiedila con una domanda a opzioni (consigliata 26.3).
+- Corregge subito se sbagli strada (es. "Fermo non 1.20, 26.3"): fermati, cambia, non discutere. Il `CLAUDE.md` dice Forge 1.20.1 come default, ma **le ultime tre mod sono tutte Fabric 26.3** e l'utente mi ha corretto quando ho usato 1.20.1: se la versione non è detta, chiedila con una domanda a opzioni (consigliata 26.3). Quando la dice lui, segui quella (la Frusta Imperiale l'ha chiesta per Forge 1.20.1).
 - Gusti: nell'horror vuole cose enigmatiche, alla *The Broken Script*, non bambinesche (un boss rosa con cuore e forbici "faceva schifo"). Per mostri e boss usa la skill `monster` (`.claude/skills/monster`): tre bozze con render, sceglie lui.
 - Le scelte vere (aspetto del boss, tipo di attacco, versione) chiedile con domande a opzioni e una consigliata; il resto decidilo tu e dillo in una riga.
 - Il suo PC: Windows, RTX 4090, MultiMC o Prism Launcher. Con 26.3 ha avuto crash nativi del driver NVIDIA in OpenGL (`0xC0000005`): soluzione Vulkan (le mod 26.3 recenti lo scelgono da sole su Windows). Se crasha di nuovo, chiedi il file `hs_err_pid*.log` dell'istanza.
@@ -61,7 +61,7 @@ Per **aggiornare** una mod: leggi la sua sezione nel `CLAUDE.md`, correggi, ripr
 
 | | Forge 1.20.1 | Fabric 1.21.1 | Fabric 26.3 |
 |---|---|---|---|
-| Mod | Würstel (radice), Yo-Yo | Sotto la Bedrock, Jumpscare! | Disabilità, Filo Rosso, Chiappe Colossali |
+| Mod | Würstel (radice), Yo-Yo, Frusta Imperiale | Sotto la Bedrock, Jumpscare! | Disabilità, Filo Rosso, Chiappe Colossali |
 | Java | 17 | 21 | 25 |
 | Gradle | wrapper della radice (8.8) | wrapper della radice | **wrapper suo** nella cartella (9.8.1) |
 | Plugin | ForgeGradle `[6.0,6.2)`, Forge 47.2.0, mappature `official` | Loom 1.7.4, mappature Mojang | Loom 1.19.1 (`net.fabricmc.fabric-loom`), niente mappature (non offuscato) |
@@ -96,4 +96,7 @@ Il dettaglio è in `references/test-in-gioco.md`. In breve: `harness/setup.sh mo
 - Nel client senza mod: manda i pacchetti solo a chi li sa ricevere (`ServerPlayNetworking.canSend`); per le mod che non hanno senso senza client, il server butta fuori chi entra senza (Disabilità, Filo Rosso).
 - Dopo una modifica grafica controlla anche l'anteprima del giocatore nell'inventario (la chiappa di 10 blocchi riempiva il riquadro).
 - Container nuovo: la prima build può fallire con `429 Too Many Requests` da Maven Central (troppi download insieme), non per il codice. Rilancia con `-Dorg.gradle.internal.repository.max.tentatives=8 -Dorg.gradle.internal.repository.initial.backoff=2000` (Gradle riprova con attese crescenti).
+- Forge: i valori nuovi degli enum di vanilla (`HumanoidModel.ArmPose.create`, `EnchantmentCategory.create`) vanno creati presto, quando si registrano gli oggetti: se nascono dopo che il gioco ha già disegnato un giocatore, lo `switch` di `HumanoidModel.poseRightArm` ha un array troppo corto e **il client di chi guarda crasha** (`Index 10 out of bounds for length 10`). Nella Frusta lo fa `WhipClientExtensions` con `WhipPoses.init()`.
+- Forge, prima persona: per un oggetto in mano che si muove disegnalo nel `RenderHandEvent` dove lo mette vanilla (`translate(0.56, -0.52, -0.72)` + il `firstperson_righthand` del modello); disegnato nel mondo vicino alla telecamera viene enorme. Un punto della mano si porta nel mondo moltiplicando x e y per tan(fov del mondo/2)/tan(fov della mano/2) (`ViewportEvent.ComputeFov`): vedi `FirstPersonWhip` della Frusta.
+- Prove Forge: `spawn-animals=false` cancella gli animali evocati; un Ender Dragon con `NoAI` non si può colpire (le parti restano a 0 0 0): evocalo con `{DragonPhase:6}` (vedi `references/test-in-gioco.md`, sezione 8).
 - Container nuovo: `mp_template.sh` avvia server e client con `--offline`, ma la prima volta mancano le librerie di avvio (`dev-launch-injector`, `fabric-log4j-util`) e il server non parte. Lancia `./gradlew downloadAssets` nella cartella della mod e la prima prova da una copia dello script senza `--offline` (`sed -i 's/ --offline//g'`).

@@ -1,0 +1,13 @@
+
+// ---- test copy only (added by the Forge test harness): who plays, where, and a smaller heap
+minecraft {
+    runs {
+        client {
+            args '--username', System.getenv('CT_USER') ?: 'Dev', '--quickPlayMultiplayer', 'localhost:25565', '--width', '1280', '--height', '720'
+            jvmArg '-Xmx2G'
+        }
+        server {
+            jvmArg '-Xmx2G'
+        }
+    }
+}

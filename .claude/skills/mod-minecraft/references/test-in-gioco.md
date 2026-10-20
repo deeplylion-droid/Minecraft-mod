@@ -2,7 +2,7 @@
 
 Compilare non basta: le cose che si rompono davvero sono i clic, la sincronizzazione tra giocatori, cosa vede l'altro, i numeri. Per questo provo ogni mod con un **server dedicato e due client veri** che girano su schermi finti (Xvfb), li comando con **tasti e clic veri** (`xdotool`) e li faccio guardare da una **mod di test** che scrive cosa vede e scatta screenshot. Poi guardo le immagini.
 
-Tutto quello che serve è in `harness/` (per Fabric 26.3; per 1.21.1 vedi in fondo).
+Tutto quello che serve è in `harness/` (per Fabric 26.3), in `harness/forge/` (per Forge 1.20.1, sezione 8); per 1.21.1 vedi in fondo.
 
 ## Indice
 1. Cosa serve nel container
@@ -103,6 +103,24 @@ Per la mod che provi aggiungi comandi suoi in `run()` (es. per le chiappe `aim <
 
 - **Un giocatore solo**: `runClient --args="--quickPlaySingleplayer <mondo>"`; per i comandi in singleplayer conviene eseguirli lato server con permessi da proprietario (la vecchia mod di test di Filo Rosso lo faceva con `server.getCommands().performPrefixedCommand(...withPermission(LevelBasedPermissionSet.OWNER))`).
 - **Fabric 1.21.1** (Sotto la Bedrock, Jumpscare!): stesso schema, ma la mod di test va riscritta con i nomi vecchi (`Minecraft.screen`, `setScreen`, `GuiGraphics`, `ResourceLocation`) e non serve `GlBackendMixin`. Le mod di test compilate con Loom e mappature chiamano i metodi di Minecraft ereditati dalle classi della mod facendo prima il cast alla classe di Minecraft, altrimenti il remapping in dev fallisce.
-- **Forge 1.20.1**: finora verificato solo compilando e con anteprime offline (es. le traiettorie dello yo-yo disegnate con le stesse classi `motion/`).
+- **Forge 1.20.1**: c'è un banco di prova suo, vedi la sezione 8 (usato per la Frusta Imperiale; Würstel e Yo-Yo erano stati verificati solo compilando e con anteprime offline).
 - **Client di produzione** (come lo avvia l'utente): Knot con il jar compilato e il classpath preso dal JSON della versione; utile per scoprire problemi che in dev non ci sono (fatto per Disabilità e Filo Rosso).
 - **Con le mod dell'utente** (Sodium, Iris, Simple Voice Chat, WorldEdit): mettile in `run/mods` del client e fai partire, per vedere conflitti di mixin o di tasti.
+
+## 8. Forge 1.20.1 (`harness/forge/`)
+
+Stesso schema (server dedicato, Mario e Luigi su Xvfb `:77`/`:78`, `xdotool`, mod di test che scrive `[ctest] ...` e legge `ftest_cmd.txt`), con queste differenze:
+- `harness/forge/setup.sh /home/user/Minecraft-mod/mods/<mod> $SCRATCH/test-forge` prepara **tre copie** del progetto (`srv/`, `cli1/` per Mario, `cli2/` per Luigi): anche Mario gira da una copia, così nella cartella della mod non nasce niente. Usa il wrapper Gradle della radice e il JDK 17, compila la mod, la mod di test e scarica gli asset (`downloadAssets`).
+- La mod di test (`harness/forge/ctest/`) è una mod Forge (`@Mod("ctest")`, `displayTest="IGNORE_ALL_VERSION"`) compilata con `jar` e **non** `build`: i client di sviluppo (`runClient`) usano i nomi di Mojang, il jar riofuscato non funzionerebbe. Va in `run/mods/` dei client. I comandi sono gli stessi della 26.3 (più `track` con x e z, e in più scrive i clic del mouse che arrivano al gioco: `mouse button 0 action 1`). I comandi della mod che provi vanno in `ctest/src/main/java/ctest/Extra.java` nella cartella di prova (esempio: `harness/forge/Extra-esempio-frusta.java`), chiamato per ogni comando che il driver non conosce; `setup.sh` rinfresca i file generici e lascia `Extra.java`.
+- `mp_template.sh`: in ogni copia aggiunge al `build.gradle` le righe di `run_args.gradle` (nome del giocatore da `CT_USER`, `--quickPlayMultiplayer localhost:25565`, finestra 1280×720, `-Xmx2G`); sempre OpenGL (1.20.1 non ha Vulkan). Prepara il mondo con i gamerule di 1.20.1 (`doDaylightCycle`, `doWeatherCycle`, `doMobSpawning`). In più: `lclick`/`rclick` (tasti del mouse in gioco senza muovere il mouse, che girerebbe la telecamera), `hover` (muove il mouse in una schermata, per i tooltip), `last <A|B> <prefisso> [n]` (ultime righe del driver), `bnow` (raffica che parte subito: `do_` aspetta 0,7 s, quindi `burst B x 20 1; lclick A` fotografava prima del colpo).
+- Comandi in 1.20.1: `summon minecraft:pig 0 -60 3 {NoAI:1b,Silent:1b,Attributes:[{Name:"generic.max_health",Base:1000}],Health:1000f}`, oggetti con `item replace entity Mario hotbar.3 with frusta:netherite_whip{Enchantments:[{id:"frusta:sottomissione",lvl:5s}]}`, libri con `StoredEnchantments`.
+- Il mondo piatto di 1.20.1 ha l'erba a y = -61: i giocatori stanno a -60.
+
+Trappole trovate qui:
+- `spawn-animals=false` nel `server.properties` **cancella subito tutti gli animali**, anche quelli evocati (`ServerLevel.shouldDiscardEntity`): i maiali di prova sparivano. Il modello non lo mette più; per non far nascere mob basta `gamerule doMobSpawning false`.
+- **Ender Dragon con `NoAI`**: in 1.20.1 le sue parti colpibili (testa, collo, corpo...) si spostano solo nel ramo con l'IA, quindi restano ferme a 0 0 0 e nessun colpo lo prende (il modello invece si vede al posto giusto). Evocalo **appollaiato**: `summon minecraft:ender_dragon 0 -60 10 {Rotation:[0f,0f],DragonPhase:6}`; in pacifico resta fermo circa 5 secondi con la testa verso -z, poi decolla. Per mirare alla testa serve un comando della mod di test che guardi `dragon.head.getBoundingBox().getCenter()`.
+- Con F1 (`hud off`) vanilla non disegna l'oggetto in mano in prima persona: le foto in prima persona vanno fatte con `hud on`.
+- llvmpipe disegna pochi fotogrammi al secondo: in una raffica ogni tick ci sono foto uguali di fila. Va bene, basta guardarle tutte.
+- In uno script di prova non usare `wait` da solo: aspetta anche server e client lanciati in background (lo script resta fermo per un'ora). Usa `wait $PID` del solo comando che ti serve.
+- Dopo un colpo che spinge (Schiocco Imperiale) il bersaglio non è più dov'era: rimettilo a posto prima della prova successiva.
+

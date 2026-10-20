@@ -1,0 +1,10 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="test only"
+
+[[mods]]
+modId="ctest"
+version="1.0.0"
+displayName="Test driver"
+displayTest="IGNORE_ALL_VERSION"
+description='''Test driver, never shipped.'''
