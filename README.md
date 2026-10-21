@@ -291,3 +291,39 @@ Il drago ha 200 di vita: la frusta di netherite con Sottomissione IV (128) e que
 
 - Messaggi di morte: *Luigi è stato frustato a morte da Mario*, *Luigi è stato annientato dallo Schiocco Imperiale di Mario*.
 - Config: `saves/<mondo>/serverconfig/frusta-server.toml` (`[whip]` danni delle tre fruste e spinta, `[sottomissione]` moltiplicatore per livello e ginocchio sì/no, `[imperial]` larghezza del cono e spinta, `[grab]` presa sì/no e forza) e `config/frusta-client.toml` (impugnatura che si muove in prima persona, scie, particelle, tremolio dello schermo, abbassare gli altri suoni e di quanto).
+
+### Infezione Zombie (`mods/infezione-zombie/`)
+
+![Gli stadi dell'infezione su una skin, il genoma che si corrompe e le bolle](docs/infezione-zombie-preview.png)
+
+Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), pensata per un modpack "epidemia zombie" e per i video. Jar: `infezione-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+
+- **Ci si infetta solo col comando** (operatori): `/infezione infetta <giocatori>`.
+- **Ogni stadio dura 5 minuti** (`/infezione durata <minuti>` per cambiarlo); dopo il quarto si diventa **zombie**.
+
+| Stadio | Sul personaggio (lo vedono tutti) | Sullo schermo di chi è infetto | Effetti |
+|---|---|---|---|
+| I · Morso | morso che sanguina sulla mascella, pelle più pallida; si porta la mano al morso | il genoma comincia a corrompersi; le vene ai bordi compaiono solo quando batte il cuore | – |
+| II · Febbre | pelle grigiastra, occhi iniettati di sangue, prime vene nere, sudore; tossisce | battito più forte, vene a ogni battito | fame più veloce |
+| III · Delirio | occhiaie, vene, vestiti strappati e sporchi di sangue, curvo, le prime **bolle** intorno al morso; tic e spasmi | zombie alle spalle che non ci sono, vertigini | 1 cuore in meno, Nausea a tratti |
+| IV · Agonia | pelle grigia, occhi lattiginosi che **brillano al buio**, sangue dalla bocca, **bolle ovunque che si gonfiano e scoppiano**, mosche; tosse con sangue, convulsioni, svenimenti | il cuore martella, lo schermo trema, buio improvviso | 2 cuori in meno, 15% più lento |
+| V · Zombie | un cadavere coperto di bolle e piaghe, occhi bianchi, braccia in avanti, gemiti | genoma corrotto al 100%, il cuore non batte più, vede al buio | vedi sotto |
+
+- **In alto a sinistra** c'è il **genoma**: una doppia elica animata che marcisce da sinistra a destra man mano che l'infezione avanza (sangue, poi nero, filamenti spezzati, gocce, glitch a ogni sintomo), con lo stadio, la percentuale di genoma corrotto e quanto manca al prossimo stadio. Sotto, i cuori infetti cambiano a ogni stadio; ai bordi dello schermo le vene avanzano stadio dopo stadio (nei primi due compaiono solo nell'istante del battito, poi restano e pulsano). Ogni nuovo stadio arriva con un titolo grande.
+- **Zombie** (stadio V): gli zombie non ti attaccano e vanno dagli umani (ma se ne colpisci uno si vendica); **bruci al sole** come uno zombie (un elmo ti protegge); colpisci più forte (+1 cuore); vedi al buio; la carne marcia non fa male e sazia di più. **Si torna umani solo morendo** (o con `/infezione cura`).
+- **Morire cura** l'infezione a qualsiasi stadio.
+- **Antidoto** (siringa), ricetta senza forma: `bottiglia di vetro` + `mela d'oro` + `occhio di ragno fermentato` + `lacrima di ghast`. **Tasto destro tenuto** per iniettartelo nel collo; **tasto destro su un altro giocatore** per iniettarlo a lui. Funziona fino allo stadio IV: per uno zombie è troppo tardi.
+- La mod trasforma **la skin di ognuno** (qualsiasi skin, anche HD, con la pelle chiara o scura) e tutti la vedono, anche nella lista Tab.
+
+| Comando (operatori) | Cosa fa |
+|---|---|
+| `/infezione infetta <giocatori>` | infetta (stadio I) |
+| `/infezione stadio <giocatori> <1-5>` | porta subito a uno stadio |
+| `/infezione cura <giocatori>` | guarisce (anche gli zombie) |
+| `/infezione pausa <giocatori>` / `/infezione riprendi <giocatori>` | ferma / fa ripartire il tempo dell'infezione |
+| `/infezione sintomo <giocatori> <sintomo>` | un sintomo subito (per le riprese): `morso`, `tosse`, `sangue`, `spasmo`, `vertigini`, `convulsioni`, `svenimento`, `lamento`, `trasformazione` |
+| `/infezione info` | chi è infetto, a che stadio e quanto manca |
+| `/infezione durata <minuti>` | quanto dura ogni stadio (resta salvato) |
+
+- Config: `saves/<mondo>/serverconfig/infezione-server.toml` (minuti per stadio, la morte cura sì/no, effetti di gioco sì/no; `[zombie]` sole, danno in più, vista al buio, zombie amici) e `config/infezione-client.toml` (genoma, timer, cuori, vene, tremolio, battito, allucinazioni, skin, bolle).
+- Gli zombie "amici" sono quelli del tag `infezione:zombie_friends` (zombie, husk, drowned, zombie villager, zombified piglin, gigante): con un datapack ci si aggiungono gli zombie di altre mod del modpack.

@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+issueTrackerURL="https://github.com/deeplylion-droid/minecraft-mod/issues"
+
+[[mods]]
+modId="infezione"
+version="${file.jarVersion}"
+displayName="Infezione Zombie"
+authors="deeplylion-droid"
+logoFile="infezione_logo.png"
+description='''
+A zombie infection in five stages - Bite, Fever, Delirium, Agony, Zombie - given with /infezione. The infected player sees it on their screen (a panel with the stage and the time left, rotting hearts, veins at the edges beating with the heart, blackouts) and everyone sees it on their body: the skin turns grey and veined, the eyes go bloodshot and then milky and glow in the dark, blood, coughs, twitches, convulsions, flies. At stage 5 the player is a zombie: zombies leave them alone and the sun burns them. Until stage 4 an antidote can still cure them.
+'''
+
+[[dependencies.infezione]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.infezione]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"

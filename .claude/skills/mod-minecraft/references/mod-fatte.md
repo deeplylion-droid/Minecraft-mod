@@ -12,6 +12,7 @@ In ordine di tempo. Per ognuna: cosa ha chiesto l'utente, cosa c'è, cosa è eme
 | Filo Rosso | `mods/filo-rosso/` | `filorosso` | Fabric 26.3 | 1.0.0 |
 | Chiappe Colossali | `mods/chiappe-colossali/` | `chiappe` | Fabric 26.3 | 1.0.0 |
 | Frusta Imperiale | `mods/frusta-imperiale/` | `frusta` | Forge 1.20.1 | 1.0.1 |
+| Infezione Zombie | `mods/infezione-zombie/` | `infezione` | Forge 1.20.1 | 1.0.0 |
 
 C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: modelli horror low-poly in Blockbench con tre bozze, texture, glow, animazioni e anteprime.
 
@@ -68,4 +69,12 @@ C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: m
 - Scelte (domande a opzioni, ha preso sempre la consigliata): tutti e tre i comandi (sinistro frustata, destro tenuto rotazione + Schiocco Imperiale, accovacciato + destro presa che tira a sé), da ferma "strascico a terra", Sottomissione = danno ×2 a livello + in ginocchio.
 - Lunga 5 / 5,5 / 6 blocchi; danno 4 / 6 / 8, con Sottomissione V 128 / 192 / 256: solo la netherite V uccide il drago. Lo schiocco abbassa per un attimo tutti gli altri suoni (`SoundDucker`).
 - **Stato**: prima mod Forge provata con server e due client veri (nato per lei il banco di prova `harness/forge/`): numeri, drago, presa, ginocchio, PvP verificati. L'utente l'ha provata: "tutto bellissimo", tranne la frusta che durante la rotazione si staccava dal manico (corretto nella **1.0.1**: guarda sempre da vicino dove la frusta esce dall'impugnatura, anche nei primi tick delle mosse e in prima persona). Audio non verificato.
+
+## Infezione Zombie (Forge 1.20.1)
+
+- **Richiesta**: "Nuova mod Minecraft forge 1.20.1. La userei in un modpack epidemia zombie a fini di video su YouTube. Mi serve che io possa contrarre infezione zombie, che abbia **5 stadi di infezione, ben visibili nella GUI**. Anche sul **personaggio** si deve vedere bene che sta succedendo qualcosa. La skin su cui verrà applicata è **lyonWGF**." Poi: "Sappi che la serie è **horror, dark e matura**", "**bolle 3D** sopra la skin negli stadi più avanzati", "una bella **barra in alto a sinistra** con il progresso dell'infezione, animata, **stile genoma che si corrompe**".
+- Scelte (domande a opzioni, sempre la consigliata): stile "Cadavere" (tre bozze disegnate sulla sua skin vera, scaricata e trasformata in Python), contagio solo col comando, stadio 5 = zombie giocabile (si torna umani morendo), antidoto fino allo stadio 4.
+- Cosa c'è: skin trasformata per stadio sul client (pelle grigia, vene dal morso, occhi, sangue, vestiti strappati; funziona con qualsiasi skin), bolle 3D che pulsano e scoppiano, occhi che brillano al buio, pose e sintomi visti da tutti (tosse, spasmi, convulsioni, svenimenti), genoma animato, cuori infetti, vene ai bordi, titoli; zombie amici degli zombie che brucia al sole; `/infezione` con `sintomo` per far partire un sintomo durante le riprese.
+- Mi ha chiesto "tra quanto mi mandi il jar?" mentre rifinivo: gli ho mandato subito il jar che funzionava, poi ho continuato con i ritocchi. Quando chiede il jar e la mod è già provata, mandalo e di' cosa manca.
+- **Stato**: provata con server e due client veri (cinque giri di prova); non ancora provata in gioco dall'utente, audio non verificato.
 

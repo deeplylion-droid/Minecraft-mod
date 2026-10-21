@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "infezione:item/antidoto"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, -90, 135],
+      "translation": [0, 3.0, 0.5],
+      "scale": [0.6, 0.6, 0.6]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 90, -135],
+      "translation": [0, 3.0, 0.5],
+      "scale": [0.6, 0.6, 0.6]
+    }
+  }
+}

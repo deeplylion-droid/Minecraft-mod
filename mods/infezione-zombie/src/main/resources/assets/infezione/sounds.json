@@ -1,0 +1,77 @@
+{
+  "cough": {
+    "sounds": [
+      "infezione:cough1",
+      "infezione:cough2",
+      "infezione:cough3"
+    ],
+    "subtitle": "subtitles.infezione.cough"
+  },
+  "cough_blood": {
+    "sounds": [
+      "infezione:cough_blood1",
+      "infezione:cough_blood2"
+    ],
+    "subtitle": "subtitles.infezione.cough_blood"
+  },
+  "bone_crack": {
+    "sounds": [
+      "infezione:bone_crack1",
+      "infezione:bone_crack2"
+    ],
+    "subtitle": "subtitles.infezione.bone_crack"
+  },
+  "heartbeat": {
+    "sounds": [
+      "infezione:heartbeat"
+    ],
+    "subtitle": "subtitles.infezione.heartbeat"
+  },
+  "stage_up": {
+    "sounds": [
+      "infezione:stage_up"
+    ],
+    "subtitle": "subtitles.infezione.stage_up"
+  },
+  "transform": {
+    "sounds": [
+      {
+        "name": "infezione:transform",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.infezione.transform"
+  },
+  "inject": {
+    "sounds": [
+      "infezione:inject"
+    ],
+    "subtitle": "subtitles.infezione.inject"
+  },
+  "cure": {
+    "sounds": [
+      "infezione:cure"
+    ],
+    "subtitle": "subtitles.infezione.cure"
+  },
+  "flies": {
+    "sounds": [
+      "infezione:flies"
+    ],
+    "subtitle": "subtitles.infezione.flies"
+  },
+  "breath": {
+    "sounds": [
+      "infezione:breath1",
+      "infezione:breath2"
+    ],
+    "subtitle": "subtitles.infezione.breath"
+  },
+  "boil_pop": {
+    "sounds": [
+      "infezione:boil_pop1",
+      "infezione:boil_pop2"
+    ],
+    "subtitle": "subtitles.infezione.boil_pop"
+  }
+}
