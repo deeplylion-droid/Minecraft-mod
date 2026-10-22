@@ -92,6 +92,15 @@ public class FiloRossoClient implements ClientModInitializer {
             PowerFx.clear();
         });
 
+        // what the trophies do, under their names
+        net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
+            String key = stack.is(com.filorosso.item.ModItems.PUPPETEER_MASK) ? "item.filorosso.puppeteer_mask.desc"
+                    : stack.is(com.filorosso.item.ModItems.GOLDEN_HEART) ? "item.filorosso.golden_heart.desc"
+                    : stack.is(com.filorosso.item.ModItems.BROKEN_HEART) ? "item.filorosso.broken_heart.desc" : null;
+            if (key != null) {
+                lines.add(net.minecraft.network.chat.Component.translatable(key).withStyle(net.minecraft.ChatFormatting.GRAY));
+            }
+        });
         ClientTickEvents.END_CLIENT_TICK.register(FiloRossoClient::tick);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> GraphicsFallback.started());
         ThreadRenderer.init();
@@ -106,6 +115,7 @@ public class FiloRossoClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.STRING_KNOT, com.filorosso.client.render.StringKnotRenderer::new);
         EntityRendererRegistry.register(ModEntities.THREAD_SPEAR, com.filorosso.client.render.ThreadSpearRenderer::new);
         EntityRendererRegistry.register(ModEntities.SPECTATOR, com.filorosso.client.render.SpectatorRenderer::new);
+        EntityRendererRegistry.register(ModEntities.FALLING_HEART, com.filorosso.client.render.FallingHeartRenderer::new);
     }
 
     /** Asks the server to use an ability (index into {@code Abilities.Ability.ALL}). */

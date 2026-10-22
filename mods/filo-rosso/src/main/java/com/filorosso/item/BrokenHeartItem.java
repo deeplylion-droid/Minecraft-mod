@@ -26,6 +26,10 @@ public class BrokenHeartItem extends Item {
             player.sendSystemMessage(Component.translatable("filorosso.msg.boss_night").withStyle(ChatFormatting.GRAY));
             return InteractionResult.FAIL;
         }
+        if (level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            player.sendSystemMessage(Component.translatable("filorosso.msg.boss_peaceful").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.FAIL;
+        }
         if (!Boss.summon(server.getServer(), server, player.position().add(player.getLookAngle().multiply(1, 0, 1).normalize().scale(14.0)))) {
             player.sendSystemMessage(Component.translatable("filorosso.msg.boss_already").withStyle(ChatFormatting.GRAY));
             return InteractionResult.FAIL;

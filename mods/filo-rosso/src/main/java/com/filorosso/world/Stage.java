@@ -13,6 +13,8 @@ import com.filorosso.server.Challenges;
 import com.filorosso.server.Scores;
 import com.filorosso.sound.ModSounds;
 import com.filorosso.util.Text;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.ChatFormatting;
@@ -59,6 +61,8 @@ public final class Stage {
     private static final int MUSIC_EVERY = 20 * 32;
 
     private static State state = State.IDLE;
+    /** Columns of the curtain open on each side of the middle (-1 = closed, 17 = all open). */
+    private static int curtainColumns = -1;
     private static long since;
     private static UUID boss;
     private static long lastMusic;
@@ -69,13 +73,20 @@ public final class Stage {
     }
 
     public static void init() {
+        // on both sides: the client must not fall back to using the item in hand, nor show blocks
+        // being placed or broken that the server would put back
         UseBlockCallback.EVENT.register((player, level, hand, hit) -> {
-            if (!(level instanceof ServerLevel server) || server.dimension() != Theatre.LEVEL || !(player instanceof ServerPlayer sp)) {
+            if (level.dimension() != Theatre.LEVEL) {
                 return InteractionResult.PASS;
             }
             if (Theatre.isGhostLight(hit.getBlockPos())) {
-                if (state == State.IDLE) {
-                    startShow(server, sp);
+                if (level instanceof ServerLevel server && player instanceof ServerPlayer sp) {
+                    if (server.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+                        // a Monster would vanish at once: no show on Peaceful
+                        sp.sendSystemMessage(Component.translatable("filorosso.msg.boss_peaceful").withStyle(ChatFormatting.GRAY), true);
+                    } else if (state == State.IDLE) {
+                        startShow(server, sp);
+                    }
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -85,6 +96,26 @@ public final class Stage {
             }
             return InteractionResult.PASS;
         });
+        // the Burattinaio's mask: crouch and hit a friend
+        AttackEntityCallback.EVENT.register((player, level, hand, entity, hit) -> {
+            if (!(player instanceof ServerPlayer wearer) || !(entity instanceof ServerPlayer victim) || !player.isShiftKeyDown()) {
+                return InteractionResult.PASS;
+            }
+            ItemStack head = wearer.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
+            if (!head.is(ModItems.PUPPETEER_MASK)) {
+                return InteractionResult.PASS;
+            }
+            if (wearer.getCooldowns().isOnCooldown(head)) {
+                return InteractionResult.PASS;
+            }
+            if (Puppets.prank((ServerLevel) level, wearer, victim)) {
+                wearer.getCooldowns().addCooldown(head, Puppets.PRANK_COOLDOWN);
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.PASS;
+        });
+        AttackBlockCallback.EVENT.register((player, level, hand, pos, direction) ->
+                level.dimension() == Theatre.LEVEL && !player.isCreative() ? InteractionResult.FAIL : InteractionResult.PASS);
         PlayerBlockBreakEvents.BEFORE.register((level, player, pos, blockState, blockEntity) ->
                 level.dimension() != Theatre.LEVEL || player.isCreative());
     }
@@ -167,6 +198,8 @@ public final class Stage {
         }
         state = State.OPENING;
         since = now(level.getServer());
+        curtainColumns = 0;
+        Theatre.curtainColumn(level, 0, false);
         Theatre.ghostLight(level, false);
         Theatre.lights(level, false);
         level.playSound(null, Theatre.GHOST_LIGHT, ModSounds.GHOST_OFF, SoundSource.BLOCKS, 3.0F, 1.0F);
@@ -212,6 +245,17 @@ public final class Stage {
         }
         long now = now(server);
         List<ServerPlayer> players = audience(level);
+        for (ServerPlayer p : players) {
+            // the Theatre hangs in nothing: whoever falls off it (flying over the walls, a pearl, a
+            // fling) is caught by the threads and put back at the back of the stalls
+            if (p.getY() < Theatre.FLOOR - 12) {
+                p.teleportTo(level, Theatre.ENTRY.x, Theatre.ENTRY.y, Theatre.ENTRY.z, java.util.Set.of(), p.getYRot(), 0.0F, true);
+                p.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                p.resetFallDistance();
+                p.sendSystemMessage(Component.translatable("filorosso.theatre.caught").withStyle(ChatFormatting.DARK_RED), true);
+                Bonds.hear(p, ModSounds.SNAP, 0.8F, 0.7F);
+            }
+        }
         if (players.isEmpty()) {
             // nobody left watching: the show stops and the place gets ready again
             if (state != State.IDLE && ++emptyTicks > 600) {
@@ -226,14 +270,16 @@ public final class Stage {
         long t = now - since;
         switch (state) {
             case OPENING -> {
-                // the curtain opens from the middle outwards
-                if (t % 3 == 0 && t / 3 <= 17) {
-                    int k = (int) (t / 3);
-                    Theatre.curtainColumn(level, k, false);
-                    Theatre.curtainColumn(level, -k, false);
-                    if (k % 3 == 0) {
+                // the curtain opens from the middle outwards, a column every 3 ticks (counted, not
+                // matched on the tick: the first tick of the show is not always t = 0)
+                int k = (int) Math.min(17, t / 3);
+                while (curtainColumns < k) {
+                    curtainColumns++;
+                    Theatre.curtainColumn(level, curtainColumns, false);
+                    Theatre.curtainColumn(level, -curtainColumns, false);
+                    if (curtainColumns % 3 == 0) {
                         level.playSound(null, new BlockPos(0, Theatre.STAGE + 8, Theatre.CURTAIN_Z), ModSounds.CURTAIN, SoundSource.BLOCKS, 2.5F,
-                                0.8F + k * 0.02F);
+                                0.8F + curtainColumns * 0.02F);
                     }
                 }
                 if (t == 30) {
@@ -283,7 +329,7 @@ public final class Stage {
 
     /** The lights of the stage go out (DARK) and come back. */
     public static void darkness(ServerLevel level, boolean dark) {
-        Theatre.lightLevels(level, dark ? 0 : 7, dark ? 0 : 4);
+        Theatre.lightLevels(level, dark ? 0 : 10, dark ? 0 : 8);
     }
 
     /** Some spectators stand up and come down to the stage. */
@@ -310,6 +356,8 @@ public final class Stage {
         state = State.ENDING;
         since = now(server);
         boss = null;
+        // the house lights come up: the stalls can be seen applauding
+        Theatre.lights(level, true);
         CoupleBook book = CoupleBook.get(server);
         book.puppeteerBeaten = true;
         for (Couple c : book.couples) {
@@ -361,12 +409,16 @@ public final class Stage {
                 s.clap(false);
             }
         }
-        if (t >= 140 && t <= 140 + 17 * 3 && (t - 140) % 3 == 0) {
-            int k = 17 - (int) ((t - 140) / 3);
-            Theatre.curtainColumn(level, k, true);
-            Theatre.curtainColumn(level, -k, true);
-            if (k % 4 == 0) {
-                level.playSound(null, new BlockPos(0, Theatre.STAGE + 8, Theatre.CURTAIN_Z), ModSounds.CURTAIN, SoundSource.BLOCKS, 2.5F, 0.7F);
+        if (t >= 140) {
+            // and closes from the sides inwards
+            int k = 17 - (int) Math.min(17, (t - 140) / 3);
+            while (curtainColumns > k - 1 && curtainColumns >= 0) {
+                Theatre.curtainColumn(level, curtainColumns, true);
+                Theatre.curtainColumn(level, -curtainColumns, true);
+                if (curtainColumns % 4 == 0) {
+                    level.playSound(null, new BlockPos(0, Theatre.STAGE + 8, Theatre.CURTAIN_Z), ModSounds.CURTAIN, SoundSource.BLOCKS, 2.5F, 0.7F);
+                }
+                curtainColumns--;
             }
         }
         if (t == 200) {
@@ -396,6 +448,7 @@ public final class Stage {
             s.discard();
         }
         Theatre.curtain(level, true);
+        curtainColumns = -1;
         Theatre.ghostLight(level, true);
         Theatre.lights(level, true);
         state = State.IDLE;

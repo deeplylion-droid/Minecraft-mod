@@ -23,7 +23,7 @@ File di supporto (leggili quando servono, non tutti subito):
 - Gusti: nell'horror vuole cose enigmatiche, alla *The Broken Script*, non bambinesche (un boss rosa con cuore e forbici "faceva schifo"). Per mostri e boss usa la skill `monster` (`.claude/skills/monster`): tre bozze con render, sceglie lui.
 - Le scelte vere (aspetto del boss, tipo di attacco, versione) chiedile con domande a opzioni e una consigliata; il resto decidilo tu e dillo in una riga.
 - Il suo PC: Windows, RTX 4090, MultiMC o Prism Launcher. Con 26.3 ha avuto crash nativi del driver NVIDIA in OpenGL (`0xC0000005`): soluzione Vulkan (le mod 26.3 recenti lo scelgono da sole su Windows). Se crasha di nuovo, chiedi il file `hs_err_pid*.log` dell'istanza.
-- Mod che usa con gli amici in 26.3: Sodium, Iris (tasti R, K, O), Simple Voice Chat (V, G, M, N, H), WorldEdit. Scegli tasti liberi anche da quelle: in 26.3 vanilla usa la **G** per le azioni rapide; liberi Z, B, J, Y, U, I (J/Y/U/I li usa Filo Rosso).
+- Mod che usa con gli amici in 26.3: Sodium, Iris (tasti R, K, O), Simple Voice Chat (V, G, M, N, H), WorldEdit. Scegli tasti liberi anche da quelle: in 26.3 vanilla usa la **G** per le azioni rapide; liberi Z, B, J, Y, U, I (J/Y/U/I e B li usa Filo Rosso, Z Chiappe Colossali).
 - Richieste piccole tipiche, e come le ho gestite:
   - "ripassami l'ultima versione di X": controlla `mod_version` e le Release (tag `<mod_id>-v<versione>`), manda quel jar e di' che versione è.
   - "fammi vedere le crafting recipe": elencale in testo (sono nel `README.md`).

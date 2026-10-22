@@ -153,6 +153,13 @@ public final class Revive {
         }
     }
 
+    /** Up at once (the partner just became "Eterni" with you on the ground). */
+    public static void standUp(ServerPlayer player, ServerPlayer partner) {
+        if (ModData.downed(player)) {
+            revived(player, partner);
+        }
+    }
+
     private static void revived(ServerPlayer player, ServerPlayer partner) {
         player.setAttached(ModData.STATUS, Status.NONE);
         HOLDING.remove(player.getUUID());

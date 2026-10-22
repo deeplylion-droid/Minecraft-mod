@@ -227,9 +227,8 @@ public final class PowerFx {
     private static void glowLine(LevelRenderContext context, PoseStack poseStack, Vec3 camera, List<Vec3> points, float width, int rgb, float alpha) {
         float[] w = new float[points.size()];
         int[] c = new int[points.size()];
+        // the eyes render type blends by alpha (26.3): the glow texture fades out in its alpha
         int color = ARGB.color(Mth.clamp(alpha, 0.0F, 1.0F), rgb);
-        // the eyes render type adds light: a dimmer colour is a fainter line
-        color = ARGB.scaleRGB(color, Mth.clamp(alpha, 0.0F, 1.0F));
         for (int i = 0; i < w.length; i++) {
             w[i] = width;
             c[i] = color;
@@ -418,7 +417,7 @@ public final class PowerFx {
                     double t = i / (double) (w.length - 1);
                     w[i] = (float) (0.13 * (1.0 - t * 0.7));
                     float alpha = fade * (0.85F - 0.3F * (float) t);
-                    c[i] = ARGB.scaleRGB(ARGB.color(1.0F, rgb), alpha);
+                    c[i] = ARGB.color(Mth.clamp(alpha, 0.0F, 1.0F), rgb);
                 }
                 ribbon(context, poseStack, GLOW_TYPE, camera, pts, w, c, LightCoordsUtil.FULL_BRIGHT, 0.0F, 1.0F);
             }

@@ -1,5 +1,8 @@
 # Recisione, la Marionetta
 
+(Il super boss della 1.1.0, il Burattinaio, ha le sue istruzioni in
+[`ISTRUZIONI_BURATTINAIO.md`](ISTRUZIONI_BURATTINAIO.md).)
+
 Il boss di Filo Rosso, rifatto con la skill `monster` (`.claude/skills/monster/SKILL.md`).
 Una marionetta gigante di corda nera intrecciata (circa 10 blocchi, 14 con i fili): testa a gabbia di
 ferro arrugginito con tre occhi rossi vuoti dentro, un nodo di filo rosso al posto del cuore (con

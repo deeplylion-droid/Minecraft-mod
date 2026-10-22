@@ -41,6 +41,10 @@ public final class ModEntities {
     public static final EntityType<Spectator> SPECTATOR = register("spectator",
             EntityType.Builder.<Spectator>of(Spectator::new, MobCategory.MONSTER).sized(0.6F, 1.95F).eyeHeight(1.74F).clientTrackingRange(8).noSave());
 
+    /** The hearts of the "Pioggia di cuori" event. */
+    public static final EntityType<FallingHeart> FALLING_HEART = register("falling_heart",
+            EntityType.Builder.<FallingHeart>of(FallingHeart::new, MobCategory.MISC).sized(0.6F, 0.6F).clientTrackingRange(8).updateInterval(2).noSave());
+
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, FiloRosso.id(name));
         return Registry.register(BuiltInRegistries.ENTITY_TYPE, key, builder.build(key));

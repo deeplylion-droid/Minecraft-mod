@@ -23,9 +23,18 @@ public final class ModItems {
     /** The trophy of whoever defeats it. */
     public static final Item GOLDEN_HEART = register("golden_heart", GoldenHeartItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
             .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
-    /** The trophy of whoever brings down the Burattinaio. */
+    /**
+     * The trophy of whoever brings down the Burattinaio: worn on the head, crouch and hit a friend and
+     * they walk to you like a marionette for a few seconds (see {@link com.filorosso.world.Puppets#prank}).
+     */
     public static final Item PUPPETEER_MASK = register("puppeteer_mask", Item::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
-            .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+            .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+            .component(net.minecraft.core.component.DataComponents.EQUIPPABLE,
+                    net.minecraft.world.item.equipment.Equippable.builder(net.minecraft.world.entity.EquipmentSlot.HEAD)
+                            .setAsset(ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, FiloRosso.id("puppeteer_mask")))
+                            .setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER)
+                            .setDamageOnHurt(false)
+                            .build()));
     /** The servants' scissors. */
     public static final Item SCISSORS = register("scissors", Item::new, new Item.Properties().stacksTo(1));
 

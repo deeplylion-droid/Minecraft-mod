@@ -19,7 +19,7 @@ import net.minecraft.util.Mth;
 
 /**
  * The spectators of the Theatre: black figures with no face. Sitting they only turn their heads;
- * standing, two white points light up where the eyes should be. At the end they applaud.
+ * standing, two white points light up where the eyes should be. At the end they all applaud, eyes open.
  */
 public class SpectatorRenderer extends AbstractZombieRenderer<Spectator, SpectatorRenderer.State, SpectatorRenderer.Model> {
     private static final Identifier TEXTURE = FiloRosso.id("textures/entity/spectator.png");
@@ -80,7 +80,8 @@ public class SpectatorRenderer extends AbstractZombieRenderer<Spectator, Spectat
 
             @Override
             public void submit(PoseStack poseStack, SubmitNodeCollector collector, int light, State state, float yRot, float xRot) {
-                if (state.awake) {
+                // standing, or applauding at the end: the white points open in the dark
+                if (state.awake || state.clapping) {
                     super.submit(poseStack, collector, light, state, yRot, xRot);
                 }
             }

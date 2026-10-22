@@ -285,6 +285,9 @@ public final class FiloCommand {
 
     private static int boss(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
+        if (p.level().getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            throw error("filorosso.msg.boss_peaceful");
+        }
         if (!Boss.summon(p.level().getServer(), (net.minecraft.server.level.ServerLevel) p.level(), p.position().add(p.getLookAngle().scale(12.0)))) {
             throw error("filorosso.command.boss_failed");
         }
@@ -362,6 +365,9 @@ public final class FiloCommand {
 
     private static int puppeteer(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
+        if (source.getServer().getWorldData().getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            throw error("filorosso.msg.boss_peaceful");
+        }
         if (!com.filorosso.world.Theatre.in(p)) {
             com.filorosso.world.Theatre.goUp(p);
         }

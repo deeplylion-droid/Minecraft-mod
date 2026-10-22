@@ -257,10 +257,15 @@ public final class CoupleHud {
             int goal = i < info.goals().size() ? info.goals().get(i) : 1;
             int progress = i < info.progress().size() ? info.progress().get(i) : 0;
             int done = i < info.done().size() ? info.done().get(i) : 0;
-            Component name = Component.translatable("filorosso.challenge." + id, goal);
             int color = done > 0 ? 0xFF80E080 : 0xFFE0E0E0;
-            small(g, font, name, x + 3, ry, color, 0.6F);
             Component right = done > 0 ? Component.literal("✔") : Component.literal(Math.min(progress, goal) + "/" + goal);
+            // a long name is cut short, so it never runs into the count
+            String name = Component.translatable("filorosso.challenge." + id, goal).getString();
+            int room = (int) ((127 - 4 - font.width(right) * 0.6F) / 0.6F);
+            if (font.width(name) > room) {
+                name = font.plainSubstrByWidth(name, room - font.width("…")).stripTrailing() + "…";
+            }
+            small(g, font, Component.literal(name), x + 3, ry, color, 0.6F);
             small(g, font, right, x + 130 - font.width(right) * 0.6F, ry, color, 0.6F);
             ry += 7;
         }
@@ -300,7 +305,11 @@ public final class CoupleHud {
                 color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.5F), 0xFFFFE070, 0xFFFFFFFF);
             }
         } else if (Puppet.active()) {
-            hint = Component.translatable("filorosso.hud.puppet", link.partnerName());
+            net.minecraft.world.entity.Entity by = mc.level == null || mc.player == null ? null
+                    : mc.level.getEntity(com.filorosso.data.ModData.powers(mc.player).puppeteer());
+            hint = by instanceof net.minecraft.world.entity.player.Player wearer
+                    ? Component.translatable("filorosso.hud.puppet_prank", wearer.getGameProfile().name())
+                    : Component.translatable("filorosso.hud.puppet", link.partnerName());
             color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.7F), 0xFFFF4040, 0xFFFFFFFF);
         } else if (partnerKissing(mc)) {
             hint = Component.translatable("filorosso.hud.kiss", link.partnerName(), Screens.keyName(FiloRossoClient.WHEEL));

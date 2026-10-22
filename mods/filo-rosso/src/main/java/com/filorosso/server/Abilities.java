@@ -89,7 +89,8 @@ public final class Abilities {
     public static final int LASSO_TICKS = 120;
     public static final double DOME_RADIUS = 5.5;
     public static final int DOME_TICKS = 200;
-    public static final int KISS_WINDOW = 80;
+    /** How long a kiss waits for the partner to answer (ticks): time to open the wheel and find it. */
+    public static final int KISS_WINDOW = 200;
     public static final double KISS_DISTANCE = 8.0;
     public static final double KISS_RADIUS = 12.0;
     public static final float KISS_DAMAGE = 24.0F;
@@ -349,13 +350,16 @@ public final class Abilities {
         level.sendParticles(ParticleTypes.CLOUD, p.getX(), p.getY() + 0.1, p.getZ(), 24, 1.5, 0.05, 1.5, 0.08);
         DamageSource source = level.damageSources().source(ModDamage.THREAD, p, p);
         AABB box = p.getBoundingBox().inflate(LANDING_RADIUS, 1.5, LANDING_RADIUS);
+        int hits = 0;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> hostile(e) && e.distanceTo(p) < LANDING_RADIUS + 1.0)) {
             if (e.hurtServer(level, source, LANDING_DAMAGE)) {
+                hits++;
                 Vec3 away = e.position().subtract(p.position()).multiply(1, 0, 1);
                 away = away.lengthSqr() < 1.0E-4 ? new Vec3(1, 0, 0) : away.normalize();
                 e.knockback(1.0, -away.x, -away.z, source, LANDING_DAMAGE);
             }
         }
+        Challenges.add(level.getServer(), Bonds.coupleOf(p), Challenges.SLING_HITS, hits);
     }
 
     // ------------------------------------------------------------------ level 7: the lasso
@@ -530,6 +534,7 @@ public final class Abilities {
                     }
                     e.setDeltaMovement(bounced);
                     e.syncVelocity = true;
+                    Challenges.add(level.getServer(), d.couple(), Challenges.DEFLECTS, 1);
                     level.playSound(null, e.getX(), e.getY(), e.getZ(), ModSounds.DOME_DEFLECT, SoundSource.PLAYERS, 1.0F, 1.2F + level.getRandom().nextFloat() * 0.3F);
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, e.getX(), e.getY(), e.getZ(), 8, 0.1, 0.1, 0.1, 0.2);
                 }
@@ -616,11 +621,13 @@ public final class Abilities {
         Couple couple = Bonds.coupleOf(a);
         DamageSource source = level.damageSources().source(ModDamage.THREAD, a, a);
         AABB box = new AABB(mid, mid).inflate(KISS_RADIUS, 6.0, KISS_RADIUS);
+        int hits = 0;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> hostile(e) && e.position().distanceTo(mid) < KISS_RADIUS + e.getBbWidth())) {
             if (e instanceof BondBoss boss) {
                 boss.kissed(couple);
             }
             if (e.hurtServer(level, source, KISS_DAMAGE)) {
+                hits++;
                 Vec3 away = e.position().subtract(mid).multiply(1, 0, 1);
                 away = away.lengthSqr() < 1.0E-4 ? new Vec3(1, 0, 0) : away.normalize();
                 e.knockback(1.6, -away.x, -away.z, source, KISS_DAMAGE);
@@ -633,6 +640,7 @@ public final class Abilities {
         }
         if (couple != null) {
             Affinity.add(server, couple, 10, true);
+            Challenges.add(server, couple, Challenges.KISS_HITS, hits);
         }
     }
 
@@ -644,6 +652,8 @@ public final class Abilities {
             return false;
         }
         long until = now + ETERNAL_TICKS;
+        // a partner on the ground gets up: nobody falls while you are eternal
+        Revive.standUp(partner, player);
         for (ServerPlayer p : new ServerPlayer[]{player, partner}) {
             p.setAttached(ModData.POWERS, ModData.powers(p).withEternal(until));
             if (!p.isCreative() && !p.isSpectator()) {
@@ -723,7 +733,8 @@ public final class Abilities {
             Couple couple = Bonds.coupleOf(p);
             if (t % 2 == 0) {
                 int rgb = couple != null ? Palette.rgb(couple.color) : 0xD8202A;
-                ((ServerLevel) p.level()).sendParticles(new DustParticleOptions(rgb, 1.6F), p.getX(), p.getY() + 0.6, p.getZ(), 3, 0.2, 0.3, 0.2, 0.0);
+                com.filorosso.util.Fx.forOthers((ServerLevel) p.level(), p, new DustParticleOptions(rgb, 1.6F), p.getX(), p.getY() + 0.6, p.getZ(), 3, 0.2,
+                        0.3, 0.2, 0.0);
             }
             boolean down = p.onGround() || p.isInWater() || p.onClimbable();
             if (down && t > 4 || t > 160) {
@@ -790,7 +801,7 @@ public final class Abilities {
                     ((ServerLevel) p.level()).sendParticles(ParticleTypes.HEART, p.getX(), p.getY() + 2.3, p.getZ(), 1, 0.05, 0.05, 0.05, 0.0);
                 }
                 if (powers.eternal(now) && p.level() instanceof ServerLevel level) {
-                    level.sendParticles(ParticleTypes.END_ROD, p.getX(), p.getY() + 1.0, p.getZ(), 2, 0.4, 0.6, 0.4, 0.02);
+                    com.filorosso.util.Fx.forOthers(level, p, ParticleTypes.END_ROD, p.getX(), p.getY() + 1.0, p.getZ(), 2, 0.4, 0.6, 0.4, 0.02);
                 }
             }
         }

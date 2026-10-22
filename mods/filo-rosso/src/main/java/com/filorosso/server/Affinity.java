@@ -98,6 +98,15 @@ public final class Affinity {
         if (couple == null) {
             return;
         }
+        if (killed instanceof Enemy) {
+            // the challenges of the powers count even with the partner far away
+            if (Abilities.tiedBy(killed, couple)) {
+                Challenges.add(killer.level().getServer(), couple, Challenges.LASSO_KILLS, 1);
+            }
+            if (Abilities.eternal(killer)) {
+                Challenges.add(killer.level().getServer(), couple, Challenges.ETERNAL_KILLS, 1);
+            }
+        }
         ServerPlayer partner = Bonds.player(killer.level().getServer(), couple.other(killer.getUUID()));
         if (partner == null || partner.level() != killer.level() || partner.distanceTo(killer) > 12.0) {
             return;

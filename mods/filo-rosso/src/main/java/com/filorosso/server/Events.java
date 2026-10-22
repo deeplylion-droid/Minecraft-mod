@@ -36,7 +36,9 @@ public final class Events {
         SWAP("scambio", 20 * 180),
         ROMANCE("romantica", 20 * 300),
         QUARREL("litigio", 20 * 120),
-        STORM("tempesta", 20 * 120);
+        STORM("tempesta", 20 * 120),
+        HEARTS("cuori", 20 * 150),
+        DANCE("ballo", 20 * 120);
 
         public static final Kind[] ALL = values();
         public final String command;
@@ -113,6 +115,10 @@ public final class Events {
                 }
             } else if (state.kind() == Kind.STORM) {
                 storm(server, now);
+            } else if (state.kind() == Kind.HEARTS) {
+                HeartRain.tick(server, now);
+            } else if (state.kind() == Kind.DANCE) {
+                Dance.tick(server, now);
             }
             return;
         }
@@ -202,6 +208,7 @@ public final class Events {
         long now = server.overworld().getGameTime();
         state = State.NONE;
         last = kind;
+        Dance.stop();
         nextAt = now + interval(server);
         broadcast(server);
         double length = length(server);

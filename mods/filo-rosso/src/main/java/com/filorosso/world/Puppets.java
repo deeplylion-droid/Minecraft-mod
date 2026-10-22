@@ -78,7 +78,11 @@ public final class Puppets {
                 continue;
             }
             ServerPlayer partner = Bonds.partner(p);
-            if (partner != null && partner.level() == level && partner.isAlive() && !isPuppet(partner)) {
+            if (partner != null && isPuppet(partner)) {
+                // the partner is already on its strings: someone must stay free to cut them
+                continue;
+            }
+            if (partner != null && partner.level() == level && partner.isAlive()) {
                 withPartner.add(p);
             } else {
                 others.add(p);
@@ -126,6 +130,37 @@ public final class Puppets {
         }
     }
 
+    /** The mask's prank: this many ticks walking to whoever wears it, once a minute. */
+    public static final int PRANK_TICKS = 60;
+    public static final int PRANK_COOLDOWN = 20 * 60;
+
+    /**
+     * Whoever wears the Burattinaio's mask, crouching, hits a friend: the strings come down on them
+     * and for three seconds they walk to the wearer like a marionette (no hits, no fall at the end).
+     */
+    public static boolean prank(ServerLevel level, ServerPlayer wearer, ServerPlayer victim) {
+        if (isPuppet(victim) || ModData.downed(victim) || victim.isSpectator() || victim == wearer) {
+            return false;
+        }
+        long now = level.getServer().overworld().getGameTime();
+        StringKnot knot = ModEntities.STRING_KNOT.create(level, EntitySpawnReason.EVENT);
+        int knotId = -1;
+        if (knot != null) {
+            knot.tie(victim, wearer);
+            level.addFreshEntity(knot);
+            knotId = knot.getId();
+        }
+        ACTIVE.put(victim.getUUID(), new Puppet(victim.getUUID(), wearer.getId(), knotId, now + PRANK_TICKS));
+        victim.setAttached(ModData.POWERS, ModData.powers(victim).withPuppet(now + PRANK_TICKS, wearer.getId(), wearer.getId()));
+        level.playSound(null, victim.getX(), victim.getY() + 1.0, victim.getZ(), ModSounds.PUPPET_STRINGS, SoundSource.PLAYERS, 1.2F, 1.3F);
+        level.sendParticles(new DustParticleOptions(0xD8202A, 1.4F), victim.getX(), victim.getY() + 2.5, victim.getZ(), 20, 0.4, 1.0, 0.4, 0.0);
+        Bonds.title(victim, Component.translatable("filorosso.puppet.title").withStyle(ChatFormatting.DARK_RED),
+                Component.translatable("filorosso.puppet.prank", wearer.getGameProfile().name()).withStyle(ChatFormatting.GRAY), 5, 40, 10);
+        wearer.sendSystemMessage(Component.translatable("filorosso.puppet.prank_by", victim.getGameProfile().name()).withStyle(ChatFormatting.DARK_RED),
+                true);
+        return true;
+    }
+
     /** The strings snap: the puppet is free. */
     public static void free(ServerLevel level, ServerPlayer victim, ServerPlayer by) {
         Puppet p = ACTIVE.remove(victim.getUUID());
@@ -137,7 +172,8 @@ public final class Puppets {
         level.sendParticles(new DustParticleOptions(0xFF4050, 1.8F), victim.getX(), victim.getY() + 2.6, victim.getZ(), 40, 0.6, 0.6, 0.6, 0.0);
         victim.sendSystemMessage(Component.translatable("filorosso.puppet.freed", by.getGameProfile().name()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
         Couple couple = Bonds.coupleOf(victim);
-        if (couple != null && couple.has(by.getUUID())) {
+        // freeing the partner from the mask's prank is only a game: no affinity, no challenge
+        if (couple != null && couple.has(by.getUUID()) && level.getEntity(p.puppeteer) instanceof Burattinaio) {
             Affinity.add(level.getServer(), couple, 6, true);
             Challenges.add(level.getServer(), couple, Challenges.FREED, 1);
         }
@@ -179,6 +215,14 @@ public final class Puppets {
             }
             ServerLevel level = (ServerLevel) victim.level();
             Entity boss = level.getEntity(p.puppeteer);
+            if (boss instanceof ServerPlayer wearer) {
+                // the mask's prank: over when the time is up or the wearer is gone
+                if (now >= p.until || !wearer.isAlive() || wearer.level() != level) {
+                    it.remove();
+                    end(level, victim, p);
+                }
+                continue;
+            }
             if (now >= p.until || !(boss instanceof Burattinaio b) || !b.isAlive()) {
                 // nobody cut the strings: it lifts the puppet up and lets go
                 it.remove();

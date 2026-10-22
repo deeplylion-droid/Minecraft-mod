@@ -28,9 +28,16 @@ public class WheelScreen extends Screen {
     private static final int RADIUS = 70;
     private final long openedAt = System.currentTimeMillis();
     private int ticks;
+    /**
+     * B was let go since the wheel opened. While it is held the system repeats the key press: those
+     * repeats must not close the wheel (they did, and it flickered open and shut under the finger).
+     */
+    private boolean letGo;
 
     public WheelScreen() {
         super(Component.translatable("filorosso.wheel.title"));
+        // opened by a quick tap, B is already up when the wheel appears
+        this.letGo = !FiloRossoClient.WHEEL.isDown();
     }
 
     private int cx() {
@@ -93,7 +100,10 @@ public class WheelScreen extends Screen {
             return true;
         }
         if (FiloRossoClient.WHEEL.matches(event)) {
-            this.onClose();
+            // B again closes it; B held down (repeating) does nothing
+            if (this.letGo) {
+                this.onClose();
+            }
             return true;
         }
         return super.keyPressed(event);
@@ -101,18 +111,17 @@ public class WheelScreen extends Screen {
 
     @Override
     public boolean keyReleased(KeyEvent event) {
-        // held B and let go on a power: use it; a quick tap leaves the wheel open for a click
-        if (FiloRossoClient.WHEEL.matches(event) && this.minecraft != null) {
+        // held B and let go on a power: use it; a quick tap leaves the wheel open for a click.
+        // Never "consumed": vanilla must still see B go up, or the key would stay down.
+        if (FiloRossoClient.WHEEL.matches(event) && this.minecraft != null && !this.letGo) {
+            this.letGo = true;
             double mx = this.minecraft.mouseHandler.getScaledXPos(this.minecraft.getWindow());
             double my = this.minecraft.mouseHandler.getScaledYPos(this.minecraft.getWindow());
             Abilities.Ability ability = this.at(mx, my);
             if (ability != null) {
                 this.use(ability);
-                return true;
-            }
-            if (System.currentTimeMillis() - this.openedAt > 350) {
+            } else if (System.currentTimeMillis() - this.openedAt > 350) {
                 this.onClose();
-                return true;
             }
         }
         return super.keyReleased(event);
@@ -199,8 +208,9 @@ public class WheelScreen extends Screen {
                 y += 7;
             }
         } else {
-            g.centeredText(this.font, Component.translatable("filorosso.hud.level", level.number(), level.displayName()), cx, cy - 4,
-                    0xFF000000 | level.color);
+            // two short lines: the ring is narrow in the middle
+            g.centeredText(this.font, Component.translatable("filorosso.wheel.level", level.number()), cx, cy - 10, 0xFF000000 | level.color);
+            g.centeredText(this.font, level.displayName(), cx, cy + 1, 0xFF000000 | level.color);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
     }

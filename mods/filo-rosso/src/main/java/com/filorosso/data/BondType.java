@@ -13,7 +13,9 @@ public enum BondType {
     MAGNET("magnetico", 0xA060FF, 3),
     SWAP("scambio", 0x40E080, 3),
     JEALOUS("geloso", 0x70D020, 3),
-    SHIELD("scudo", 0x60A0FF, 3);
+    SHIELD("scudo", 0x60A0FF, 3),
+    /** What one of you drinks or catches, the other feels too: potions, poisons, golden apples. */
+    TWINS("gemelli", 0xF080FF, 3);
 
     public static final BondType[] ALL = values();
 

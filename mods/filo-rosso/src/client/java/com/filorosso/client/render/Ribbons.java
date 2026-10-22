@@ -58,10 +58,10 @@ public final class Ribbons {
         });
     }
 
-    /** A soft glowing line (additive: a darker colour is a fainter line). */
+    /** A soft glowing line: full bright, fading out at the edges and with {@code alpha} (the eyes type blends by alpha). */
     public static void glow(SubmitNodeCollector collector, PoseStack poseStack, Vec3 origin, Vec3 camera, List<Vec3> points, float width, int rgb,
                             float alpha) {
-        int c = ARGB.scaleRGB(0xFF000000 | rgb, Mth.clamp(alpha, 0.0F, 1.0F));
+        int c = ARGB.color(Mth.clamp(alpha, 0.0F, 1.0F), rgb);
         draw(collector, poseStack, GLOW, origin, camera, points, width, c, LightCoordsUtil.FULL_BRIGHT, 0.0F, 1.0F);
     }
 

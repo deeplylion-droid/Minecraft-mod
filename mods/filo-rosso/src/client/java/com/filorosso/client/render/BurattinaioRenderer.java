@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -36,6 +37,19 @@ public class BurattinaioRenderer extends MobRenderer<Burattinaio, BurattinaioRen
                 }
             }
         });
+    }
+
+    /**
+     * The follow spot from the dark above keeps it lit (its light would be read at its eyes, fifteen
+     * blocks up in the dark), except while the lights are out.
+     */
+    @Override
+    protected int getBlockLightLevel(Burattinaio entity, BlockPos pos) {
+        float t = entity.actionTime(0.0F);
+        if (entity.action() == Burattinaio.DARK && t > 4.0F && t < 60.0F) {
+            return 0;
+        }
+        return Math.max(super.getBlockLightLevel(entity, pos), 11);
     }
 
     @Override

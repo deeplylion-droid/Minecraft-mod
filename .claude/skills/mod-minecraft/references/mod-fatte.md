@@ -9,7 +9,7 @@ In ordine di tempo. Per ognuna: cosa ha chiesto l'utente, cosa c'è, cosa è eme
 | Sotto la Bedrock | `mods/below-bedrock/` | `belowbedrock` | Fabric 1.21.1 | 1.1.0 |
 | Jumpscare! | `mods/jumpscares/` | `jumpscares` | Fabric 1.21.1 | 1.0.0 |
 | Disabilità | `mods/disabilities/` | `disabilities` | Fabric 26.3 | 1.0.1 |
-| Filo Rosso | `mods/filo-rosso/` | `filorosso` | Fabric 26.3 | 1.0.0 |
+| Filo Rosso | `mods/filo-rosso/` | `filorosso` | Fabric 26.3 | 1.1.0 |
 | Chiappe Colossali | `mods/chiappe-colossali/` | `chiappe` | Fabric 26.3 | 1.0.0 |
 | Frusta Imperiale | `mods/frusta-imperiale/` | `frusta` | Forge 1.20.1 | 1.0.1 |
 | Infezione Zombie | `mods/infezione-zombie/` | `infezione` | Forge 1.20.1 | 1.0.0 |
@@ -55,6 +55,7 @@ C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: m
 - Filo con fisica sul client, livelli del legame e abilità (Y, U, I), destini per live, eventi ogni 20 minuti, imprese con classifica, a terra e rianimazione, Spaiati e schegge di cuore.
 - Il primo boss ("Lo Spezzacuori", rosa con cuore e forbici) all'utente faceva schifo. Rifatto con la skill `monster`: ha scelto la bozza **"B - La Marionetta"**, movimento "passi lenti e storti", attacco "frusta di tentacoli". Ora è **Recisione**, marionetta di corda nera alta 10 blocchi (modello `.bbmodel` in `mods/filo-rosso/blockbench/`).
 - **Stato**: provata con server e due client veri (anche Vulkan e un client di produzione); non ancora in gioco dall'utente. Una volta ha chiesto una spiegazione breve "per spiegarla agli altri": gli ho dato un elenco di 9 punti.
+- **1.1.0**: l'ha giocata in live e "abbiamo esaurito i contenuti, ci manca da affrontare il boss": ha chiesto altri livelli di coppia con skill più d'impatto, un **super boss** superiore a Recisione **con una sua dimensione**, e altre funzioni a piacere. Fatti: livelli 6-10 con Fionda, Laccio, Cupola, Bacio ed Eterni su una ruota (tasto **B**); il **Teatro** (dimensione sospesa nel vuoto, si sale con il Cuore d'oro di Recisione) e il **Burattinaio** (skill `monster`: ha scelto la bozza "A - Il Burattinaio", movimento "Sospeso", attacco "Fili che comandano": rende marionetta uno dei due, che attacca il partner finché non gli taglia il nodo); destino *Gemelli*, eventi *Pioggia di cuori* e *Ballo di coppia*, imprese dei poteri, Maschera del Burattinaio da indossare (scherzo: fa camminare un amico verso di te). Le prove hanno trovato molti bug veri (ruota che si apriva e chiudeva tenendo B, Fionda frenata dalla fisica del filo, bagliori neri di giorno, colonna centrale del sipario sempre chiusa, boss nero perché la luce si legge agli occhi, Bacio con soli 4 secondi per rispondere): vedi CLAUDE.md. Non ancora in gioco dall'utente.
 
 ## Chiappe Colossali (Fabric 26.3)
 

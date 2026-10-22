@@ -64,6 +64,13 @@ public class StringKnotRenderer extends EntityRenderer<StringKnot, StringKnotRen
             Vec3 fwd = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
             Vec3 right = new Vec3(-fwd.z, 0.0, fwd.x);
             state.control = pos.add(fwd.scale(2.6)).add(right.scale(-1.6)).add(0.0, 8.8, 0.0);
+        } else if (boss instanceof net.minecraft.world.entity.player.Player wearer) {
+            // the mask's prank: the strings come from the wearer's raised hand
+            Vec3 pos = wearer.getPosition(partial);
+            float yaw = Mth.rotLerp(partial, wearer.yBodyRotO, wearer.yBodyRot) * Mth.DEG_TO_RAD;
+            Vec3 fwd = new Vec3(-Mth.sin(yaw), 0.0, Mth.cos(yaw));
+            Vec3 right = new Vec3(-fwd.z, 0.0, fwd.x);
+            state.control = pos.add(fwd.scale(0.3)).add(right.scale(-0.35)).add(0.0, wearer.getBbHeight() + 0.5, 0.0);
         }
         Entity puppet = level.getEntity(entity.puppetId());
         if (puppet instanceof LivingEntity p) {

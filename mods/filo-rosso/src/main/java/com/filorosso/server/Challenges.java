@@ -44,11 +44,19 @@ public final class Challenges {
     public static final String REVIVES = "revives";
     public static final String COMBOS = "combos";
     public static final String SHARDS = "shards";
+    /** The powers of levels 6-10: drawn only when every couple has the level. */
+    public static final String SLING_HITS = "sling_hits";
+    public static final String LASSO_KILLS = "lasso_kills";
+    public static final String DEFLECTS = "deflects";
+    public static final String KISS_HITS = "kiss_hits";
+    public static final String ETERNAL_KILLS = "eternal_kills";
     public static final String FREED = "freed";
     public static final String PUPPETEER = "puppeteer";
 
     private static final Map<String, Integer> GOALS = new java.util.LinkedHashMap<>();
     private static final Map<String, Integer> SPECIAL = new java.util.LinkedHashMap<>();
+    /** The level every couple needs before a challenge is drawn. */
+    private static final Map<String, com.filorosso.data.BondLevel> NEEDS = new HashMap<>();
 
     static {
         GOALS.put(KILLS, 20);
@@ -66,6 +74,16 @@ public final class Challenges {
         GOALS.put(REVIVES, 1);
         GOALS.put(COMBOS, 10);
         GOALS.put(SHARDS, 3);
+        GOALS.put(SLING_HITS, 5);
+        GOALS.put(LASSO_KILLS, 3);
+        GOALS.put(DEFLECTS, 10);
+        GOALS.put(KISS_HITS, 6);
+        GOALS.put(ETERNAL_KILLS, 8);
+        NEEDS.put(SLING_HITS, com.filorosso.data.BondLevel.EMBER);
+        NEEDS.put(LASSO_KILLS, com.filorosso.data.BondLevel.CRYSTAL);
+        NEEDS.put(DEFLECTS, com.filorosso.data.BondLevel.AURORA);
+        NEEDS.put(KISS_HITS, com.filorosso.data.BondLevel.COMET);
+        NEEDS.put(ETERNAL_KILLS, com.filorosso.data.BondLevel.DESTINY);
         // only when chosen with /filo imprese: they need the Theatre
         SPECIAL.put(FREED, 3);
         SPECIAL.put(PUPPETEER, 1);
@@ -80,9 +98,18 @@ public final class Challenges {
         return list;
     }
 
-    /** The ones a new live draws from. */
-    public static List<String> pool() {
-        return new ArrayList<>(GOALS.keySet());
+    /** The ones a new live draws from: a power's challenge only if every couple has that power. */
+    public static List<String> pool(MinecraftServer server) {
+        List<Couple> couples = CoupleBook.get(server).couples;
+        List<String> list = new ArrayList<>();
+        for (String id : GOALS.keySet()) {
+            com.filorosso.data.BondLevel need = NEEDS.get(id);
+            if (need != null && (couples.isEmpty() || couples.stream().anyMatch(c -> !c.level().atLeast(need)))) {
+                continue;
+            }
+            list.add(id);
+        }
+        return list;
     }
 
     public static int goal(String id) {
@@ -100,7 +127,7 @@ public final class Challenges {
 
     public static void newSession(MinecraftServer server) {
         CoupleBook book = CoupleBook.get(server);
-        List<String> pool = pool();
+        List<String> pool = pool(server);
         Collections.shuffle(pool, new java.util.Random(server.overworld().getRandom().nextLong()));
         book.challenges.clear();
         book.challenges.addAll(pool.subList(0, PER_SESSION));

@@ -243,7 +243,8 @@ public final class Theatre {
 
     /** Invisible lights: brighter on the stage before the show, dimmer while it is on. */
     public static void lights(ServerLevel level, boolean waiting) {
-        lightLevels(level, waiting ? 9 : 7, waiting ? 6 : 4);
+        // dim, but the stage must be readable during the fight (the spot lights the Burattinaio)
+        lightLevels(level, 10, waiting ? 10 : 8);
     }
 
     /** Sets the invisible lights of the stage and of the stalls (0 = out). */
@@ -253,8 +254,8 @@ public final class Theatre {
                 set(level, x, STAGE + 2, z, stage > 0 ? Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, stage) : Blocks.AIR.defaultBlockState());
             }
         }
-        for (int x = -20; x <= 20; x += 8) {
-            for (int z = -46; z <= -18; z += 7) {
+        for (int x = -21; x <= 21; x += 6) {
+            for (int z = -48; z <= -18; z += 5) {
                 set(level, x, FLOOR + stallsHeight(z) + 3, z,
                         stalls > 0 ? Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, stalls) : Blocks.AIR.defaultBlockState());
             }

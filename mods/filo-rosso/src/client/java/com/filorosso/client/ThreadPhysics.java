@@ -79,8 +79,14 @@ public final class ThreadPhysics {
             settle--;
             return;
         }
+        long now = Me.now();
         for (ThreadLinks.Tie tie : ties) {
             Player other = tie.other(me);
+            // flung together by the slingshot: the partner flies next to you, but here they still look
+            // on the ground for a few ticks (they move on their own client): do not pull back mid-air
+            if (ModData.powers(me).slinging(now) || ModData.powers(other).slinging(now)) {
+                continue;
+            }
             apply(mc, me, body, other, tie, length);
         }
         if (me.level().getGameTime() % 200 == 0) {
