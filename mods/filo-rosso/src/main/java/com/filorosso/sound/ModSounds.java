@@ -43,6 +43,33 @@ public final class ModSounds {
     public static final SoundEvent MINION_HURT = register("minion_hurt");
     public static final SoundEvent MINION_DEATH = register("minion_death");
     public static final SoundEvent VICTORY = register("victory");
+    // the powers of levels 6-10
+    public static final SoundEvent SLING = register("sling");
+    public static final SoundEvent LANDING = register("landing");
+    public static final SoundEvent LASSO = register("lasso");
+    public static final SoundEvent DOME = register("dome");
+    public static final SoundEvent DOME_DEFLECT = register("dome_deflect");
+    public static final SoundEvent KISS_ASK = register("kiss_ask");
+    public static final SoundEvent KISS = register("kiss");
+    public static final SoundEvent ETERNAL = register("eternal");
+    public static final SoundEvent ETERNAL_END = register("eternal_end");
+    // the Theatre and the Burattinaio
+    public static final SoundEvent THEATRE_CALL = register("theatre_call");
+    public static final SoundEvent THEATRE_MUSIC = register("theatre_music");
+    public static final SoundEvent GHOST_OFF = register("ghost_off");
+    public static final SoundEvent CURTAIN = register("curtain");
+    public static final SoundEvent APPLAUSE = register("applause");
+    public static final SoundEvent PUPPETEER_AMBIENT = register("puppeteer_ambient");
+    public static final SoundEvent PUPPETEER_HURT = register("puppeteer_hurt");
+    public static final SoundEvent PUPPETEER_DEATH = register("puppeteer_death");
+    public static final SoundEvent MASK_FALL = register("mask_fall");
+    public static final SoundEvent PUPPET_STRINGS = register("puppet_strings");
+    public static final SoundEvent PUPPET_HIT = register("puppet_hit");
+    public static final SoundEvent KNOT_HIT = register("knot_hit");
+    public static final SoundEvent SPEAR_FALL = register("spear_fall");
+    public static final SoundEvent SPEAR_HIT = register("spear_hit");
+    public static final SoundEvent SPECTATOR_RISE = register("spectator_rise");
+    public static final SoundEvent SPECTATOR_AMBIENT = register("spectator_ambient");
 
     private static SoundEvent register(String name) {
         Identifier id = FiloRosso.id(name);

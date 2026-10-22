@@ -21,7 +21,8 @@ public final class CoupleBook extends SavedData {
             Codec.INT.optionalFieldOf("next_id", 1).forGetter(b -> b.nextId),
             Codec.STRING.listOf().optionalFieldOf("challenges", List.of()).forGetter(b -> b.challenges),
             Codec.unboundedMap(Codec.STRING, Codec.INT).optionalFieldOf("finished", Map.of()).forGetter(b -> b.finished),
-            Codec.BOOL.optionalFieldOf("boss_beaten", false).forGetter(b -> b.bossBeaten)
+            Codec.BOOL.optionalFieldOf("boss_beaten", false).forGetter(b -> b.bossBeaten),
+            Codec.BOOL.optionalFieldOf("puppeteer_beaten", false).forGetter(b -> b.puppeteerBeaten)
     ).apply(i, CoupleBook::new));
 
     public static final SavedDataType<CoupleBook> TYPE = new SavedDataType<>(FiloRosso.id("couples"), CoupleBook::new, CODEC, null);
@@ -34,17 +35,21 @@ public final class CoupleBook extends SavedData {
     /** How many couples finished each challenge (the first ones get more points). */
     public final Map<String, Integer> finished = new HashMap<>();
     public boolean bossBeaten;
+    /** The Burattinaio fell at least once. */
+    public boolean puppeteerBeaten;
 
     public CoupleBook() {
     }
 
-    private CoupleBook(List<Couple> couples, int session, int nextId, List<String> challenges, Map<String, Integer> finished, boolean bossBeaten) {
+    private CoupleBook(List<Couple> couples, int session, int nextId, List<String> challenges, Map<String, Integer> finished, boolean bossBeaten,
+                       boolean puppeteerBeaten) {
         this.couples.addAll(couples);
         this.session = session;
         this.nextId = nextId;
         this.challenges.addAll(challenges);
         this.finished.putAll(finished);
         this.bossBeaten = bossBeaten;
+        this.puppeteerBeaten = puppeteerBeaten;
     }
 
     public static CoupleBook get(MinecraftServer server) {

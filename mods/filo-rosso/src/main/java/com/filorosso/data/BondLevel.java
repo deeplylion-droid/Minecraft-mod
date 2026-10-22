@@ -8,7 +8,12 @@ public enum BondLevel {
     RIBBON(120, 0xE8406A),
     BRAID(360, 0xC03060),
     GOLD(800, 0xF0C040),
-    STARS(1600, 0xFFC8F0);
+    STARS(1600, 0xFFC8F0),
+    EMBER(2100, 0xFF7A30),
+    CRYSTAL(2700, 0x9CEBFF),
+    AURORA(3400, 0x7CFFB8),
+    COMET(4200, 0xB59CFF),
+    DESTINY(5100, 0xFF2448);
 
     public static final BondLevel[] ALL = values();
 
@@ -21,7 +26,7 @@ public enum BondLevel {
         this.color = color;
     }
 
-    /** 1 to 5. */
+    /** 1 to 10. */
     public int number() {
         return this.ordinal() + 1;
     }

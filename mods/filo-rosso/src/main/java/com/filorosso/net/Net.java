@@ -150,6 +150,14 @@ public final class Net {
         public static final int COMBO = 2;
         public static final int LEVEL_UP = 3;
         public static final int PULL = 4;
+        /** The slingshot: the thread stretches and lets go ({@code a}, {@code b} = the couple). */
+        public static final int SLING = 5;
+        /** The kiss: a wave of hearts from between the two ({@code a}, {@code b} = the couple). */
+        public static final int KISS = 6;
+        /** The lasso flies from {@code a} to {@code b}. */
+        public static final int LASSO = 7;
+        /** "Eterni" begins ({@code a}, {@code b} = the couple). */
+        public static final int ETERNAL = 8;
 
         public static final Type<ThreadFx> TYPE = new Type<>(FiloRosso.id("thread_fx"));
         public static final StreamCodec<ByteBuf, ThreadFx> CODEC = StreamCodec.composite(
@@ -239,6 +247,48 @@ public final class Net {
         }
     }
 
+    /** Server to clients: a dome of threads stands here until {@code end} (game time). */
+    public record Dome(int id, double x, double y, double z, float radius, long start, long end, int color) implements CustomPacketPayload {
+        public static final Type<Dome> TYPE = new Type<>(FiloRosso.id("dome"));
+        public static final StreamCodec<ByteBuf, Dome> CODEC = new StreamCodec<>() {
+            @Override
+            public Dome decode(ByteBuf buf) {
+                return new Dome(ByteBufCodecs.VAR_INT.decode(buf), ByteBufCodecs.DOUBLE.decode(buf), ByteBufCodecs.DOUBLE.decode(buf),
+                        ByteBufCodecs.DOUBLE.decode(buf), ByteBufCodecs.FLOAT.decode(buf), ByteBufCodecs.VAR_LONG.decode(buf),
+                        ByteBufCodecs.VAR_LONG.decode(buf), ByteBufCodecs.INT.decode(buf));
+            }
+
+            @Override
+            public void encode(ByteBuf buf, Dome d) {
+                ByteBufCodecs.VAR_INT.encode(buf, d.id);
+                ByteBufCodecs.DOUBLE.encode(buf, d.x);
+                ByteBufCodecs.DOUBLE.encode(buf, d.y);
+                ByteBufCodecs.DOUBLE.encode(buf, d.z);
+                ByteBufCodecs.FLOAT.encode(buf, d.radius);
+                ByteBufCodecs.VAR_LONG.encode(buf, d.start);
+                ByteBufCodecs.VAR_LONG.encode(buf, d.end);
+                ByteBufCodecs.INT.encode(buf, d.color);
+            }
+        };
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Server to clients: {@code by} has lassoed {@code target} until {@code until} (game time; 0 = let go). */
+    public record Tied(int target, int by, long until) implements CustomPacketPayload {
+        public static final Type<Tied> TYPE = new Type<>(FiloRosso.id("tied"));
+        public static final StreamCodec<ByteBuf, Tied> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, Tied::target, ByteBufCodecs.VAR_INT, Tied::by, ByteBufCodecs.VAR_LONG, Tied::until, Tied::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public static void init() {
         PayloadTypeRegistry.serverboundPlay().register(Propose.TYPE, Propose.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(Answer.TYPE, Answer.CODEC);
@@ -254,5 +304,7 @@ public final class Net {
         PayloadTypeRegistry.clientboundPlay().register(CoupleInfo.TYPE, CoupleInfo.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Cooldowns.TYPE, Cooldowns.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Roster.TYPE, Roster.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Dome.TYPE, Dome.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Tied.TYPE, Tied.CODEC);
     }
 }

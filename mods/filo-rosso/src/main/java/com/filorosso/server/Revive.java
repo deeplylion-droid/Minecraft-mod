@@ -45,6 +45,11 @@ public final class Revive {
 
     public static void init() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
+            if (entity instanceof ServerPlayer player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && Abilities.eternal(player)) {
+                // "Eterni": you cannot fall
+                player.setHealth(1.0F);
+                return false;
+            }
             if (entity instanceof ServerPlayer player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 return !down(player);
             }

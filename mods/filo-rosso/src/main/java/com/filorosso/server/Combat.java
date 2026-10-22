@@ -3,7 +3,7 @@ package com.filorosso.server;
 import com.filorosso.data.BondType;
 import com.filorosso.data.Couple;
 import com.filorosso.data.ModData;
-import com.filorosso.entity.Recisione;
+import com.filorosso.entity.BondBoss;
 import com.filorosso.net.Net;
 import com.filorosso.sound.ModSounds;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
@@ -68,6 +68,10 @@ public final class Combat {
             if (ModData.downed(player) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 return false;
             }
+            // flung by the slingshot or flying with "Eterni": the thread holds you
+            if (source.is(DamageTypeTags.IS_FALL) && Abilities.noFall(player)) {
+                return false;
+            }
             Couple couple = Bonds.coupleOf(player);
             if (couple != null && couple.bondType() == BondType.FIRE && source.is(DamageTypeTags.IS_FIRE)) {
                 ServerPlayer partner = Bonds.partner(player);
@@ -104,15 +108,23 @@ public final class Combat {
                 }
             }
             HITS.computeIfAbsent(target.getId(), k -> new HashMap<>()).put(attacker.getUUID(), now);
+            // tied up by your lasso: every hit of yours is a couple hit
+            if (!combo && couple != null && Abilities.tiedBy(target, couple)) {
+                combo = true;
+            }
             if (combo) {
-                out *= 1.4F + 0.15F * couple.level().ordinal();
+                out *= comboMultiplier(couple.level());
                 comboFx(server, attacker, target, couple);
             }
-            if (target instanceof Recisione boss) {
+            if (target instanceof BondBoss boss) {
                 out = boss.adjustDamage(out, combo, couple);
             }
-        } else if (target instanceof Recisione boss && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        } else if (target instanceof BondBoss boss && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             out = boss.adjustDamage(out, false, null);
+        }
+        // under their dome of threads a couple takes hardly anything
+        if (target instanceof ServerPlayer player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && Abilities.shielded(player)) {
+            out *= 0.25F;
         }
         // the shield fate: close together, the couple takes less damage
         if (target instanceof ServerPlayer player && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -132,6 +144,12 @@ public final class Combat {
             });
         }
         return out;
+    }
+
+    /** How much more a couple hit does: x1.4 at the first level, +0.15 a level up to the fifth, then +0.07. */
+    public static float comboMultiplier(com.filorosso.data.BondLevel level) {
+        int n = level.ordinal();
+        return 1.4F + 0.15F * Math.min(n, 4) + 0.07F * Math.max(0, n - 4);
     }
 
     private static void comboFx(MinecraftServer server, ServerPlayer attacker, LivingEntity target, Couple couple) {

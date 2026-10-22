@@ -42,7 +42,9 @@ public final class ThreadRenderer {
     }
 
     private static final Identifier TEXTURE = FiloRosso.id("textures/entity/thread.png");
-    private static final float[] WIDTH = {0.04F, 0.075F, 0.08F, 0.085F, 0.08F};
+    private static final float[] WIDTH = {0.04F, 0.075F, 0.08F, 0.085F, 0.08F, 0.085F, 0.09F, 0.09F, 0.095F, 0.1F};
+    /** Tiles in thread.png, one 16x16 per level. */
+    private static final int TILES = 10;
     private static final int GROW_TICKS = 30;
 
     /** A short animation on a thread (by entity ids, so it outlives the link: snapping). */
@@ -103,6 +105,15 @@ public final class ThreadRenderer {
                     }
                 }
             }
+            case Net.ThreadFx.LASSO -> PowerFx.onFx(fx);
+            case Net.ThreadFx.KISS, Net.ThreadFx.ETERNAL -> {
+                PowerFx.onFx(fx);
+                PULSES.put(pairKey(fx.a(), fx.b()), new Effect(Net.ThreadFx.LEVEL_UP, fx.a(), fx.b(), now, null, null, 0.0F));
+            }
+            case Net.ThreadFx.SLING -> {
+                PowerFx.onFx(fx);
+                PULSES.put(pairKey(fx.a(), fx.b()), new Effect(Net.ThreadFx.PULL, fx.a(), fx.b(), now, null, null, 0.0F));
+            }
             default -> PULSES.put(pairKey(fx.a(), fx.b()), new Effect(fx.kind(), fx.a(), fx.b(), now, null, null, 0.0F));
         }
     }
@@ -145,10 +156,12 @@ public final class ThreadRenderer {
                     reversed = pulse.a() == tie.b().getId();
                 }
             }
-            int level5 = tie.level();
+            int tile = tie.level();
             int color = tie.extra() ? 0xFFFFD870 : 0xFFFFFFFF;
-            List<Vec3> points = curve(level, a, b, length, time, tie.a().getId() * 31 + tie.b().getId(), pulseKind == Net.ThreadFx.PULL);
-            drawRibbon(context, poseStack, level, camera, points, level5, color, grow, pulseT, pulseKind, reversed, time);
+            // "Eterni": the thread burns
+            boolean blazing = !tie.extra() && (PowerFx.blazing(tie.a(), now) || PowerFx.blazing(tie.b(), now));
+            List<Vec3> points = curve(level, a, b, length, time, tie.a().getId() * 31 + tie.b().getId(), pulseKind == Net.ThreadFx.PULL || blazing);
+            drawRibbon(context, poseStack, level, camera, points, tile, color, grow, pulseT, pulseKind, reversed, time, blazing);
         }
 
         // threads that snapped or were cut: the halves fly back to their owners
@@ -246,7 +259,7 @@ public final class ThreadRenderer {
     }
 
     private static int light(ClientLevel level, Vec3 p, int tile) {
-        if (tile == BondLevel.STARS.ordinal()) {
+        if (tile >= BondLevel.STARS.ordinal()) {
             return LightCoordsUtil.FULL_BRIGHT;
         }
         return LightCoordsUtil.getLightCoords(level, BlockPos.containing(p));
@@ -254,9 +267,15 @@ public final class ThreadRenderer {
 
     private static void drawRibbon(LevelRenderContext context, PoseStack poseStack, ClientLevel level, Vec3 camera, List<Vec3> points, int tile,
                                    int color, float grow, float pulseT, int pulseKind, boolean reversed, float time) {
+        drawRibbon(context, poseStack, level, camera, points, tile, color, grow, pulseT, pulseKind, reversed, time, false);
+    }
+
+    private static void drawRibbon(LevelRenderContext context, PoseStack poseStack, ClientLevel level, Vec3 camera, List<Vec3> points, int tile,
+                                   int color, float grow, float pulseT, int pulseKind, boolean reversed, float time, boolean blazing) {
         int n = points.size() - 1;
-        float v0 = tile / 5.0F;
-        float v1 = (tile + 1) / 5.0F;
+        tile = Mth.clamp(tile, 0, TILES - 1);
+        float v0 = tile / (float) TILES;
+        float v1 = (tile + 1) / (float) TILES;
         float baseWidth = WIDTH[Mth.clamp(tile, 0, WIDTH.length - 1)];
         float[] widths = new float[n + 1];
         int[] colors = new int[n + 1];
@@ -281,10 +300,12 @@ public final class ThreadRenderer {
                 w *= 1.0F + 1.4F * wave;
                 c = ARGB.srgbLerp(Math.min(1.0F, wave), c, 0xFFFFF0F8);
             }
-            if (tile == BondLevel.STARS.ordinal()) {
-                // the starry thread twinkles
-                float tw = 0.5F + 0.5F * Mth.sin(time * 0.3F + i * 1.7F);
-                c = ARGB.srgbLerp(0.25F * tw, c, 0xFFFFE0A0);
+            c = ARGB.multiply(c, levelTint(tile, t, i, time));
+            if (blazing) {
+                // a thread on fire: wider, white-gold, flickering
+                float fl = 0.5F + 0.5F * Mth.sin(time * 1.3F + i * 2.1F) * Mth.sin(time * 0.7F + i * 0.6F);
+                w *= 1.7F + 0.4F * fl;
+                c = ARGB.srgbLerp(0.35F + 0.35F * fl, c, 0xFFFFE8A0);
             }
             widths[i] = w;
             colors[i] = c;
@@ -322,6 +343,46 @@ public final class ThreadRenderer {
             }
         });
         poseStack.popPose();
+    }
+
+    /**
+     * How each level's thread moves: the stars twinkle, the embers flicker, the crystal sparkles, the
+     * aurora shifts colour, a comet runs along it, the thread of destiny beats like a heart.
+     */
+    private static int levelTint(int tile, float t, int i, float time) {
+        if (tile == BondLevel.STARS.ordinal()) {
+            float tw = 0.5F + 0.5F * Mth.sin(time * 0.3F + i * 1.7F);
+            return ARGB.srgbLerp(0.25F * tw, 0xFFFFFFFF, 0xFFFFE0A0);
+        }
+        if (tile == BondLevel.EMBER.ordinal()) {
+            float fl = 0.5F + 0.5F * Mth.sin(time * 0.9F + i * 2.3F) * Mth.sin(time * 0.37F + i * 0.9F);
+            return ARGB.srgbLerp(0.45F * fl, 0xFFE0C0B0, 0xFFFFFFFF);
+        }
+        if (tile == BondLevel.CRYSTAL.ordinal()) {
+            float sp = Mth.sin(time * 0.5F + i * 3.7F);
+            return sp > 0.93F ? 0xFFFFFFFF : 0xFFD8F4FF;
+        }
+        if (tile == BondLevel.AURORA.ordinal()) {
+            float h = (time * 0.006F + t * 0.6F) % 1.0F;
+            int a = 0xFF80FFB0;
+            int b = 0xFF80B0FF;
+            int c = 0xFFD080FF;
+            return h < 0.33F ? ARGB.srgbLerp(h / 0.33F, a, b) : h < 0.66F ? ARGB.srgbLerp((h - 0.33F) / 0.33F, b, c)
+                    : ARGB.srgbLerp((h - 0.66F) / 0.34F, c, a);
+        }
+        if (tile == BondLevel.COMET.ordinal()) {
+            float pos = (time * 0.02F) % 1.4F - 0.2F;
+            float d = t - pos;
+            float head = d < 0.0F ? (float) Math.exp(-d * d / 0.0008) : (float) Math.exp(-d / 0.12) * (d < 0.3F ? 1.0F : 0.0F);
+            return ARGB.srgbLerp(Math.min(1.0F, head), 0xFFC8C0FF, 0xFFFFFFFF);
+        }
+        if (tile == BondLevel.DESTINY.ordinal()) {
+            float ph = (time % 24.0F) / 24.0F;
+            float beat = Math.max((float) Math.exp(-Math.pow((ph - 0.1F) / 0.04F, 2)), 0.7F * (float) Math.exp(-Math.pow((ph - 0.28F) / 0.04F, 2)));
+            float gold = Mth.sin(time * 0.2F + i * 1.3F) > 0.8F ? 0.6F : 0.0F;
+            return ARGB.srgbLerp(Math.max(beat * 0.6F, gold), 0xFFE8D0D0, 0xFFFFE6A0);
+        }
+        return 0xFFFFFFFF;
     }
 
     private static void vertex(VertexConsumer buffer, PoseStack.Pose pose, Vec3 p, float u, float v, int color, int light) {

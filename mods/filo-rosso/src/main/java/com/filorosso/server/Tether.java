@@ -199,12 +199,15 @@ public final class Tether {
         Vec3 lastMid = LAST_MID.put(key(pair), mid);
         double speed = lastMid == null ? 0.0 : lastMid.distanceTo(mid);
         boolean taut = d > max - 0.8;
-        if (!taut && speed < 0.15) {
+        if (!taut && speed < 0.15 && !(Abilities.eternal(a) || Abilities.eternal(b))) {
             return;
         }
         AABB box = new AABB(from, to).inflate(0.5);
-        boolean fire = couple.bondType() == BondType.FIRE;
-        float damage = 1.5F + 0.75F * couple.level().ordinal() + (fire ? 1.0F : 0.0F);
+        // with "Eterni" the thread burns whatever it touches
+        boolean eternal = Abilities.eternal(a) || Abilities.eternal(b);
+        boolean fire = couple.bondType() == BondType.FIRE || eternal;
+        float damage = 1.5F + 0.75F * Math.min(couple.level().ordinal(), 4) + 0.4F * Math.max(0, couple.level().ordinal() - 4)
+                + (fire ? 1.0F : 0.0F) + (eternal ? 6.0F : 0.0F);
         Vec3 push = lastMid == null ? Vec3.ZERO : mid.subtract(lastMid);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> e.isAlive() && !(e instanceof Player) && !(e instanceof ArmorStand))) {
             if (e.getBoundingBox().inflate(0.2).clip(from, to).isEmpty() && !e.getBoundingBox().inflate(0.2).contains(mid)) {

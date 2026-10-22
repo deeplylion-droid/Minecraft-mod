@@ -21,7 +21,10 @@ public final class ModItems {
     /** Eight shards around a gold block: use it at night to call Recisione. */
     public static final Item BROKEN_HEART = register("broken_heart", BrokenHeartItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
     /** The trophy of whoever defeats it. */
-    public static final Item GOLDEN_HEART = register("golden_heart", Item::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
+    public static final Item GOLDEN_HEART = register("golden_heart", GoldenHeartItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
+            .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    /** The trophy of whoever brings down the Burattinaio. */
+    public static final Item PUPPETEER_MASK = register("puppeteer_mask", Item::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
             .component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     /** The servants' scissors. */
     public static final Item SCISSORS = register("scissors", Item::new, new Item.Properties().stacksTo(1));
@@ -36,6 +39,7 @@ public final class ModItems {
             output.accept(HEART_SHARD);
             output.accept(BROKEN_HEART);
             output.accept(GOLDEN_HEART);
+            output.accept(PUPPETEER_MASK);
         });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
         });

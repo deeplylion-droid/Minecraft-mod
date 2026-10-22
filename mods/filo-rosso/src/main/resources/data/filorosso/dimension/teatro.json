@@ -1,0 +1,13 @@
+{
+  "type": "filorosso:teatro",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "filorosso:teatro",
+      "layers": [],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

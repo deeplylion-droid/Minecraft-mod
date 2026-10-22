@@ -52,7 +52,9 @@ public class FiloRosso implements ModInitializer {
         SharedLife.init();
         Joining.init();
         FiloCommand.init();
+        com.filorosso.world.Stage.init();
 
+        ServerLifecycleEvents.SERVER_STOPPING.register(Abilities::stop);
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             Destiny.newSession(server);
             Scores.refresh(server);
@@ -69,6 +71,10 @@ public class FiloRosso implements ModInitializer {
                 SharedLife.tick(server);
                 Challenges.tick(server);
                 Servants.tick(server);
+                Abilities.tick(server);
+                com.filorosso.world.Theatre.tick(server);
+                com.filorosso.world.Stage.tick(server);
+                com.filorosso.world.Puppets.tick(server);
             } catch (RuntimeException e) {
                 LOGGER.error("Filo Rosso: error in the server tick", e);
             }

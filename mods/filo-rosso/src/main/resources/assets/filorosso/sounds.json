@@ -191,5 +191,247 @@
       "filorosso:victory"
     ],
     "subtitle": "subtitles.filorosso.victory"
+  },
+  "sling": {
+    "sounds": [
+      {
+        "name": "filorosso:sling",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.sling"
+  },
+  "landing": {
+    "sounds": [
+      {
+        "name": "filorosso:landing",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.filorosso.landing"
+  },
+  "lasso": {
+    "sounds": [
+      {
+        "name": "filorosso:lasso",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.lasso"
+  },
+  "dome": {
+    "sounds": [
+      {
+        "name": "filorosso:dome",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.filorosso.dome"
+  },
+  "dome_deflect": {
+    "sounds": [
+      {
+        "name": "filorosso:dome_deflect",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.dome_deflect"
+  },
+  "kiss_ask": {
+    "sounds": [
+      {
+        "name": "filorosso:kiss_ask",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.filorosso.kiss_ask"
+  },
+  "kiss": {
+    "sounds": [
+      {
+        "name": "filorosso:kiss",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.kiss"
+  },
+  "eternal": {
+    "sounds": [
+      {
+        "name": "filorosso:eternal",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.eternal"
+  },
+  "eternal_end": {
+    "sounds": [
+      {
+        "name": "filorosso:eternal_end",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.filorosso.eternal_end"
+  },
+  "theatre_call": {
+    "sounds": [
+      {
+        "name": "filorosso:theatre_call",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.theatre_call"
+  },
+  "theatre_music": {
+    "sounds": [
+      {
+        "name": "filorosso:theatre_music",
+        "attenuation_distance": 96,
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitles.filorosso.theatre_music"
+  },
+  "ghost_off": {
+    "sounds": [
+      {
+        "name": "filorosso:ghost_off",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.filorosso.ghost_off"
+  },
+  "curtain": {
+    "sounds": [
+      {
+        "name": "filorosso:curtain",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.filorosso.curtain"
+  },
+  "applause": {
+    "sounds": [
+      {
+        "name": "filorosso:applause1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "filorosso:applause2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "filorosso:applause3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.applause"
+  },
+  "puppeteer_ambient": {
+    "sounds": [
+      {
+        "name": "filorosso:puppeteer_ambient1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "filorosso:puppeteer_ambient2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.filorosso.puppeteer_ambient"
+  },
+  "puppeteer_hurt": {
+    "sounds": [
+      {
+        "name": "filorosso:puppeteer_hurt1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "filorosso:puppeteer_hurt2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.puppeteer_hurt"
+  },
+  "puppeteer_death": {
+    "sounds": [
+      {
+        "name": "filorosso:puppeteer_death",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.filorosso.puppeteer_death"
+  },
+  "mask_fall": {
+    "sounds": [
+      {
+        "name": "filorosso:mask_fall",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.mask_fall"
+  },
+  "puppet_strings": {
+    "sounds": [
+      {
+        "name": "filorosso:puppet_strings",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.filorosso.puppet_strings"
+  },
+  "puppet_hit": {
+    "sounds": [
+      {
+        "name": "filorosso:puppet_hit",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.puppet_hit"
+  },
+  "knot_hit": {
+    "sounds": [
+      {
+        "name": "filorosso:knot_hit",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.knot_hit"
+  },
+  "spear_fall": {
+    "sounds": [
+      {
+        "name": "filorosso:spear_fall",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.filorosso.spear_fall"
+  },
+  "spear_hit": {
+    "sounds": [
+      {
+        "name": "filorosso:spear_hit",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.filorosso.spear_hit"
+  },
+  "spectator_rise": {
+    "sounds": [
+      {
+        "name": "filorosso:spectator_rise",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.filorosso.spectator_rise"
+  },
+  "spectator_ambient": {
+    "sounds": [
+      {
+        "name": "filorosso:spectator_ambient",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.filorosso.spectator_ambient"
   }
 }

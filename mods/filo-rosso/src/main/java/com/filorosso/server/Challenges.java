@@ -44,8 +44,11 @@ public final class Challenges {
     public static final String REVIVES = "revives";
     public static final String COMBOS = "combos";
     public static final String SHARDS = "shards";
+    public static final String FREED = "freed";
+    public static final String PUPPETEER = "puppeteer";
 
     private static final Map<String, Integer> GOALS = new java.util.LinkedHashMap<>();
+    private static final Map<String, Integer> SPECIAL = new java.util.LinkedHashMap<>();
 
     static {
         GOALS.put(KILLS, 20);
@@ -63,16 +66,27 @@ public final class Challenges {
         GOALS.put(REVIVES, 1);
         GOALS.put(COMBOS, 10);
         GOALS.put(SHARDS, 3);
+        // only when chosen with /filo imprese: they need the Theatre
+        SPECIAL.put(FREED, 3);
+        SPECIAL.put(PUPPETEER, 1);
     }
 
     public static final int PER_SESSION = 3;
 
+    /** Every challenge (for the command). */
     public static List<String> all() {
+        List<String> list = new ArrayList<>(GOALS.keySet());
+        list.addAll(SPECIAL.keySet());
+        return list;
+    }
+
+    /** The ones a new live draws from. */
+    public static List<String> pool() {
         return new ArrayList<>(GOALS.keySet());
     }
 
     public static int goal(String id) {
-        return GOALS.getOrDefault(id, 1);
+        return GOALS.getOrDefault(id, SPECIAL.getOrDefault(id, 1));
     }
 
     public static MutableComponent name(String id) {
@@ -86,7 +100,7 @@ public final class Challenges {
 
     public static void newSession(MinecraftServer server) {
         CoupleBook book = CoupleBook.get(server);
-        List<String> pool = all();
+        List<String> pool = pool();
         Collections.shuffle(pool, new java.util.Random(server.overworld().getRandom().nextLong()));
         book.challenges.clear();
         book.challenges.addAll(pool.subList(0, PER_SESSION));

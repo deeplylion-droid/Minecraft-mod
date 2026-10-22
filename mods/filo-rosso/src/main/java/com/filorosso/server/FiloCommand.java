@@ -75,7 +75,7 @@ public final class FiloCommand {
                                                 IntegerArgumentType.getInteger(c, "quanta"))))))
                 .then(Commands.literal("livello").requires(op)
                         .then(Commands.argument("giocatore", EntityArgument.player())
-                                .then(Commands.argument("livello", IntegerArgumentType.integer(1, 5))
+                                .then(Commands.argument("livello", IntegerArgumentType.integer(1, BondLevel.ALL.length))
                                         .executes(c -> level(c.getSource(), EntityArgument.getPlayer(c, "giocatore"),
                                                 IntegerArgumentType.getInteger(c, "livello"))))))
                 .then(Commands.literal("destino").requires(op)
@@ -117,7 +117,20 @@ public final class FiloCommand {
                         .then(Commands.literal("fase")
                                 .then(Commands.argument("fase", IntegerArgumentType.integer(2, 3))
                                         .executes(c -> bossPhase(c.getSource(), IntegerArgumentType.getInteger(c, "fase"))))))
-                .then(Commands.literal("servo").requires(op).executes(c -> servant(c.getSource()))));
+                .then(Commands.literal("servo").requires(op).executes(c -> servant(c.getSource())))
+                // the Theatre and the Burattinaio, for testing and for videos
+                .then(Commands.literal("teatro").requires(op).executes(c -> theatre(c.getSource()))
+                        .then(Commands.literal("ricostruisci").executes(c -> rebuildTheatre(c.getSource()))))
+                .then(Commands.literal("burattinaio").requires(op).executes(c -> puppeteer(c.getSource()))
+                        .then(Commands.literal("attacco")
+                                .then(Commands.argument("attacco", StringArgumentType.word())
+                                        .suggests((c, b) -> SharedSuggestionProvider.suggest(Arrays.stream(com.filorosso.entity.Burattinaio.ACTION_NAMES)
+                                                .filter(n -> !n.isEmpty()), b))
+                                        .executes(c -> puppeteerAttack(c.getSource(), StringArgumentType.getString(c, "attacco")))))
+                        .then(Commands.literal("fase")
+                                .then(Commands.argument("fase", IntegerArgumentType.integer(2, 3))
+                                        .executes(c -> puppeteerPhase(c.getSource(), IntegerArgumentType.getInteger(c, "fase")))))
+                        .then(Commands.literal("fine").executes(c -> puppeteerReset(c.getSource())))));
     }
 
     private static Couple coupleOf(ServerPlayer p) throws CommandSyntaxException {
@@ -313,6 +326,71 @@ public final class FiloCommand {
     private static int bossPhase(CommandSourceStack source, int phase) throws CommandSyntaxException {
         Recisione boss = nearestBoss(source);
         boss.setHealth(Math.min(boss.getHealth(), boss.getMaxHealth() * (phase == 3 ? 0.3F : 0.6F)));
+        return 1;
+    }
+
+    private static int theatre(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        if (com.filorosso.world.Theatre.in(p)) {
+            com.filorosso.world.Theatre.goHome(p);
+        } else {
+            com.filorosso.world.Theatre.goUp(p);
+        }
+        return 1;
+    }
+
+    private static int rebuildTheatre(CommandSourceStack source) {
+        net.minecraft.server.level.ServerLevel level = com.filorosso.world.Theatre.level(source.getServer());
+        if (level == null) {
+            return 0;
+        }
+        com.filorosso.world.Theatre.Data data = level.getDataStorage().computeIfAbsent(com.filorosso.world.Theatre.Data.TYPE);
+        data.version = 0;
+        com.filorosso.world.Theatre.ensureBuilt(level);
+        com.filorosso.world.Stage.reset(level);
+        source.sendSuccess(() -> Component.translatable("filorosso.command.theatre_rebuilt"), true);
+        return 1;
+    }
+
+    private static com.filorosso.entity.Burattinaio puppeteerOrThrow(CommandSourceStack source) throws CommandSyntaxException {
+        com.filorosso.entity.Burattinaio b = com.filorosso.world.Stage.current(source.getServer());
+        if (b == null || !b.isAlive()) {
+            throw error("filorosso.command.no_puppeteer");
+        }
+        return b;
+    }
+
+    private static int puppeteer(CommandSourceStack source) throws CommandSyntaxException {
+        ServerPlayer p = source.getPlayerOrException();
+        if (!com.filorosso.world.Theatre.in(p)) {
+            com.filorosso.world.Theatre.goUp(p);
+        }
+        if (!com.filorosso.world.Stage.forceShow(source.getServer(), p)) {
+            throw error("filorosso.command.puppeteer_failed");
+        }
+        return 1;
+    }
+
+    private static int puppeteerAttack(CommandSourceStack source, String name) throws CommandSyntaxException {
+        int action = Arrays.asList(com.filorosso.entity.Burattinaio.ACTION_NAMES).indexOf(name.toLowerCase(java.util.Locale.ROOT));
+        if (action <= 0) {
+            throw new SimpleCommandExceptionType(Component.translatable("filorosso.command.unknown_attack", name)).create();
+        }
+        puppeteerOrThrow(source).force(action);
+        return 1;
+    }
+
+    private static int puppeteerPhase(CommandSourceStack source, int phase) throws CommandSyntaxException {
+        com.filorosso.entity.Burattinaio b = puppeteerOrThrow(source);
+        b.setHealth(Math.min(b.getHealth(), b.getMaxHealth() * (phase == 3 ? 0.3F : 0.6F)));
+        return 1;
+    }
+
+    private static int puppeteerReset(CommandSourceStack source) {
+        net.minecraft.server.level.ServerLevel level = com.filorosso.world.Theatre.level(source.getServer());
+        if (level != null) {
+            com.filorosso.world.Stage.reset(level);
+        }
         return 1;
     }
 

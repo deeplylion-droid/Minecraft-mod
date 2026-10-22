@@ -3,6 +3,8 @@ package com.filorosso.client.hud;
 import com.filorosso.client.ClientState;
 import com.filorosso.client.FiloRossoClient;
 import com.filorosso.client.Me;
+import com.filorosso.client.Puppet;
+import com.filorosso.client.render.PowerFx;
 import com.filorosso.client.ThreadPhysics;
 import com.filorosso.client.screen.Screens;
 import com.filorosso.data.BondLevel;
@@ -95,6 +97,10 @@ public final class CoupleHud {
 
         // near Recisione the picture breaks up (under the couple's HUD, over everything else)
         BossFx.draw(g);
+        if (PowerFx.flash > 0.0F) {
+            // the kiss, "Eterni"
+            g.fill(0, 0, w, h, ARGB.color(PowerFx.flash * 0.45F, PowerFx.flashColor));
+        }
         if (status.downed()) {
             downed(g, font, w, h, t, now, status, link);
         } else if (partner != null && ModData.downed(partner)) {
@@ -197,28 +203,39 @@ public final class CoupleHud {
 
     private static int abilities(GuiGraphicsExtractor g, Font font, Link link, long now, int y) {
         int x = 2;
+        // first row: the three powers with their own keys; second row: the five on the wheel
+        g.fill(x, y + 13, x + 11, y + 25, 0x90000000);
+        small(g, font, Component.literal(Screens.keyName(FiloRossoClient.WHEEL).getString()), x + 3, y + 16, 0xFFFFE080, 0.6F);
         for (Abilities.Ability ability : Abilities.Ability.ALL) {
             int i = ability.ordinal();
+            boolean first = i < 3;
+            int boxW = first ? 43 : 23;
+            int bx = first ? x + i * (boxW + 1) : x + 12 + (i - 3) * (boxW + 1);
+            int by = first ? y : y + 13;
             boolean unlocked = link.level().atLeast(ability.level);
             long ready = ClientState.readyAt(i);
-            int boxW = 43;
-            int bx = x + i * (boxW + 1);
-            g.fill(bx, y, bx + boxW, y + 12, unlocked ? 0x90000000 : 0x60000000);
+            g.fill(bx, by, bx + boxW, by + 12, unlocked ? 0x90000000 : 0x60000000);
             if (unlocked && now < ready) {
                 float k = Mth.clamp((ready - now) / (float) ability.cooldown, 0.0F, 1.0F);
-                g.fill(bx, y + 12 - (int) (12 * k), bx + boxW, y + 12, 0x60C08040);
+                g.fill(bx, by + 12 - (int) (12 * k), bx + boxW, by + 12, 0x60C08040);
             } else if (unlocked) {
-                g.outline(bx, y, boxW, 12, 0xFF60B060);
+                g.outline(bx, by, boxW, 12, 0xFF60B060);
             }
-            Component key = Screens.keyName(FiloRossoClient.ABILITY_KEYS[i]);
             String id = ability.name().toLowerCase(Locale.ROOT);
             Component label = unlocked && now < ready ? Component.literal(time(ready - now))
                     : unlocked ? Component.translatable("filorosso.ability." + id + ".short")
                     : Component.translatable("filorosso.hud.locked", ability.level.number());
-            small(g, font, Component.literal("[").append(key).append("]"), bx + 2, y + 3, unlocked ? 0xFFFFE080 : 0xFF707070, 0.6F);
-            small(g, font, label, bx + 14, y + 3, unlocked ? 0xFFFFFFFF : 0xFF707070, 0.6F);
+            if (first) {
+                Component key = Screens.keyName(FiloRossoClient.ABILITY_KEYS[i]);
+                small(g, font, Component.literal("[").append(key).append("]"), bx + 2, by + 3, unlocked ? 0xFFFFE080 : 0xFF707070, 0.6F);
+                small(g, font, label, bx + 14, by + 3, unlocked ? 0xFFFFFFFF : 0xFF707070, 0.6F);
+            } else {
+                g.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, com.filorosso.FiloRosso.id("textures/gui/ability/" + id + ".png"),
+                        bx + 1, by + 2, 0, 0, 8, 8, 16, 16, 16, 16, unlocked ? 0xFFFFFFFF : 0xFF505050);
+                small(g, font, label, bx + 10, by + 4, unlocked ? 0xFFFFFFFF : 0xFF707070, 0.45F);
+            }
         }
-        return y + 12;
+        return y + 25;
     }
 
     // ------------------------------------------------------------------ challenges
@@ -282,6 +299,12 @@ public final class CoupleHud {
                 hint = Component.translatable("filorosso.hud.holding", mc.options.keyShift.getTranslatedKeyMessage(), link.partnerName());
                 color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.5F), 0xFFFFE070, 0xFFFFFFFF);
             }
+        } else if (Puppet.active()) {
+            hint = Component.translatable("filorosso.hud.puppet", link.partnerName());
+            color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.7F), 0xFFFF4040, 0xFFFFFFFF);
+        } else if (partnerKissing(mc)) {
+            hint = Component.translatable("filorosso.hud.kiss", link.partnerName(), Screens.keyName(FiloRossoClient.WHEEL));
+            color = ARGB.srgbLerp(0.5F + 0.5F * Mth.sin(t * 0.5F), 0xFFFF70B0, 0xFFFFFFFF);
         } else if (ThreadPhysics.jealous) {
             hint = Component.translatable("filorosso.hud.jealous", link.partnerName());
             color = 0xFF90E040;
@@ -293,6 +316,11 @@ public final class CoupleHud {
             g.fill(w / 2 - tw / 2 - 4, h - 84, w / 2 + tw / 2 + 4, h - 72, 0x80000000);
             g.centeredText(font, hint, w / 2, h - 82, color);
         }
+    }
+
+    private static boolean partnerKissing(Minecraft mc) {
+        Player partner = Me.partner();
+        return partner != null && mc.level != null && ModData.powers(partner).kissing(mc.level.getGameTime());
     }
 
     // ------------------------------------------------------------------ on the ground

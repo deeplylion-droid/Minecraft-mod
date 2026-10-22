@@ -50,7 +50,7 @@ import java.util.UUID;
  * from its shoulders: that is what it whips with. Black boxes glitch around it, more in its later
  * forms; in the last one it grows. A bell rings when it comes. Only couple hits really hurt it.
  */
-public class Recisione extends Monster {
+public class Recisione extends Monster implements BondBoss {
     public static final int NONE = 0;
     /** The cut strings lash down in front of it, the right ones first, then the left ones. */
     public static final int SLAM = 1;
@@ -226,8 +226,29 @@ public class Recisione extends Monster {
 
     // ------------------------------------------------------------------ damage
 
+    /** Tied by a couple's lasso until then (game time): slower. */
+    private long lassoedUntil;
+    /** The wave of a kiss counts as a couple hit. */
+    private Couple kissedBy;
+
+    @Override
+    public void lassoed(long until, Couple couple) {
+        this.lassoedUntil = until;
+    }
+
+    @Override
+    public void kissed(Couple couple) {
+        this.kissedBy = couple;
+    }
+
     /** Only couple hits count fully; while it climbs out it cannot be hurt. */
+    @Override
     public float adjustDamage(float amount, boolean combo, Couple couple) {
+        if (this.kissedBy != null) {
+            combo = true;
+            couple = couple != null ? couple : this.kissedBy;
+            this.kissedBy = null;
+        }
         this.lastCombo = combo;
         if (this.action() == RISE || this.isDeadOrDying()) {
             return 0.0F;
@@ -434,7 +455,8 @@ public class Recisione extends Monster {
             this.missileCooldown = 170;
             this.start(MISSILES);
         } else {
-            this.getNavigation().moveTo(target, 1.0);
+            boolean tied = this.level().getServer() != null && this.level().getServer().overworld().getGameTime() < this.lassoedUntil;
+            this.getNavigation().moveTo(target, tied ? 0.4 : 1.0);
         }
         // far away for too long: it glitches next to them
         this.farTicks = d > 24.0 ? this.farTicks + 1 : 0;

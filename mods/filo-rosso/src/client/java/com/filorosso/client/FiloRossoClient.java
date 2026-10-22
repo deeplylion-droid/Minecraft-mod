@@ -4,6 +4,8 @@ import com.filorosso.FiloRosso;
 import com.filorosso.client.hud.CoupleHud;
 import com.filorosso.client.hud.BossFx;
 import com.filorosso.client.render.GraspRenderer;
+import com.filorosso.client.render.PowerFx;
+import com.filorosso.client.screen.WheelScreen;
 import com.filorosso.client.render.MissileRenderer;
 import com.filorosso.client.render.RecisioneRenderer;
 import com.filorosso.client.render.ServantRenderer;
@@ -38,7 +40,14 @@ public class FiloRossoClient implements ClientModInitializer {
     public static final KeyMapping PULL = key("pull", InputConstants.KEY_Y);
     public static final KeyMapping GIFT = key("gift", InputConstants.KEY_U);
     public static final KeyMapping REACH = key("reach", InputConstants.KEY_I);
-    public static final KeyMapping[] ABILITY_KEYS = {PULL, GIFT, REACH};
+    // the powers of levels 6-10 are on the wheel (B); their own keys start unbound, set them in the Controls if you like
+    public static final KeyMapping WHEEL = key("wheel", InputConstants.KEY_B);
+    public static final KeyMapping SLING = key("sling", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping LASSO = key("lasso", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping DOME = key("dome", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping KISS = key("kiss", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping ETERNAL = key("eternal", InputConstants.UNKNOWN.getValue());
+    public static final KeyMapping[] ABILITY_KEYS = {PULL, GIFT, REACH, SLING, LASSO, DOME, KISS, ETERNAL};
 
     /** Screens the server asked for, opened as soon as nothing else is on screen. */
     private static boolean pendingChoice;
@@ -69,6 +78,8 @@ public class FiloRossoClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(Net.CoupleInfo.TYPE, (payload, context) -> ClientState.info = payload);
         ClientPlayNetworking.registerGlobalReceiver(Net.Cooldowns.TYPE, (payload, context) -> ClientState.cooldowns = payload.readyAt());
         ClientPlayNetworking.registerGlobalReceiver(Net.Roster.TYPE, (payload, context) -> ClientState.roster = new java.util.HashMap<>(payload.colors()));
+        ClientPlayNetworking.registerGlobalReceiver(Net.Dome.TYPE, (payload, context) -> PowerFx.onDome(payload));
+        ClientPlayNetworking.registerGlobalReceiver(Net.Tied.TYPE, (payload, context) -> PowerFx.onTied(payload));
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             pendingChoice = false;
             PROPOSALS.clear();
@@ -78,16 +89,32 @@ public class FiloRossoClient implements ClientModInitializer {
             ThreadPhysics.reset();
             CoupleHud.reset();
             BossFx.reset();
+            PowerFx.clear();
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(FiloRossoClient::tick);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> GraphicsFallback.started());
         ThreadRenderer.init();
+        PowerFx.init();
+        com.filorosso.client.render.TheatreFx.init();
 
         EntityRendererRegistry.register(ModEntities.SERVANT, ServantRenderer::new);
         EntityRendererRegistry.register(ModEntities.RECISIONE, RecisioneRenderer::new);
         EntityRendererRegistry.register(ModEntities.MISSILE, MissileRenderer::new);
         EntityRendererRegistry.register(ModEntities.GRASP, GraspRenderer::new);
+        EntityRendererRegistry.register(ModEntities.BURATTINAIO, com.filorosso.client.render.BurattinaioRenderer::new);
+        EntityRendererRegistry.register(ModEntities.STRING_KNOT, com.filorosso.client.render.StringKnotRenderer::new);
+        EntityRendererRegistry.register(ModEntities.THREAD_SPEAR, com.filorosso.client.render.ThreadSpearRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SPECTATOR, com.filorosso.client.render.SpectatorRenderer::new);
+    }
+
+    /** Asks the server to use an ability (index into {@code Abilities.Ability.ALL}). */
+    public static void useAbility(int i) {
+        if (Me.link().bound()) {
+            ClientPlayNetworking.send(new Net.UseAbility(i));
+        } else {
+            CoupleHud.hintSingle();
+        }
     }
 
     private static void tick(Minecraft mc) {
@@ -98,6 +125,9 @@ public class FiloRossoClient implements ClientModInitializer {
             return;
         }
         ThreadPhysics.tick(mc);
+        Puppet.tick(mc);
+        PowerFx.tick(mc);
+        com.filorosso.client.render.TheatreFx.tick(mc);
 
         while (MENU.consumeClick()) {
             if (Me.link().bound()) {
@@ -108,11 +138,14 @@ public class FiloRossoClient implements ClientModInitializer {
         }
         for (int i = 0; i < ABILITY_KEYS.length; i++) {
             while (ABILITY_KEYS[i].consumeClick()) {
-                if (Me.link().bound()) {
-                    ClientPlayNetworking.send(new Net.UseAbility(i));
-                } else {
-                    CoupleHud.hintSingle();
-                }
+                useAbility(i);
+            }
+        }
+        while (WHEEL.consumeClick()) {
+            if (!Me.link().bound()) {
+                CoupleHud.hintSingle();
+            } else if (mc.gui.screen() == null) {
+                mc.gui.setScreen(new WheelScreen());
             }
         }
 

@@ -34,7 +34,7 @@ public class CoupleScreen extends Screen {
 
     @Override
     protected void init() {
-        int h = Math.min(this.height - 8, 236);
+        int h = Math.min(this.height - 8, 250);
         this.top = Math.max(4, (this.height - h) / 2);
         int bottom = this.top + h - 24;
         this.breakUp = this.addRenderableWidget(Button.builder(Component.empty(), b -> this.breakUp())
@@ -79,7 +79,7 @@ public class CoupleScreen extends Screen {
             return;
         }
         int x0 = this.width / 2 - W / 2;
-        int h = Math.min(this.height - 8, 236);
+        int h = Math.min(this.height - 8, 250);
         g.fill(x0, this.top, x0 + W, this.top + h, 0xD0100C12);
         g.outline(x0, this.top, W, h, 0xFF000000 | Palette.rgb(link.color()));
         int cx = this.width / 2;
@@ -129,10 +129,14 @@ public class CoupleScreen extends Screen {
         }
         y += 4;
 
-        // abilities
+        // abilities, in two columns
         long now = Me.now();
+        int rowY = y;
         for (Abilities.Ability ability : Abilities.Ability.ALL) {
             int i = ability.ordinal();
+            int colX = i < 4 ? x0 + 8 : x0 + W / 2 + 4;
+            int colW = W / 2 - 12;
+            y = rowY + (i % 4) * 10;
             boolean unlocked = level.atLeast(ability.level);
             long ready = ClientState.readyAt(i);
             Component state;
@@ -148,13 +152,14 @@ public class CoupleScreen extends Screen {
                 color = 0xFF70E070;
             }
             String id = ability.name().toLowerCase(Locale.ROOT);
-            Component key = Component.literal("[").append(Screens.keyName(FiloRossoClient.ABILITY_KEYS[i])).append("] ");
-            g.text(this.font, Component.empty().append(key).append(Component.translatable("filorosso.ability." + id)), x0 + 8, y,
-                    unlocked ? 0xFFFFFFFF : 0xFF707070);
-            small(g, state, x0 + W - 8 - (int) (this.font.width(state) * 0.75F), y + 1, color, false);
-            y += 10;
+            boolean bound = !FiloRossoClient.ABILITY_KEYS[i].isUnbound();
+            Component key = Component.literal("[").append(bound ? Screens.keyName(FiloRossoClient.ABILITY_KEYS[i])
+                    : Screens.keyName(FiloRossoClient.WHEEL)).append("] ");
+            small(g, Component.empty().append(key).append(Component.translatable("filorosso.ability." + id)), colX, y, unlocked ? 0xFFFFFFFF : 0xFF707070,
+                    false);
+            small(g, state, colX + colW - (int) (this.font.width(state) * 0.75F), y, color, false);
         }
-        y += 4;
+        y = rowY + 44;
 
         // challenges and score
         Net.CoupleInfo info = ClientState.info;

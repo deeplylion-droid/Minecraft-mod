@@ -19,7 +19,19 @@ public final class ModData {
     public static final AttachmentType<Status> STATUS = AttachmentRegistry.create(FiloRosso.id("status"),
             b -> b.syncWith(Status.STREAM_CODEC, AttachmentSyncPredicate.all()));
 
+    /** Powers working on a player right now (slingshot, Eterni, a kiss, the Burattinaio's strings): not saved, known by every client. */
+    public static final AttachmentType<Powers> POWERS = AttachmentRegistry.create(FiloRosso.id("powers"),
+            b -> b.syncWith(Powers.STREAM_CODEC, AttachmentSyncPredicate.all()));
+
+    /** Where a player came from before the Theatre (saved, kept on death, nobody else needs it). */
+    public static final AttachmentType<Home> HOME = AttachmentRegistry.create(FiloRosso.id("home"),
+            b -> b.persistent(Home.CODEC).copyOnDeath());
+
     public static void init() {
+    }
+
+    public static Powers powers(Entity entity) {
+        return entity.getAttachedOrElse(POWERS, Powers.NONE);
     }
 
     public static Link link(Entity entity) {
