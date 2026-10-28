@@ -110,18 +110,14 @@ public final class InfectionHud {
             graphics.fill(0, 0, width, height, 0x2A1C3020);
         }
         float sinceBeat = ClientInfections.clock() - SymptomFx.lastBeat() + partialTick;
-        float alpha;
-        if (stage <= 2) {
-            // the first two stages: the veins show only for the instant the heart beats (lub... dub), then they are gone
-            float lub = (float) Math.exp(-Math.max(0.0F, sinceBeat) / 2.5F);
-            float dub = sinceBeat >= 5.0F ? 0.6F * (float) Math.exp(-(sinceBeat - 5.0F) / 2.5F) : 0.0F;
-            alpha = Mth.clamp(VEINS_ALPHA[stage] * 1.6F * Math.max(lub, dub), 0.0F, 1.0F);
-            if (alpha < 0.01F) {
-                return;
-            }
-        } else {
-            float pulse = (float) Math.exp(-sinceBeat / 4.0F);
-            alpha = Mth.clamp(VEINS_ALPHA[stage] * (0.8F + 0.45F * pulse), 0.0F, 1.0F);
+        // at every stage the veins show only for the instant the heart beats (lub... dub, once every
+        // 30 seconds), then they are gone
+        float lub = (float) Math.exp(-Math.max(0.0F, sinceBeat) / 2.5F);
+        float dub = sinceBeat >= 5.0F ? 0.6F * (float) Math.exp(-(sinceBeat - 5.0F) / 2.5F) : 0.0F;
+        float alpha = Mth.clamp(VEINS_ALPHA[stage] * 1.6F * Math.max(lub, dub), 0.0F, 1.0F);
+        if (alpha < 0.01F) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            return;
         }
         if (stage == Stages.ZOMBIE) {
             RenderSystem.setShaderColor(0.55F, 0.7F, 0.5F, alpha);

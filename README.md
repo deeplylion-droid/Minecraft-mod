@@ -320,15 +320,15 @@ Il drago ha 200 di vita: la frusta di netherite con Sottomissione IV (128) e que
 
 ![Gli stadi dell'infezione su una skin, il genoma che si corrompe e le bolle](docs/infezione-zombie-preview.png)
 
-Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), pensata per un modpack "epidemia zombie" e per i video. Jar: `infezione-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), pensata per un modpack "epidemia zombie" e per i video. Jar: `infezione-1.0.1.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Ci si infetta solo col comando** (operatori): `/infezione infetta <giocatori>`.
 - **Ogni stadio dura 5 minuti** (`/infezione durata <minuti>` per cambiarlo); dopo il quarto si diventa **zombie**.
 
 | Stadio | Sul personaggio (lo vedono tutti) | Sullo schermo di chi è infetto | Effetti |
 |---|---|---|---|
-| I · Morso | morso che sanguina sulla mascella, pelle più pallida; si porta la mano al morso | il genoma comincia a corrompersi; le vene ai bordi compaiono solo quando batte il cuore | – |
-| II · Febbre | pelle grigiastra, occhi iniettati di sangue, prime vene nere, sudore; tossisce | battito più forte, vene a ogni battito | fame più veloce |
+| I · Morso | morso che sanguina sulla mascella, pelle più pallida; si porta la mano al morso | il genoma comincia a corrompersi; le vene ai bordi compaiono solo quando batte il cuore (dalla 1.0.1, in tutti gli stadi, una volta ogni 30 secondi) | – |
+| II · Febbre | pelle grigiastra, occhi iniettati di sangue, prime vene nere, sudore; tossisce | battito più forte | fame più veloce |
 | III · Delirio | occhiaie, vene, vestiti strappati e sporchi di sangue, curvo, le prime **bolle** intorno al morso; tic e spasmi | zombie alle spalle che non ci sono, vertigini | 1 cuore in meno, Nausea a tratti |
 | IV · Agonia | pelle grigia, occhi lattiginosi che **brillano al buio**, sangue dalla bocca, **bolle ovunque che si gonfiano e scoppiano**, mosche; tosse con sangue, convulsioni, svenimenti | il cuore martella, lo schermo trema, buio improvviso | 2 cuori in meno, 15% più lento |
 | V · Zombie | un cadavere coperto di bolle e piaghe, occhi bianchi, braccia in avanti, gemiti | genoma corrotto al 100%, il cuore non batte più, vede al buio | vedi sotto |

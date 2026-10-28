@@ -28,6 +28,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public final class SymptomFx {
     private static final RandomSource RANDOM = RandomSource.create();
+    /** The heart (sound and veins) beats at most once every 30 seconds, at every stage. */
+    private static final int BEAT_EVERY = 600;
     private static int nextBeat = 40;
     private static int nextHallucination = 900;
     /** This client's clock when the heart last beat (the edges of the screen pulse with it). */
@@ -50,7 +52,10 @@ public final class SymptomFx {
         switch (symptom) {
             case THROB -> {
                 if (self) {
-                    beat(mc, 1.0F);
+                    if (ClientInfections.clock() - lastBeat >= BEAT_EVERY) {
+                        beat(mc, 1.0F);
+                        nextBeat = BEAT_EVERY;
+                    }
                     InfectionHud.flash(0x8A0000, 0.35F, 14);
                     ScreenShake.add(0.8F, 10);
                 }
@@ -164,26 +169,25 @@ public final class SymptomFx {
     /** The infected player's heartbeat, and the sounds that are not there. */
     private static void selfTick(Minecraft mc) {
         int stage = ClientInfections.SELF.stage;
-        if (stage == Stages.HEALTHY || stage == Stages.ZOMBIE || mc.player.isSpectator()) {
-            // the zombie's heart does not beat
+        if (stage == Stages.HEALTHY || mc.player.isSpectator()) {
             nextBeat = 40;
             return;
         }
         if (--nextBeat <= 0) {
-            beat(mc, switch (stage) {
-                case 1 -> 0.3F;
-                case 2 -> 0.45F;
-                case 3 -> 0.6F;
-                default -> 0.85F;
-            });
-            nextBeat = switch (stage) {
-                case 1 -> 110 + RANDOM.nextInt(60);
-                case 2 -> 70 + RANDOM.nextInt(40);
-                case 3 -> 26;
-                default -> 17;
-            };
+            if (stage == Stages.ZOMBIE) {
+                // the zombie's heart does not beat: only the veins show, without a sound
+                lastBeat = ClientInfections.clock();
+            } else {
+                beat(mc, switch (stage) {
+                    case 1 -> 0.3F;
+                    case 2 -> 0.45F;
+                    case 3 -> 0.6F;
+                    default -> 0.85F;
+                });
+            }
+            nextBeat = BEAT_EVERY;
         }
-        if (stage >= 3 && InfezioneConfig.CLIENT.hallucinations.get() && --nextHallucination <= 0) {
+        if (stage >= 3 && stage != Stages.ZOMBIE && InfezioneConfig.CLIENT.hallucinations.get() && --nextHallucination <= 0) {
             nextHallucination = 600 + RANDOM.nextInt(800);
             hallucinate(mc);
         }
