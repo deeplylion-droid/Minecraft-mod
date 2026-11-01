@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "C C",
+    "CFC"
+  ],
+  "key": {
+    "C": "minecraft:copper_block",
+    "F": "minecraft:campfire"
+  },
+  "result": {
+    "id": "punizioni:brazen_bull",
+    "count": 1
+  }
+}

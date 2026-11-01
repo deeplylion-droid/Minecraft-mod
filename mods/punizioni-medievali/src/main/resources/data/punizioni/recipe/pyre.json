@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " L ",
+    "HHH",
+    "HHH"
+  ],
+  "key": {
+    "L": "minecraft:dark_oak_log",
+    "H": "minecraft:hay_block"
+  },
+  "result": {
+    "id": "punizioni:pyre",
+    "count": 1
+  }
+}

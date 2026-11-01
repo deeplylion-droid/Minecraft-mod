@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III",
+    "IPI",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_block",
+    "P": "minecraft:pointed_dripstone"
+  },
+  "result": {
+    "id": "punizioni:iron_maiden",
+    "count": 1
+  }
+}

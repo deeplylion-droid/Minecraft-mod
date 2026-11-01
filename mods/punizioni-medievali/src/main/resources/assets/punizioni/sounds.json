@@ -1,0 +1,223 @@
+{
+  "scream": {
+    "subtitle": "subtitles.punizioni.scream",
+    "sounds": [
+      {
+        "name": "punizioni:scream1"
+      },
+      {
+        "name": "punizioni:scream2"
+      },
+      {
+        "name": "punizioni:scream3"
+      }
+    ]
+  },
+  "scream_muffled": {
+    "subtitle": "subtitles.punizioni.scream_muffled",
+    "sounds": [
+      {
+        "name": "punizioni:scream_muffled1"
+      },
+      {
+        "name": "punizioni:scream_muffled2"
+      },
+      {
+        "name": "punizioni:scream_muffled3"
+      }
+    ]
+  },
+  "bellow": {
+    "subtitle": "subtitles.punizioni.bellow",
+    "sounds": [
+      {
+        "name": "punizioni:bellow1"
+      },
+      {
+        "name": "punizioni:bellow2"
+      }
+    ]
+  },
+  "lash": {
+    "subtitle": "subtitles.punizioni.lash",
+    "sounds": [
+      {
+        "name": "punizioni:lash1"
+      },
+      {
+        "name": "punizioni:lash2"
+      },
+      {
+        "name": "punizioni:lash3"
+      }
+    ]
+  },
+  "whoosh": {
+    "subtitle": "subtitles.punizioni.whoosh",
+    "sounds": [
+      {
+        "name": "punizioni:whoosh1"
+      }
+    ]
+  },
+  "mallet": {
+    "subtitle": "subtitles.punizioni.mallet",
+    "sounds": [
+      {
+        "name": "punizioni:mallet1"
+      },
+      {
+        "name": "punizioni:mallet2"
+      }
+    ]
+  },
+  "chop": {
+    "subtitle": "subtitles.punizioni.chop",
+    "sounds": [
+      {
+        "name": "punizioni:chop1"
+      },
+      {
+        "name": "punizioni:chop2"
+      }
+    ]
+  },
+  "spikes": {
+    "subtitle": "subtitles.punizioni.spikes",
+    "sounds": [
+      {
+        "name": "punizioni:spikes1"
+      },
+      {
+        "name": "punizioni:spikes2"
+      }
+    ]
+  },
+  "rats": {
+    "subtitle": "subtitles.punizioni.rats",
+    "sounds": [
+      {
+        "name": "punizioni:rats1"
+      },
+      {
+        "name": "punizioni:rats2"
+      }
+    ]
+  },
+  "gnaw": {
+    "subtitle": "subtitles.punizioni.gnaw",
+    "sounds": [
+      {
+        "name": "punizioni:gnaw1"
+      },
+      {
+        "name": "punizioni:gnaw2"
+      }
+    ]
+  },
+  "crow": {
+    "subtitle": "subtitles.punizioni.crow",
+    "sounds": [
+      {
+        "name": "punizioni:crow1"
+      },
+      {
+        "name": "punizioni:crow2"
+      }
+    ]
+  },
+  "bone_crack": {
+    "subtitle": "subtitles.punizioni.bone_crack",
+    "sounds": [
+      {
+        "name": "punizioni:bone_crack1"
+      },
+      {
+        "name": "punizioni:bone_crack2"
+      },
+      {
+        "name": "punizioni:bone_crack3"
+      }
+    ]
+  },
+  "tear": {
+    "subtitle": "subtitles.punizioni.tear",
+    "sounds": [
+      {
+        "name": "punizioni:tear1"
+      }
+    ]
+  },
+  "maiden_creak": {
+    "subtitle": "subtitles.punizioni.maiden_creak",
+    "sounds": [
+      {
+        "name": "punizioni:maiden_creak1"
+      }
+    ]
+  },
+  "maiden_slam": {
+    "subtitle": "subtitles.punizioni.maiden_slam",
+    "sounds": [
+      {
+        "name": "punizioni:maiden_slam1"
+      }
+    ]
+  },
+  "rope_creak": {
+    "subtitle": "subtitles.punizioni.rope_creak",
+    "sounds": [
+      {
+        "name": "punizioni:rope_creak1"
+      }
+    ]
+  },
+  "chains": {
+    "subtitle": "subtitles.punizioni.chains",
+    "sounds": [
+      {
+        "name": "punizioni:chains1"
+      }
+    ]
+  },
+  "fire_ignite": {
+    "subtitle": "subtitles.punizioni.fire_ignite",
+    "sounds": [
+      {
+        "name": "punizioni:fire_ignite1"
+      }
+    ]
+  },
+  "fire_roar": {
+    "subtitle": "subtitles.punizioni.fire_roar",
+    "sounds": [
+      {
+        "name": "punizioni:fire_roar1"
+      }
+    ]
+  },
+  "sizzle": {
+    "subtitle": "subtitles.punizioni.sizzle",
+    "sounds": [
+      {
+        "name": "punizioni:sizzle1"
+      }
+    ]
+  },
+  "drums": {
+    "subtitle": "subtitles.punizioni.drums",
+    "sounds": [
+      {
+        "name": "punizioni:drums1"
+      }
+    ]
+  },
+  "toll": {
+    "subtitle": "subtitles.punizioni.toll",
+    "sounds": [
+      {
+        "name": "punizioni:toll1"
+      }
+    ]
+  }
+}

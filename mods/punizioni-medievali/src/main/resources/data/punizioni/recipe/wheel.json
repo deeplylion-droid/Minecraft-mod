@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "SLS",
+    " L "
+  ],
+  "key": {
+    "R": "minecraft:lead",
+    "S": "minecraft:stick",
+    "L": "minecraft:dark_oak_log"
+  },
+  "result": {
+    "id": "punizioni:wheel",
+    "count": 1
+  }
+}

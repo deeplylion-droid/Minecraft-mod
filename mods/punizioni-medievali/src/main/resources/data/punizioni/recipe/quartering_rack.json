@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RPR",
+    "PLP",
+    "RPR"
+  ],
+  "key": {
+    "R": "minecraft:lead",
+    "P": "minecraft:dark_oak_planks",
+    "L": "minecraft:dark_oak_log"
+  },
+  "result": {
+    "id": "punizioni:quartering_rack",
+    "count": 1
+  }
+}

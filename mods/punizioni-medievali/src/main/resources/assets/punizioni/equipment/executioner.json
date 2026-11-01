@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "punizioni:executioner"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "punizioni:executioner"
+      }
+    ]
+  }
+}

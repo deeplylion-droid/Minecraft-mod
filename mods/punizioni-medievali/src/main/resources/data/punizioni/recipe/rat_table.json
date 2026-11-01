@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IBI",
+    "PPP",
+    "L L"
+  ],
+  "key": {
+    "I": "minecraft:iron_bars",
+    "B": "minecraft:spider_eye",
+    "P": "minecraft:dark_oak_planks",
+    "L": "minecraft:dark_oak_log"
+  },
+  "result": {
+    "id": "punizioni:rat_table",
+    "count": 1
+  }
+}

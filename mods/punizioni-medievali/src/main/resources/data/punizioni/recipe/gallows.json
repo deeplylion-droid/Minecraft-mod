@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LLL",
+    "L R",
+    "PPP"
+  ],
+  "key": {
+    "L": "minecraft:dark_oak_log",
+    "R": "minecraft:lead",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "punizioni:gallows",
+    "count": 1
+  }
+}

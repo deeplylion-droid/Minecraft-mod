@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C",
+    "W",
+    "T"
+  ],
+  "key": {
+    "C": "minecraft:coal",
+    "W": "minecraft:black_wool",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "punizioni:executioner_torch",
+    "count": 1
+  }
+}

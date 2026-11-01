@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "punizioni",
+  "version": "${version}",
+  "name": "Punizioni Medievali",
+  "description": "Cruel, bloody, scenic medieval punishments in 3D: whipping post with the cat-o'-nine-tails (the lashes mark the skin), iron maiden, quartering by four horses, the chopping block, the rat table, the stake, the guillotine, the breaking wheel, the brazen bull and the gallows, with the executioner's hood and gear.",
+  "authors": [
+    "deeplylion-droid"
+  ],
+  "contact": {
+    "sources": "https://github.com/deeplylion-droid/Minecraft-mod"
+  },
+  "license": "MIT",
+  "icon": "assets/punizioni/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.punizioni.Punizioni"
+    ],
+    "client": [
+      "com.punizioni.client.PunizioniClient"
+    ]
+  },
+  "mixins": [
+    "punizioni.mixins.json",
+    {
+      "config": "punizioni.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

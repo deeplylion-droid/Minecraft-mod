@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "LLL"
+  ],
+  "key": {
+    "A": "minecraft:iron_axe",
+    "L": "minecraft:dark_oak_log"
+  },
+  "result": {
+    "id": "punizioni:chopping_block",
+    "count": 1
+  }
+}

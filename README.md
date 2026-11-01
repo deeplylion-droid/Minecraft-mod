@@ -351,3 +351,65 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 - Config: `saves/<mondo>/serverconfig/infezione-server.toml` (minuti per stadio, la morte cura sì/no, effetti di gioco sì/no; `[zombie]` sole, danno in più, vista al buio, zombie amici) e `config/infezione-client.toml` (genoma, timer, cuori, vene, tremolio, battito, allucinazioni, skin, bolle).
 - Gli zombie "amici" sono quelli del tag `infezione:zombie_friends` (zombie, husk, drowned, zombie villager, zombified piglin, gigante): con un datapack ci si aggiungono gli zombie di altre mod del modpack.
+
+### Punizioni Medievali (`mods/punizioni-medievali/`)
+
+![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
+
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+
+- **Dieci macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
+- **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
+- **Mani, piedi e ossa non tornano**: si guarisce solo morendo. Il boia decide se fermarsi o andare fino in fondo.
+- Chi subisce vede la punizione **dai suoi occhi** (sdraiato sul cavalletto, a testa in giù sotto la lama, mentre la ruota gira, dentro il toro, appeso alla corda) con sangue sullo schermo, colpi e buio; chi guarda vede tutto da fuori, con sangue, pezzi che volano, fuoco, ratti e corvi.
+
+| Macchinario | Come si usa (tasto destro del boia) | Come finisce |
+|---|---|---|
+| **Palo della fustigazione** | incatena chi è davanti; poi lo si colpisce col **gatto a nove code** | ogni frustata lascia **un segno rosso sulla schiena, sulla skin** (fino a 40), che sanguina se è fresca; resta fino alla morte |
+| **Vergine di ferro** | chiude le porte di ferro sulle punte | sangue che cola dalle fessure; di nuovo tasto destro a porte chiuse: pietà, si riaprono |
+| **Tavola dello squartamento** | lega a braccia e gambe aperte, arrivano **4 cavalli neri**; tasto destro: frustati via, tirano | il boia li **ferma** (chi è legato resta **allungato come gomma per un minuto**) o li lascia tirare: **braccia e gambe strappate** e trascinate via dai cavalli |
+| **Ceppo** | in ginocchio con una mano sul ceppo (o seduto con un piede); colpisci con la **scure del boia**, tasto destro con la scure per scegliere | **via la mano o il piede**, che vola via; il moncherino sanguina. Senza la mano destra non si colpisce e non si usa niente, senza piedi si zoppica e poi si striscia |
+| **Tavola dei ratti** | legato, la gabbia si apre: i ratti corrono e rosicchiano | morsi su tutto il corpo (sulla skin); di nuovo tasto destro: i ratti tornano nella gabbia. Se muore restano le ossa rosicchiate |
+| **Rogo** | legato al palo sulla catasta; accendi con la **torcia del boia** (o acciarino, torce, cariche di fuoco, lava) | fiamme alte 3 blocchi, la pelle si annerisce, braci e cenere; un **secchio d'acqua** lo spegne. Restano le ossa carbonizzate |
+| **Ghigliottina** | la lunetta si chiude sul collo; tasto destro: la lama cade | la **testa vola nel cesto**, e chi la perde vede la caduta dalla sua testa e poi il proprio corpo |
+| **Ruota** | legato ai raggi; colpisci con la **mazza del boia** (un osso alla volta, restano storti); poi tasto destro: la ruota sale in cima al palo e **gira** | arrivano i **corvi** a beccare; accovacciato + tasto destro la riporta giù |
+| **Toro di bronzo** | chi è davanti allo sportello ci viene chiuso dentro; accendi il fuoco sotto | il bronzo diventa rosso, il fumo esce dalle narici e **le urla escono come muggiti**; un secchio d'acqua lo raffredda |
+| **Forca** | il cappio al collo; tasto destro: si apre la botola | il corpo dondola e ruota; una spada, un'ascia o le cesoie tagliano la corda. Poi arrivano i corvi |
+
+**Il boia**: cappuccio nero con i buchi per gli occhi (nasconde il nome sopra la testa), grembiule di cuoio insanguinato con bracciali borchiati, brache e stivali, tutti **in 3D** sul personaggio. Più il gatto a nove code, la scure, la mazza e la torcia, in 3D in mano.
+
+Ricette (banco da lavoro):
+```
+Cappuccio          lana nera ×5 (come un elmo)
+Grembiule          cuoio ×7 + pepita di ferro (come una corazza)
+Brache             cuoio ×7 (come dei gambali)
+Stivali            cuoio ×2 sopra, lana nera ×2 sotto
+Gatto a nove code  filo / filo cuoio filo / bastone
+Scure del boia     blocco di ferro ×3 + bastone ×2 (come un'ascia)
+Mazza del boia     tronco di quercia scura, lingotto di ferro, tronco / bastone / bastone
+Torcia del boia    carbone / lana nera / bastone
+Palo               catena / tronco di quercia scura / assi ×3
+Vergine di ferro   blocco di ferro ×8 intorno a una punta di stalattite
+Squartamento       guinzaglio, assi, guinzaglio / assi, tronco, assi / guinzaglio, assi, guinzaglio
+Ceppo              ascia di ferro / tronco ×3
+Tavola dei ratti   sbarre, occhio di ragno, sbarre / assi ×3 / tronco _ tronco
+Rogo               tronco / balla di fieno ×6
+Ghigliottina       tronco, blocco di ferro, tronco / tronco _ tronco / assi ×3
+Ruota              guinzaglio / bastone, tronco, bastone / tronco
+Toro di bronzo     blocco di rame ×7 + falò (sotto al centro)
+Forca              tronco ×3 / tronco _ guinzaglio / assi ×3
+```
+(assi e tronchi sono di quercia scura)
+
+| Comando (operatori) | Cosa fa |
+|---|---|
+| `/punizione <macchinario> <vittime>` | porta le vittime nel macchinario più vicino e comincia (`fustigazione`, `vergine`, `squartamento`, `ceppo`, `ratti`, `rogo`, `ghigliottina`, `ruota`, `toro`, `forca`) |
+| `/punizione avanza [macchinario]` | il passo dopo, come un clic del boia con l'attrezzo giusto |
+| `/punizione libera [vittime]` | libera chi è dentro |
+| `/punizione guarisci <vittime>` | mani, piedi, ossa, segni: tutto come prima |
+| `/punizione amputa <vittima> <arto>` | `mano_destra`, `mano_sinistra`, `piede_destro`, `piede_sinistro` |
+| `/punizione spezza <vittima> <osso>` | `braccio_destro`, `braccio_sinistro`, `gamba_destra`, `gamba_sinistra`, `tutte` |
+| `/punizione segni <vittima> <frustate> <morsi> <bruciature>` | segni sulla pelle (bruciature da 0 a 100) |
+| `/punizione allunga <vittima>` | allungato come dai cavalli, per un minuto |
+
+- Messaggi di morte per ogni macchinario, con il nome del boia: *Luigi ha perso la testa per colpa di Mario*, *Luigi è stato cotto nel toro di bronzo da Mario*, *Luigi è stato dato in pasto ai ratti da Mario*...

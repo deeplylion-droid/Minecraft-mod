@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LIL",
+    "L L",
+    "PPP"
+  ],
+  "key": {
+    "L": "minecraft:dark_oak_log",
+    "I": "minecraft:iron_block",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "punizioni:guillotine",
+    "count": 1
+  }
+}

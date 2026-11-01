@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "SSS",
+    "SLS",
+    " T "
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "L": "minecraft:leather",
+    "T": "minecraft:stick"
+  },
+  "result": {
+    "id": "punizioni:cat_o_nine_tails",
+    "count": 1
+  }
+}

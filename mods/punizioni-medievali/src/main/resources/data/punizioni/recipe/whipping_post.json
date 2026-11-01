@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    " L ",
+    "PPP"
+  ],
+  "key": {
+    "C": "minecraft:iron_chain",
+    "L": "minecraft:dark_oak_log",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "punizioni:whipping_post",
+    "count": 1
+  }
+}
