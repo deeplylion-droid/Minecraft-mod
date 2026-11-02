@@ -32,6 +32,8 @@ public final class ModSounds {
     public static final SoundEvent BELLOW = register("bellow");
     public static final SoundEvent CROW = register("crow");
     public static final SoundEvent MALLET = register("mallet");
+    public static final SoundEvent CRACK = register("crack");
+    public static final SoundEvent FANFARE = register("fanfare");
 
     private static SoundEvent register(String name) {
         Identifier id = Punizioni.id(name);

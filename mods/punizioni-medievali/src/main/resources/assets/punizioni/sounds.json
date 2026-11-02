@@ -219,5 +219,31 @@
         "name": "punizioni:toll1"
       }
     ]
+  },
+  "crack": {
+    "subtitle": "subtitles.punizioni.crack",
+    "sounds": [
+      {
+        "name": "punizioni:crack1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "punizioni:crack2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "punizioni:crack3",
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "fanfare": {
+    "subtitle": "subtitles.punizioni.fanfare",
+    "sounds": [
+      {
+        "name": "punizioni:fanfare1",
+        "attenuation_distance": 96
+      }
+    ]
   }
 }

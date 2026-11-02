@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " G ",
+    "GPG",
+    " S "
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "P": "minecraft:glass_pane",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "punizioni:royal_lens",
+    "count": 1
+  }
+}

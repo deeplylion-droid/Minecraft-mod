@@ -19,6 +19,13 @@ public final class ModParticles {
     public static final SimpleParticleType ASH = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("ash"),
             FabricParticleTypes.simple(true));
 
+    /** A golden twinkle on the crown's gems. */
+    public static final SimpleParticleType SPARKLE = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("sparkle"),
+            FabricParticleTypes.simple(true));
+    /** The puff of dust and snapped air where the overseer's whip cracks. */
+    public static final SimpleParticleType CRACK = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("crack"),
+            FabricParticleTypes.simple(true));
+
     public static void init() {
     }
 }

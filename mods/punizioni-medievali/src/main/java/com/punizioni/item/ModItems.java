@@ -64,6 +64,31 @@ public final class ModItems {
     /** Pitch-soaked torch: lights the stake and the bull. */
     public static final Item EXECUTIONER_TORCH = register("executioner_torch", Item::new, new Item.Properties().stacksTo(1));
 
+    /**
+     * The king's regalia: a gold crown and an ermine-lined velvet mantle. Like the executioner's gear
+     * the vanilla armour layer draws nothing (transparent equipment asset): the crown is a 3D model on
+     * the head, the mantle is cloth simulated on every client.
+     */
+    public static final ResourceKey<EquipmentAsset> ROYAL_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Punizioni.id("royal"));
+    public static final ArmorMaterial ROYAL_GOLD = new ArmorMaterial(33,
+            Map.of(ArmorType.BOOTS, 1, ArmorType.LEGGINGS, 3, ArmorType.CHESTPLATE, 4, ArmorType.HELMET, 3, ArmorType.BODY, 4),
+            25, SoundEvents.ARMOR_EQUIP_GOLD, 1.0F, 0.0F, ItemTags.REPAIRS_GOLD_ARMOR, ROYAL_ASSET);
+    public static final ArmorMaterial ROYAL_CLOTH = new ArmorMaterial(33,
+            Map.of(ArmorType.BOOTS, 1, ArmorType.LEGGINGS, 3, ArmorType.CHESTPLATE, 4, ArmorType.HELMET, 2, ArmorType.BODY, 4),
+            25, SoundEvents.ARMOR_EQUIP_LEATHER, 1.0F, 0.0F, ItemTags.WOOL, ROYAL_ASSET);
+
+    public static final Item ROYAL_CROWN = register("royal_crown", Item::new,
+            new Item.Properties().humanoidArmor(ROYAL_GOLD, ArmorType.HELMET).rarity(Rarity.EPIC));
+    public static final Item ROYAL_CAPE = register("royal_cape", Item::new,
+            new Item.Properties().humanoidArmor(ROYAL_CLOTH, ArmorType.CHESTPLATE).rarity(Rarity.EPIC));
+    /** The king's lens: looks into a subject's pockets, their Ender chest and their recent misdeeds. */
+    public static final Item ROYAL_LENS = register("royal_lens", RoyalLensItem::new,
+            new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    /** The overseer's bullwhip: a crack on the back and the peasant works faster (Speed and Haste). */
+    public static final Item OVERSEER_WHIP = register("overseer_whip", OverseerWhipItem::new,
+            new Item.Properties().stacksTo(1).durability(800).attributes(OverseerWhipItem.attributes()).component(DataComponents.WEAPON, new Weapon(1))
+                    .rarity(Rarity.UNCOMMON));
+
     public static final Map<MachineKind, Item> MACHINES = new EnumMap<>(MachineKind.class);
 
     static {
@@ -95,7 +120,11 @@ public final class ModItems {
             output.accept(CAT_O_NINE_TAILS);
             output.accept(EXECUTIONER_AXE);
             output.accept(EXECUTIONER_MALLET);
+            output.accept(ROYAL_CROWN);
+            output.accept(ROYAL_CAPE);
+            output.accept(OVERSEER_WHIP);
         });
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(ROYAL_LENS));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
             output.accept(EXECUTIONER_TORCH);
             for (MachineKind kind : MachineKind.ALL) {

@@ -18,6 +18,12 @@ import com.punizioni.data.Limb;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.EquipmentSlot;
+import com.punizioni.client.royal.Guilty;
+import com.punizioni.client.royal.Royal;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.HumanoidArm;
+import org.joml.Matrix4f;
 import org.jspecify.annotations.Nullable;
 
 /** What a player's drawing needs from the punishments, copied into the render state each frame. */
@@ -41,6 +47,22 @@ public final class Visuals {
     public boolean alive = true;
     public boolean hood, apron, breeches, boots;
     public int seed;
+    /** The king's regalia. */
+    public boolean crown, cape;
+    /** The hand holding the overseer's whip (its lash is drawn from the handle), or null. */
+    public @Nullable HumanoidArm whipArm;
+    /** Drawn in the inventory's little window, not in the world: no cloth or lash simulation there. */
+    public boolean gui;
+    public int entityId;
+    /** Where they look (degrees), for the whip's crack. */
+    public float viewYaw, viewPitch;
+    /**
+     * The pose the entity is drawn from in this pass, before the renderer's own rotations (the
+     * camera's or a shadow pass' transform, then the move to the entity): set by LivingEntityRendererMixin.
+     * Cloth and lash live in world space and are drawn through it.
+     */
+    public final Matrix4f entityPose = new Matrix4f();
+    public boolean hasEntityPose;
 
     /** What the mod draws on this player (or mannequin) now, or null: nothing. */
     public static @Nullable Visuals of(Avatar entity, float partial) {
@@ -49,12 +71,24 @@ public final class Visuals {
         boolean apron = entity.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.EXECUTIONER_APRON);
         boolean breeches = entity.getItemBySlot(EquipmentSlot.LEGS).is(ModItems.EXECUTIONER_BREECHES);
         boolean boots = entity.getItemBySlot(EquipmentSlot.FEET).is(ModItems.EXECUTIONER_BOOTS);
+        boolean crown = entity.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.ROYAL_CROWN);
+        boolean cape = entity.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.ROYAL_CAPE);
+        HumanoidArm whipArm = entity.getMainHandItem().is(ModItems.OVERSEER_WHIP) ? entity.getMainArm()
+                : entity.getOffhandItem().is(ModItems.OVERSEER_WHIP) ? entity.getMainArm().getOpposite() : null;
         long now = entity.level().getGameTime();
         boolean stretched = body.stretchUntil() > now;
-        if (!(entity.getVehicle() instanceof Machine) && body == Body.NONE && !hood && !apron && !breeches && !boots && !stretched) {
+        if (!(entity.getVehicle() instanceof Machine) && body == Body.NONE && !hood && !apron && !breeches && !boots && !stretched && !crown && !cape
+                && whipArm == null) {
             return null;
         }
         Visuals v = new Visuals();
+        v.crown = crown;
+        v.cape = cape;
+        v.whipArm = whipArm;
+        v.gui = Royal.inGui;
+        v.entityId = entity.getId();
+        v.viewYaw = entity.getViewYRot(partial);
+        v.viewPitch = entity.getViewXRot(partial);
         v.body = body;
         v.hood = hood;
         v.apron = apron;
@@ -97,8 +131,22 @@ public final class Visuals {
     public static void extract(Avatar entity, AvatarRenderState state, float partial) {
         Visuals v = of(entity, partial);
         state.setData(KEY, v);
+        if (Guilty.shows(entity)) {
+            // seen through the king's lens: fresh misdeeds glow red, through walls
+            state.outlineColor = Guilty.COLOR;
+            if (state.nameTag != null) {
+                state.nameTag = Component.literal("\u26a0 ").withStyle(ChatFormatting.RED).append(state.nameTag.copy().withStyle(ChatFormatting.RED));
+            }
+        }
         if (v == null) {
             return;
+        }
+        if (v.cape) {
+            // the royal mantle replaces any cape
+            state.showCape = false;
+        }
+        if (v.crown && state.nameTag != null && !Guilty.shows(entity)) {
+            state.nameTag = Component.literal("\u2654 ").withStyle(ChatFormatting.GOLD).append(state.nameTag.copy().withStyle(ChatFormatting.GOLD));
         }
         if (v.kind != null) {
             // the machine holds the body: no falling over when they die, the machine shows what is left

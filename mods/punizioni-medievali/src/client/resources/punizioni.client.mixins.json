@@ -9,6 +9,8 @@
     "FirstPersonHandsMixin",
     "GameRendererMixin",
     "HudMixin",
+    "InventoryScreenMixin",
+    "LivingEntityRendererMixin",
     "PlayerModelMixin"
   ],
   "injectors": {

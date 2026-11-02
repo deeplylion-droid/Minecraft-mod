@@ -7,11 +7,20 @@ import com.punizioni.client.fx.ScreenFx;
 import com.punizioni.client.fx.VictimCamera;
 import com.punizioni.client.particle.AshParticle;
 import com.punizioni.client.particle.BloodParticle;
+import com.punizioni.client.particle.CrackParticle;
 import com.punizioni.client.particle.EmberParticle;
+import com.punizioni.client.particle.SparkleParticle;
 import com.punizioni.client.render.BodyLayer;
 import com.punizioni.client.render.MachineRenderer;
 import com.punizioni.client.render.MarkedSkins;
 import com.punizioni.client.render.RatRenderer;
+import com.punizioni.client.royal.Capes;
+import com.punizioni.client.royal.Guilty;
+import com.punizioni.client.royal.Lashes;
+import com.punizioni.client.royal.RoyalLayer;
+import com.punizioni.inspect.Inspection;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import com.punizioni.entity.ModEntities;
 import com.punizioni.item.ModItems;
 import com.punizioni.machine.Machine;
@@ -53,11 +62,16 @@ public class PunizioniClient implements ClientModInitializer {
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof AvatarRenderer<?> avatar) {
                 helper.register(new BodyLayer(avatar, context.getResourceManager()));
+                helper.register(new RoyalLayer(avatar, context.getResourceManager()));
             }
         });
         ParticleProviderRegistry.getInstance().register(ModParticles.BLOOD, BloodParticle.Provider::new);
         ParticleProviderRegistry.getInstance().register(ModParticles.EMBER, EmberParticle.Provider::new);
         ParticleProviderRegistry.getInstance().register(ModParticles.ASH, AshParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.SPARKLE, SparkleParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.CRACK, CrackParticle.Provider::new);
+        MenuScreens.register(Inspection.MENU, ContainerScreen::new);
+        ClientPlayNetworking.registerGlobalReceiver(Net.Guilty.TYPE, (payload, context) -> Guilty.receive(payload.ids()));
 
         ClientPlayNetworking.registerGlobalReceiver(Net.VictimFx.TYPE, (payload, context) -> ScreenFx.hit(payload.kind(), payload.strength()));
         ClientPlayNetworking.registerGlobalReceiver(Net.ChopFx.TYPE, (payload, context) -> {
@@ -83,6 +97,8 @@ public class PunizioniClient implements ClientModInitializer {
             ScreenFx.tick(mc);
             Gibs.tick(mc);
             VictimCamera.tick(mc);
+            Lashes.tick(mc);
+            Capes.tick(mc);
             // vanilla says "press shift to get off": not from a machine
             boolean held = mc.player != null && mc.player.getVehicle() instanceof Machine;
             if (held && !wasHeld) {
@@ -96,6 +112,9 @@ public class PunizioniClient implements ClientModInitializer {
             Gibs.reset();
             VictimCamera.reset();
             MarkedSkins.clear();
+            Lashes.reset();
+            Capes.reset();
+            Guilty.reset();
         });
 
         DESCRIBED.add(ModItems.EXECUTIONER_HOOD);
@@ -107,6 +126,10 @@ public class PunizioniClient implements ClientModInitializer {
         DESCRIBED.add(ModItems.EXECUTIONER_MALLET);
         DESCRIBED.add(ModItems.EXECUTIONER_TORCH);
         DESCRIBED.addAll(ModItems.MACHINES.values());
+        DESCRIBED.add(ModItems.ROYAL_CROWN);
+        DESCRIBED.add(ModItems.ROYAL_CAPE);
+        DESCRIBED.add(ModItems.ROYAL_LENS);
+        DESCRIBED.add(ModItems.OVERSEER_WHIP);
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, flag, lines) -> {
             if (DESCRIBED.contains(stack.getItem())) {
                 String base = "item." + Punizioni.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + ".desc";

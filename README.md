@@ -356,7 +356,7 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 ![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
 
-Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.0.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.1.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Dieci macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
 - **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
@@ -378,6 +378,30 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 
 **Il boia**: cappuccio nero con i buchi per gli occhi (nasconde il nome sopra la testa), grembiule di cuoio insanguinato con bracciali borchiati, brache e stivali, tutti **in 3D** sul personaggio. Più il gatto a nove code, la scure, la mazza e la torcia, in 3D in mano.
 
+**Per il re (dalla 1.1.0)**, per fare roleplay medievale:
+
+![Corona, mantello, lente e frusta del sorvegliante](docs/punizioni-medievali-re.png)
+
+| Oggetto | Cosa fa |
+|---|---|
+| **Corona del re** | corona **in 3D**: oro inciso, ermellino alla base, rubini, zaffiri e smeraldi, perle, croci e gigli, due archi sopra un berretto di velluto rosso, globo e croce in cima; le gemme **brillano al buio** e ogni tanto **scintillano**. Quando la indossi suona una **fanfara** e tutto il server legge *♔ Mario è stato incoronato! Lunga vita al re! ♔*. Il nome sopra la testa diventa dorato con ♔ |
+| **Mantello reale** | velluto rosso ricamato d'oro (gigli e una corona sulla schiena), bordo e fodera d'**ermellino**, collo d'ermellino con catena e spilla. È **stoffa vera, simulata**: pende dalle spalle, ondeggia col vento, **si gonfia quando corri** (si vede la fodera), non entra nel corpo né nelle gambe e **strascica a terra** per più di un blocco dietro al re. Lo vedono tutti |
+| **Lente del re** | **tasto destro su un giocatore** (fino a 10 blocchi): il suo **inventario**, l'**armatura**, la mano secondaria, la sua testa (vita, fame, livello, posizione) e le sue **ultime malefatte**. Quello che prendi **è confiscato** (lui lo legge sullo schermo e in chat); puoi anche mettergli delle cose. Clic sul libro *Concedi la grazia*: le sue malefatte vengono dimenticate. **Accovacciato + tasto destro**: il suo **baule dell'End**. Finché tieni la lente in mano, **i colpevoli degli ultimi 10 minuti brillano di rosso** anche attraverso i muri (entro 48 blocchi) e hanno ⚠ davanti al nome |
+| **Frusta del sorvegliante** | frusta lunga **in 3D**: la frusta vera (3,6 blocchi) pende dal manico e **si trascina a terra**; a ogni colpo **si alza dietro la spalla, si srotola in avanti e schiocca** in punta (si sente forte, lo sentono tutti). Arriva a **5 blocchi**, fa poco danno (un cuore), lascia **un segno sulla schiena** e **sprona**: 30 secondi di **Velocità** e **Rapidità II**, così il plebeo cammina, scava e raccoglie più in fretta (*Mario ti sprona: al lavoro!*) |
+
+Le malefatte che la lente vede (si ricordano per un'ora; un riavvio del server le dimentica):
+
+| Malefatta | Quanto è grave |
+|---|---|
+| Prendere oggetti da un baule, barile, forno, scatola... **piazzato da un altro** (furto: *Ha rubato 12× Diamante a Mario*) | **colpevole** (brilla di rosso) |
+| Distruggere un contenitore di un altro | **colpevole** |
+| Colpire o uccidere un giocatore, un villico, un golem, un animale con un nome o l'animale di un altro | **colpevole** |
+| Accendere del TNT | **colpevole** |
+| Aprire il contenitore di un altro senza prendere niente, appiccare il fuoco, versare lava | sospetto (giallo) |
+| Aprire o prendere da contenitori senza padrone, rompere blocchi, uccidere animali | solo un fatto |
+
+(Un contenitore ha un padrone solo se è stato piazzato con la mod installata.)
+
 Ricette (banco da lavoro):
 ```
 Cappuccio          lana nera ×5 (come un elmo)
@@ -398,6 +422,10 @@ Ghigliottina       tronco, blocco di ferro, tronco / tronco _ tronco / assi ×3
 Ruota              guinzaglio / bastone, tronco, bastone / tronco
 Toro di bronzo     blocco di rame ×7 + falò (sotto al centro)
 Forca              tronco ×3 / tronco _ guinzaglio / assi ×3
+Corona del re      smeraldo, diamante, smeraldo / lingotto d'oro ×3
+Mantello reale     lana bianca, lingotto d'oro, lana bianca / lana rossa ×3 / lana rossa ×3
+Lente del re       _ oro _ / oro, lastra di vetro, oro / _ bastone _
+Frusta del sorv.   _ _ cuoio / _ cuoio _ / bastone _ _
 ```
 (assi e tronchi sono di quercia scura)
 

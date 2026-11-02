@@ -7,6 +7,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
+import java.util.List;
+
 /** Effects the server sends: what the victim feels on their own screen, and the pieces that fly. */
 public final class Net {
     private Net() {
@@ -70,10 +72,22 @@ public final class Net {
         }
     }
 
+    /** Through the king's lens: the players nearby with fresh misdeeds (they glow red), sent every second to whoever holds it. */
+    public record Guilty(List<Integer> ids) implements CustomPacketPayload {
+        public static final Type<Guilty> TYPE = new Type<>(Punizioni.id("guilty"));
+        public static final StreamCodec<ByteBuf, Guilty> CODEC = ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).map(Guilty::new, Guilty::ids);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public static void init() {
         PayloadTypeRegistry.clientboundPlay().register(VictimFx.TYPE, VictimFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ChopFx.TYPE, ChopFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(TearFx.TYPE, TearFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(HeadFx.TYPE, HeadFx.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Guilty.TYPE, Guilty.CODEC);
     }
 }

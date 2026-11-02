@@ -5,6 +5,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.punizioni.client.fx.VictimCamera;
 import com.punizioni.client.render.FirstPersonArm;
+import com.punizioni.client.royal.FirstPersonLash;
+import com.punizioni.item.ModItems;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
 import com.punizioni.machine.Machine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
@@ -31,9 +35,23 @@ public abstract class FirstPersonHandsMixin {
     @Inject(method = "submitHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void punizioni$held(float partialTicks, PoseStack poseStack, SubmitNodeCollector collector, PlayerRenderState playerState,
                                 FirstPersonHandsAndItemsRenderState state, CallbackInfo ci) {
+        FirstPersonLash.begin(poseStack);
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && (mc.player.getVehicle() instanceof Machine || VictimCamera.sinceHead(partialTicks) >= 0.0F)) {
             ci.cancel();
+        }
+    }
+
+    /** The overseer's whip: its lash from the tip of the handle vanilla is about to draw. */
+    @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState;submit(Lcom/mojang/blaze3d/vertex/PoseStack;"
+                    + "Lnet/minecraft/client/renderer/SubmitNodeCollector;III)V"))
+    private void punizioni$lash(PlayerRenderState playerState, FirstPersonHandsAndItemsRenderState state, float partialTicks, float xRot,
+                                InteractionHand hand, float attack, ItemStack itemStack, float inverseArmHeight, PoseStack poseStack,
+                                SubmitNodeCollector collector, int light, CallbackInfo ci) {
+        if (itemStack.is(ModItems.OVERSEER_WHIP) && playerState.avatarRenderState != null) {
+            HumanoidArm main = playerState.avatarRenderState.mainArm;
+            FirstPersonLash.draw(poseStack, collector, hand == InteractionHand.MAIN_HAND ? main : main.getOpposite(), light, partialTicks);
         }
     }
 }
