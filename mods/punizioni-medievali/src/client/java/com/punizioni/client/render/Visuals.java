@@ -18,6 +18,7 @@ import com.punizioni.data.Limb;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.EquipmentSlot;
+import com.punizioni.client.bonds.Captives;
 import com.punizioni.client.royal.Guilty;
 import com.punizioni.client.royal.Royal;
 import net.minecraft.ChatFormatting;
@@ -49,6 +50,8 @@ public final class Visuals {
     public int seed;
     /** The king's regalia. */
     public boolean crown, cape;
+    /** Hands tied with the prisoner's rope; leading someone on one. */
+    public boolean bound, captor;
     /** The hand holding the overseer's whip (its lash is drawn from the handle), or null. */
     public @Nullable HumanoidArm whipArm;
     /** Drawn in the inventory's little window, not in the world: no cloth or lash simulation there. */
@@ -77,13 +80,17 @@ public final class Visuals {
                 : entity.getOffhandItem().is(ModItems.OVERSEER_WHIP) ? entity.getMainArm().getOpposite() : null;
         long now = entity.level().getGameTime();
         boolean stretched = body.stretchUntil() > now;
+        boolean bound = ModData.isBound(entity);
+        boolean captor = Captives.isCaptor(entity.getUUID());
         if (!(entity.getVehicle() instanceof Machine) && body == Body.NONE && !hood && !apron && !breeches && !boots && !stretched && !crown && !cape
-                && whipArm == null) {
+                && whipArm == null && !bound && !captor) {
             return null;
         }
         Visuals v = new Visuals();
         v.crown = crown;
         v.cape = cape;
+        v.bound = bound;
+        v.captor = captor;
         v.whipArm = whipArm;
         v.gui = Royal.inGui;
         v.entityId = entity.getId();
@@ -158,7 +165,15 @@ public final class Visuals {
                 state.nameTag = null;
             }
         }
-        // a hand that is gone holds nothing
+        // a hand that is gone holds nothing; tied hands neither
+        if (v.bound) {
+            state.rightHandItemState.clear();
+            state.rightHandItemStack = ItemStack.EMPTY;
+            state.leftHandItemState.clear();
+            state.leftHandItemStack = ItemStack.EMPTY;
+            state.rightArmPose = HumanoidModel.ArmPose.EMPTY;
+            state.leftArmPose = HumanoidModel.ArmPose.EMPTY;
+        }
         if (v.body.lacks(Limb.RIGHT_HAND) || v.body.torn()) {
             state.rightHandItemState.clear();
             state.rightHandItemStack = ItemStack.EMPTY;

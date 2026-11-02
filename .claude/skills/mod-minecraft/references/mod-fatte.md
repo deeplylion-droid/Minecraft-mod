@@ -13,7 +13,7 @@ In ordine di tempo. Per ognuna: cosa ha chiesto l'utente, cosa c'è, cosa è eme
 | Chiappe Colossali | `mods/chiappe-colossali/` | `chiappe` | Fabric 26.3 | 1.0.0 |
 | Frusta Imperiale | `mods/frusta-imperiale/` | `frusta` | Forge 1.20.1 | 1.0.1 |
 | Infezione Zombie | `mods/infezione-zombie/` | `infezione` | Forge 1.20.1 | 1.0.1 |
-| Punizioni Medievali | `mods/punizioni-medievali/` | `punizioni` | Fabric 26.3 | 1.1.0 |
+| Punizioni Medievali | `mods/punizioni-medievali/` | `punizioni` | Fabric 26.3 | 1.2.0 |
 
 C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: modelli horror low-poly in Blockbench con tre bozze, texture, glow, animazioni e anteprime.
 
@@ -86,4 +86,5 @@ C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: m
 - Scelte (domande a opzioni, sempre la consigliata): macchinari liberi (chi è davanti quando il boia lo usa ci finisce dentro), finali mortali ma si tengono gli oggetti, amputazioni fino alla morte, allo squartamento decide il boia (fermare = allungato per un minuto). Aggiunte da me: ghigliottina, ruota, toro di bronzo, forca (10 macchinari).
 - Cosa c'è: 10 macchinari 3D (entità con modelli Blockbench generati), la vittima li "cavalca"; telecamera della vittima dai suoi occhi (sdraiata, a testa in giù, sulla ruota, appesa, dentro la testa che cade nel cesto); segni sulla skin a 4× risoluzione; moncherini e ossa rotte sul modello del giocatore; pezzi che volano; sangue sullo schermo; equipaggiamento del boia 3D; attrezzi 3D in mano; suoni sintetizzati.
 - **1.1.0** (poi, sempre per il roleplay): "una fighissima corona 3D per il re, un mantello bellissimo regale animato in 3D sempre, poter sgamare i plebei [...] una lente per vedergli dentro l'inventario, ma servirà anche una frusta per farli lavorare nei campi, sempre in 3D e animata". Scelte: lente "Tutto + malefatte" (inventario, armatura, baule dell'End, confisca, malefatte, i colpevoli brillano di rosso), frusta "Lo sprona" (Velocità e Rapidità per 30 s). Fatte: corona 3D con gemme che brillano e fanfara all'incoronazione; mantello di stoffa simulata con strascico; lente con menu d'ispezione e registro delle malefatte (furti dai bauli altrui, colpi, uccisioni, fuoco, lava, TNT); frusta lunga con schiocco disegnato (si alza dietro la spalla, l'anello rotola fino alla punta).
-- **Stato**: provata con server e due client veri (1.0.0 e 1.1.0); non ancora provata in gioco dall'utente, audio non verificato.
+- **1.2.0**: "un oggetto per legare le persone e poterle portare in giro". Scelte: al guinzaglio, e da soli non ci si libera (solo chi ha legato, o le cesoie). Poi: "fallo legato tipo salame". Fatta: corda da prigioniero (legato come un salame dalle spalle alle caviglie, saltella; guinzaglio di 4 blocchi tirato dal client del prigioniero, nodo sulle staccionate).
+- **Stato**: provata con server e due client veri (1.0.0, 1.1.0 e 1.2.0); non ancora provata in gioco dall'utente, audio non verificato.

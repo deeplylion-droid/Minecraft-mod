@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SS ",
+    "SL ",
+    "  S"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "L": "minecraft:leather"
+  },
+  "result": {
+    "id": "punizioni:prisoner_rope",
+    "count": 2
+  }
+}

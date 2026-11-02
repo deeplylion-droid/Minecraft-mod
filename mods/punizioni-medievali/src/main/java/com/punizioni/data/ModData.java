@@ -22,6 +22,18 @@ public final class ModData {
         entity.setAttached(BODY, body);
     }
 
+    /** The prisoner's rope: saved, lost on death, known by every client. */
+    public static final AttachmentType<Bound> BOUND = AttachmentRegistry.create(Punizioni.id("bound"),
+            b -> b.persistent(Bound.CODEC).syncWith(Bound.STREAM_CODEC, AttachmentSyncPredicate.all()));
+
+    public static Bound bound(Entity entity) {
+        return entity.getAttached(BOUND);
+    }
+
+    public static boolean isBound(Entity entity) {
+        return entity.hasAttached(BOUND);
+    }
+
     public static void init() {
     }
 }

@@ -356,7 +356,7 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 ![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
 
-Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.1.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.2.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Dieci macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
 - **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
@@ -388,6 +388,10 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 | **Mantello reale** | velluto rosso ricamato d'oro (gigli e una corona sulla schiena), bordo e fodera d'**ermellino**, collo d'ermellino con catena e spilla. È **stoffa vera, simulata**: pende dalle spalle, ondeggia col vento, **si gonfia quando corri** (si vede la fodera), non entra nel corpo né nelle gambe e **strascica a terra** per più di un blocco dietro al re. Lo vedono tutti |
 | **Lente del re** | **tasto destro su un giocatore** (fino a 10 blocchi): il suo **inventario**, l'**armatura**, la mano secondaria, la sua testa (vita, fame, livello, posizione) e le sue **ultime malefatte**. Quello che prendi **è confiscato** (lui lo legge sullo schermo e in chat); puoi anche mettergli delle cose. Clic sul libro *Concedi la grazia*: le sue malefatte vengono dimenticate. **Accovacciato + tasto destro**: il suo **baule dell'End**. Finché tieni la lente in mano, **i colpevoli degli ultimi 10 minuti brillano di rosso** anche attraverso i muri (entro 48 blocchi) e hanno ⚠ davanti al nome |
 | **Frusta del sorvegliante** | frusta lunga **in 3D**: la frusta vera (3,6 blocchi) pende dal manico e **si trascina a terra**; a ogni colpo **si alza dietro la spalla, si srotola in avanti e schiocca** in punta (si sente forte, lo sentono tutti). Arriva a **5 blocchi**, fa poco danno (un cuore), lascia **un segno sulla schiena** e **sprona**: 30 secondi di **Velocità** e **Rapidità II**, così il plebeo cammina, scava e raccoglie più in fretta (*Mario ti sprona: al lavoro!*) |
+
+![Il prigioniero legato come un salame e portato al guinzaglio](docs/punizioni-medievali-corda.png)
+
+**Corda da prigioniero (dalla 1.2.0)**: tasto destro su un giocatore con la corda in mano e lo **leghi come un salame**: braccia strette al corpo e giri di corda dalle spalle alle caviglie, con il nodo sulla pancia. Non può più colpire, scavare, costruire, usare oggetti né aprire niente, cammina a saltelli (più piano) e **ti segue al guinzaglio** con una corda di 4 blocchi: se resta indietro viene tirato, se c'è un gradino lo scavalca, se vi separate con un teletrasporto o un portale viene riportato da te. **Da solo non può liberarsi**: lo slega solo chi l'ha legato (tasto destro su di lui, la corda torna in mano) o chiunque **tagli la corda con le cesoie**. Tasto destro su una **staccionata** mentre lo porti: lo leghi lì (la corda resta annodata al palo); di nuovo tasto destro sulla staccionata (o su di lui) per riprenderlo. Chiunque abbia una corda in mano può prendere in consegna un prigioniero legato a un palo.
 
 Le malefatte che la lente vede (si ricordano per un'ora; un riavvio del server le dimentica):
 
@@ -426,6 +430,7 @@ Corona del re      smeraldo, diamante, smeraldo / lingotto d'oro ×3
 Mantello reale     lana bianca, lingotto d'oro, lana bianca / lana rossa ×3 / lana rossa ×3
 Lente del re       _ oro _ / oro, lastra di vetro, oro / _ bastone _
 Frusta del sorv.   _ _ cuoio / _ cuoio _ / bastone _ _
+Corda (×2)         filo, filo / filo, cuoio / _ _ filo (come un guinzaglio, col cuoio al posto dello slime)
 ```
 (assi e tronchi sono di quercia scura)
 

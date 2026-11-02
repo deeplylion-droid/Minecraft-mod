@@ -7,6 +7,7 @@ import com.punizioni.item.ModItems;
 import com.punizioni.misdeed.Misdeeds;
 import com.punizioni.net.Net;
 import com.punizioni.server.Amputations;
+import com.punizioni.server.Bonds;
 import com.punizioni.server.Deaths;
 import com.punizioni.server.PunizioneCommand;
 import com.punizioni.server.Royalty;
@@ -46,12 +47,14 @@ public class Punizioni implements ModInitializer {
         Inspection.init();
         Misdeeds.init();
         Royalty.init();
+        Bonds.init();
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> Misdeeds.forget(handler.player));
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> PunizioneCommand.register(dispatcher));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             try {
                 Amputations.tick(server);
                 Royalty.tick(server);
+                Bonds.tick(server);
             } catch (RuntimeException e) {
                 LOGGER.error("Punizioni tick failed", e);
             }

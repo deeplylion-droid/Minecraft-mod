@@ -89,6 +89,9 @@ public final class ModItems {
             new Item.Properties().stacksTo(1).durability(800).attributes(OverseerWhipItem.attributes()).component(DataComponents.WEAPON, new Weapon(1))
                     .rarity(Rarity.UNCOMMON));
 
+    /** The prisoner's rope: ties a player's hands and leads them on a 4-block rope (see server.Bonds). */
+    public static final Item PRISONER_ROPE = register("prisoner_rope", Item::new, new Item.Properties().stacksTo(16));
+
     public static final Map<MachineKind, Item> MACHINES = new EnumMap<>(MachineKind.class);
 
     static {
@@ -124,7 +127,10 @@ public final class ModItems {
             output.accept(ROYAL_CAPE);
             output.accept(OVERSEER_WHIP);
         });
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> output.accept(ROYAL_LENS));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
+            output.accept(ROYAL_LENS);
+            output.accept(PRISONER_ROPE);
+        });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
             output.accept(EXECUTIONER_TORCH);
             for (MachineKind kind : MachineKind.ALL) {

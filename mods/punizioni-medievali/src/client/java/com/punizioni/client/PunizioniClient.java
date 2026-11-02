@@ -2,6 +2,8 @@ package com.punizioni.client;
 
 import com.punizioni.ModParticles;
 import com.punizioni.Punizioni;
+import com.punizioni.client.bonds.BondsLayer;
+import com.punizioni.client.bonds.Captives;
 import com.punizioni.client.fx.Gibs;
 import com.punizioni.client.fx.ScreenFx;
 import com.punizioni.client.fx.VictimCamera;
@@ -63,6 +65,7 @@ public class PunizioniClient implements ClientModInitializer {
             if (renderer instanceof AvatarRenderer<?> avatar) {
                 helper.register(new BodyLayer(avatar, context.getResourceManager()));
                 helper.register(new RoyalLayer(avatar, context.getResourceManager()));
+                helper.register(new BondsLayer(avatar, context.getResourceManager()));
             }
         });
         ParticleProviderRegistry.getInstance().register(ModParticles.BLOOD, BloodParticle.Provider::new);
@@ -99,6 +102,7 @@ public class PunizioniClient implements ClientModInitializer {
             VictimCamera.tick(mc);
             Lashes.tick(mc);
             Capes.tick(mc);
+            Captives.tick(mc);
             // vanilla says "press shift to get off": not from a machine
             boolean held = mc.player != null && mc.player.getVehicle() instanceof Machine;
             if (held && !wasHeld) {
@@ -107,6 +111,7 @@ public class PunizioniClient implements ClientModInitializer {
             wasHeld = held;
         });
         LevelRenderEvents.COLLECT_SUBMITS.register(Gibs::submit);
+        LevelRenderEvents.COLLECT_SUBMITS.register(Captives::submit);
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             ScreenFx.reset();
             Gibs.reset();
@@ -114,6 +119,7 @@ public class PunizioniClient implements ClientModInitializer {
             MarkedSkins.clear();
             Lashes.reset();
             Capes.reset();
+            Captives.reset();
             Guilty.reset();
         });
 
@@ -130,6 +136,7 @@ public class PunizioniClient implements ClientModInitializer {
         DESCRIBED.add(ModItems.ROYAL_CAPE);
         DESCRIBED.add(ModItems.ROYAL_LENS);
         DESCRIBED.add(ModItems.OVERSEER_WHIP);
+        DESCRIBED.add(ModItems.PRISONER_ROPE);
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, flag, lines) -> {
             if (DESCRIBED.contains(stack.getItem())) {
                 String base = "item." + Punizioni.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + ".desc";

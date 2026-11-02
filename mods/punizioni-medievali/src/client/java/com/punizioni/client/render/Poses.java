@@ -60,6 +60,9 @@ public final class Poses {
                 }
             }
         }
+        if (v.bound && v.kind == null) {
+            tied(m, t);
+        }
         if (v.stretch > 0.001F) {
             stretch(m, v.stretch);
         }
@@ -97,6 +100,28 @@ public final class Poses {
 
     private static float tremble(float t, float speed, float amount) {
         return (Mth.sin(t * speed) + 0.5F * Mth.sin(t * speed * 2.3F + 1.0F)) * amount;
+    }
+
+    /**
+     * The prisoner's rope, tied like a salami: arms pressed to the sides, legs together, rope wound
+     * round all of it (BondsLayer); only the head moves, and the body sways a little.
+     */
+    private static void tied(PlayerModel m, float t) {
+        float sway = Mth.sin(t * 0.07F) * 0.03F;
+        for (ModelPart arm : new ModelPart[]{m.rightArm, m.leftArm}) {
+            // pressed to the body: they lean with it (crouching)
+            arm.xRot = m.body.xRot;
+            arm.yRot = 0.0F;
+            arm.zRot = 0.0F;
+        }
+        for (ModelPart leg : new ModelPart[]{m.rightLeg, m.leftLeg}) {
+            leg.xRot = 0.0F;
+            leg.yRot = 0.0F;
+            leg.zRot = 0.0F;
+        }
+        m.body.zRot = sway;
+        m.rightArm.zRot = sway;
+        m.leftArm.zRot = sway;
     }
 
     /** Wrists chained high on the post; every lash makes the body arch and the head jerk back. */
@@ -339,7 +364,14 @@ public final class Poses {
 
     /** Lowered (kneeling, sitting) or lifted (long stretched legs) on top of vanilla's offset. */
     public static Vec3 offset(AvatarRenderState s) {
-        return offset(s.getData(Visuals.KEY));
+        Visuals v = s.getData(Visuals.KEY);
+        Vec3 base = offset(v);
+        if (v != null && v.bound && v.kind == null && s.walkAnimationSpeed > 0.05F) {
+            // tied like a salami, legs and all: it hops
+            float hop = Math.abs(Mth.sin(s.walkAnimationPos * 1.1F)) * Math.min(1.0F, s.walkAnimationSpeed * 2.0F) * 0.13F;
+            return base.add(0.0, hop, 0.0);
+        }
+        return base;
     }
 
     public static Vec3 offset(@Nullable Visuals v) {

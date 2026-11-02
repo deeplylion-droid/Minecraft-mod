@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.punizioni.client.fx.VictimCamera;
 import com.punizioni.client.render.FirstPersonArm;
 import com.punizioni.client.royal.FirstPersonLash;
+import com.punizioni.data.ModData;
 import com.punizioni.item.ModItems;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
@@ -37,7 +38,8 @@ public abstract class FirstPersonHandsMixin {
                                 FirstPersonHandsAndItemsRenderState state, CallbackInfo ci) {
         FirstPersonLash.begin(poseStack);
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && (mc.player.getVehicle() instanceof Machine || VictimCamera.sinceHead(partialTicks) >= 0.0F)) {
+        if (mc.player != null && (mc.player.getVehicle() instanceof Machine || VictimCamera.sinceHead(partialTicks) >= 0.0F
+                || ModData.isBound(mc.player))) {
             ci.cancel();
         }
     }
