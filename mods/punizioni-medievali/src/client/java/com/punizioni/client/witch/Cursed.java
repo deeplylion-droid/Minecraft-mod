@@ -135,8 +135,8 @@ public final class Cursed {
         vy = v.y + (vy - v.y) * 0.25;
         // the wind: slow, the same for every balloon at the same time
         double a = now * 0.0019 + 1.3;
-        double wx = Math.cos(a) * 0.0035;
-        double wz = Math.sin(a * 0.7) * 0.0035;
+        double wx = Math.cos(a) * 0.0016;
+        double wz = Math.sin(a * 0.7) * 0.0016;
         p.setDeltaMovement(v.x + wx, vy, v.z + wz);
         p.resetFallDistance();
     }

@@ -254,6 +254,11 @@ public final class Visuals {
             // the royal mantle replaces any cape
             state.showCape = false;
         }
+        if (v.curse == CurseKind.TOAD) {
+            // a toad faces where it looks (its tongue goes there)
+            state.bodyRot += state.yRot;
+            state.yRot = 0.0F;
+        }
         if (v.hidesBody()) {
             // nothing worn or held shows on a toad or a balloon (vanilla's armour, items, capes, parrots, arrows)
             boolean balloon = v.curse == CurseKind.BALLOON;
@@ -283,7 +288,9 @@ public final class Visuals {
             state.headEquipment = ItemStack.EMPTY;
             state.headItem.clear();
             state.wornHeadType = null;
-            state.bodyRot += 180.0F * v.turn;
+            // the body turns its back to where the player looks (the face in its backside looks there)
+            state.bodyRot += state.yRot + 180.0F * v.turn;
+            state.yRot = 0.0F;
         }
         if (v.crown && state.nameTag != null && !Guilty.shows(entity)) {
             state.nameTag = Component.literal("\u2654 ").withStyle(ChatFormatting.GOLD).append(state.nameTag.copy().withStyle(ChatFormatting.GOLD));
