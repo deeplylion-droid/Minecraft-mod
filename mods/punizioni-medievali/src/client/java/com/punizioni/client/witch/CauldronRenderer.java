@@ -135,7 +135,7 @@ public class CauldronRenderer extends EntityRenderer<WitchCauldron, CauldronRend
         // the fire under the pot, among the logs
         poseStack.pushPose();
         poseStack.translate(0.0F, 0.06F, 0.0F);
-        Flames.ring(collector, poseStack, s.time, 1.0F, 7, 0.36F, 0.5F, 0.3F, 97L);
+        Flames.ring(collector, poseStack, s.time, 1.0F, 9, 0.62F, 0.55F, 0.34F, 97L);
         poseStack.popPose();
         poseStack.popPose();
         super.submit(s, poseStack, collector, camera);
