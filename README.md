@@ -356,7 +356,7 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 ![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
 
-Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.4.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.5.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Undici macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
 - **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
@@ -416,6 +416,26 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 | **Pentolone di sbobba** | un pentolone di ferro **in 3D** appeso a un treppiede sopra il fuoco, pieno di sbobba grigioverde che bolle e fuma, con dentro un osso, una rapa, una suola di scarpa, la coda di un ratto e una lisca. **Tasto destro con una ciotola vuota: la riempi** (16 porzioni al massimo, la sbobba scende man mano). Si riempie con un **secchio d'acqua** (+6) e con gli **avanzi** (+1 ciascuno: carne marcia, ossa, patate anche velenose, carote, barbabietole, grano, semi, funghi, pane, alghe, occhi di ragno... e cacca) |
 | **Ciotola di sbobba** | **tasto destro su un giocatore: gliela fai mangiare subito**, anche se non ha fame e anche se è alla gogna o legato (a te resta la ciotola vuota). Oppure mangiala tu. **Sfama poco e fa schifo**: chi la mangia scuote la testa disgustato (lo vedono tutti), lo schermo gli diventa verde per un attimo, rutta, e una volta su tre ha qualche secondo di nausea |
 
+**La strega (dalla 1.5.0)**:
+
+![La strega col suo cappello a punta, il calderone gigante, il rospo, la testa nel culo e il pallone](docs/punizioni-medievali-strega.png)
+
+| Cosa | Com'è |
+|---|---|
+| **Vestito da strega** (cappello, veste, calze, stivali) | tutto **in 3D**: il **cappello a punta** classico, nero, con la tesa larga e floscia, la fascia viola con una grossa fibbia d'argento, una toppa e la **punta storta che si piega e ondeggia** quando cammini; dalla tesa pende un **ragnetto sul suo filo**. Veste di velluto nero con i lacci viola, uno scialle sfilacciato, la cintura con un **teschio** e una **fiala verde**, la gonna stracciata che segue le gambe, le maniche a campana; **calze a righe** viola e nere, **stivali a punta** con la fibbia. **Chi porta il cappello è una strega**: solo lei sa usare il calderone. Quando lancia una pozione ride |
+| **Calderone gigante** | un calderone di ferro panciuto **largo due blocchi**, su tre zampe ad artiglio sopra il fuoco, con dentro un intruglio che bolle e fuma (ci galleggiano un occhio, un osso e una zampa di rospo). La strega **ci butta dentro gli ingredienti** (con Q, o tasto destro con l'ingrediente in mano: glielo lancia lei): a ogni ingrediente giusto l'intruglio cambia colore; al terzo la maledizione è pronta, **brilla** e la strega ride. Poi **tasto destro con una bottiglia di vetro: 3 pozioni** a intruglio. Ingredienti di pozioni diverse lo **rovinano** (nuvola nera); qualsiasi altra cosa, o qualsiasi cosa buttata da chi non è una strega, **viene sputata fuori** con un rutto |
+| **Pozione del Rospo** | si lancia come una pozione da lancio: chi colpisce (entro 3 blocchi) diventa **un rospo bitorzoluto orribile fino alla morte**: verruche, pustole infette, occhi gialli iniettati di sangue, bava. **Salta** invece di camminare, **gracida**, nuota benissimo e trattiene il fiato, **non ha mani** (non può colpire con le armi, scavare, costruire, aprire, usare oggetti: solo mangiare), ma **attacca con la lingua appiccicosa** da 5 blocchi. In chat scrive solo *Cra cra craaa!*. Gli animali colpiti diventano **rane** |
+| **Pozione Testa nel Culo** | a chi colpisce **la testa scivola giù e si infila nel culo fino alla morte**: la faccia spunta dal sedere, il corpo si gira e **cammina all'indietro** (la faccia guarda dove guarda il giocatore). Lui vede **dal basso, tra due chiappe** che ogni tanto si stringono; ogni tanto **si scoreggia in faccia da solo** (schermo verde, nausea) e le mani provano a tirarla fuori. In chat scrive solo *Mmmf mmf!* |
+| **Pozione Gonfiante** | chi colpisce **si gonfia come un pallone** (con la sua maglietta tirata sopra), con la testa in cima e le braccine e le gambe che penzolano, e **vola a due blocchi da terra portato dal vento**. **Una lama, una freccia, il fuoco, un cactus o un'esplosione lo fanno scoppiare**: BANG, **sfreccia in giro sgonfiandosi** (lui lo vede da dentro, girando) e muore (**gli oggetti restano**), lasciando a terra la pelle afflosciata. Tenendo premuto **Maiusc per 3 secondi** si fa scoppiare da solo. Gli animali colpiti volano via per un po' |
+
+Chi lancia la pozione non viene colpito, a meno che non ci sia nessun altro (così la puoi provare su di te). **Solo la morte toglie le maledizioni.**
+
+| Pozione | Ingredienti (nel calderone gigante) |
+|---|---|
+| Pozione del Rospo | ninfea + palla di slime + occhio di ragno fermentato |
+| Pozione Testa nel Culo | cacca + piuma + carne marcia |
+| Pozione Gonfiante | pesce palla + polvere da sparo + filo |
+
 Le malefatte che la lente vede (si ricordano per un'ora; un riavvio del server le dimentica):
 
 | Malefatta | Quanto è grave |
@@ -466,6 +486,11 @@ Gogna              lastra ×3 / tronco, lingotto di ferro, tronco / assi ×3 (la
 Cacca (×4)         terra + semi di cacao (senza forma)
 Maiale arrosto     braciola cotta, mela, braciola cotta / braciola cotta ×3 / lastra di legno ×3
 Pentolone sbobba   calderone + falò (senza forma)
+Cappello strega    _ lana nera _ / _ lana nera _ / lana nera, occhio di ragno, lana nera
+Veste da strega    lana nera _ lana nera / lana nera, tintura viola, lana nera / lana nera ×3
+Calze da strega    lana viola, lana nera, lana viola / lana nera _ lana nera / lana viola _ lana viola
+Stivali da strega  tintura nera _ tintura nera / cuoio _ cuoio
+Calderone gigante  _ verruca del Nether _ / lingotto di ferro, calderone, lingotto di ferro / lingotto di ferro, falò, lingotto di ferro
 ```
 (assi e tronchi sono di quercia scura)
 
@@ -478,6 +503,8 @@ Pentolone sbobba   calderone + falò (senza forma)
 | `/punizione amputa <vittima> <arto>` | `mano_destra`, `mano_sinistra`, `piede_destro`, `piede_sinistro` |
 | `/punizione spezza <vittima> <osso>` | `braccio_destro`, `braccio_sinistro`, `gamba_destra`, `gamba_sinistra`, `tutte` |
 | `/punizione segni <vittima> <frustate> <morsi> <bruciature>` | segni sulla pelle (bruciature da 0 a 100) |
+| `/punizione maledizione <giocatori> <rospo\|sedere\|pallone\|nessuna>` | una maledizione della strega senza lanciare la pozione (o la toglie) |
+| `/punizione scoppia <giocatori>` | fa scoppiare chi è un pallone |
 | `/punizione allunga <vittima>` | allungato come dai cavalli, per un minuto |
 
 - Messaggi di morte per ogni macchinario, con il nome del boia: *Luigi ha perso la testa per colpa di Mario*, *Luigi è stato cotto nel toro di bronzo da Mario*, *Luigi è stato dato in pasto ai ratti da Mario*...
