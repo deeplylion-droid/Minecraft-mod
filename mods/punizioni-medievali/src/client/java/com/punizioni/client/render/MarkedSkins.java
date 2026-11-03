@@ -3,6 +3,7 @@ package com.punizioni.client.render;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.punizioni.Punizioni;
 import com.punizioni.data.Body;
+import com.punizioni.data.Filth;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -10,10 +11,12 @@ import net.minecraft.core.ClientAsset;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.entity.player.PlayerSkin;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +26,8 @@ import java.util.UUID;
 /**
  * The player's own skin with what the punishments left on it, painted at four times the skin's
  * resolution so the marks have edges and shading: lash welts across the back (fresh ones bright and
- * dripping, old ones dark scabs), rat bites all over, the charring of the stake. One texture per
+ * dripping, old ones dark scabs), rat bites all over, the charring of the stake, dung exactly where
+ * it hit (wet and running at first, then dry and cracked). One texture per
  * player, redrawn only when something changes. Where marks go comes from the player's UUID, so every
  * client paints the same marks in the same places.
  */
@@ -34,8 +38,10 @@ public final class MarkedSkins {
     private static final int UPSCALE = 4;
     /** Lashes stay fresh (bright red, dripping) this long. */
     private static final long FRESH_TICKS = 20 * 40;
+    /** Dung goes from wet to dry in three of these steps. */
+    private static final long DRY_STEP = 20 * 30;
 
-    private record Key(Identifier base, int lashes, int bites, int burn, int fresh) {
+    private record Key(Identifier base, int lashes, int bites, int burn, int fresh, int filth) {
     }
 
     private static final class Entry {
@@ -51,11 +57,14 @@ public final class MarkedSkins {
     private static final Map<Identifier, NativeImage> SOURCES = new HashMap<>();
 
     /** The marked version of this player's skin (the skin itself while the original cannot be read). */
-    public static PlayerSkin marked(PlayerSkin skin, UUID player, Body body, long now) {
+    public static PlayerSkin marked(PlayerSkin skin, UUID player, Body body, Filth filth, long now) {
         Identifier base = skin.body().texturePath();
         long since = now - body.lastLash();
         int fresh = body.lastLash() <= 0L || since > FRESH_TICKS ? 0 : 1 + (int) Math.min(4L, since / 25L);
-        Key key = new Key(base, body.lashes(), body.bites(), Math.round(body.burn() * 12.0F), fresh);
+        // dung dries in three steps
+        int dry = filth.clean() ? 0 : (int) Math.min(3L, Math.max(0L, now - filth.lastHit()) / DRY_STEP);
+        int filthKey = filth.clean() ? 0 : filth.splats().hashCode() * 31 + dry + 1;
+        Key key = new Key(base, body.lashes(), body.bites(), Math.round(body.burn() * 12.0F), fresh, filthKey);
         Entry e = ENTRIES.get(player);
         if (e != null && e.key.equals(key)) {
             if (e.from != skin) {
@@ -84,7 +93,7 @@ public final class MarkedSkins {
                 e.texture = new DynamicTexture(id::toString, out);
                 Minecraft.getInstance().getTextureManager().register(e.id, e.texture);
             }
-            paint(src, e.texture.getPixels(), player, body, fresh);
+            paint(src, e.texture.getPixels(), player, body, fresh, filth, dry, skin.model() == PlayerModelType.SLIM);
             e.texture.upload();
             e.key = key;
             e.from = skin;
@@ -116,7 +125,7 @@ public final class MarkedSkins {
             // feet (bottoms of the legs)
             {8, 16, 4, 4}, {24, 48, 4, 4}};
 
-    private static void paint(NativeImage src, NativeImage out, UUID player, Body body, int fresh) {
+    private static void paint(NativeImage src, NativeImage out, UUID player, Body body, int fresh, Filth filth, int dry, boolean slim) {
         int sw = src.getWidth();
         int sh = src.getHeight();
         // one skin pixel of the 64-wide layout = scale image pixels (HD skins are bigger)
@@ -149,6 +158,142 @@ public final class MarkedSkins {
             float fx = face[0] + 0.5F + b.nextFloat() * (face[2] - 1.0F);
             float fy = face[1] + 0.5F + b.nextFloat() * (face[3] - 1.0F);
             bite(out, scale, fx, fy, 0.45F + b.nextFloat() * 0.35F, b);
+        }
+        List<Integer> splats = filth.splats();
+        for (int i = 0; i < splats.size(); i++) {
+            // the newest one is still wet whatever the others are
+            dung(out, scale, splats.get(i), slim, wide, i == splats.size() - 1 ? dry : Math.max(dry, 2));
+        }
+    }
+
+    // ------------------------------------------------------------------ dung
+
+    /** The skin's boxes in the 64-wide layout: u, v, width, height, depth (head, body, arms, legs). */
+    private static final int[][] BOXES = {{0, 0, 8, 8, 8}, {16, 16, 8, 12, 4}, {40, 16, 4, 12, 4}, {32, 48, 4, 12, 4}, {0, 16, 4, 12, 4},
+            {16, 48, 4, 12, 4}};
+    /** Where each box's outer layer (hat, jacket, sleeves, trousers) starts. */
+    private static final int[][] OVERLAYS = {{32, 0}, {16, 32}, {40, 32}, {48, 48}, {0, 32}, {0, 48}};
+
+    /** A face of a box in the skin: x, y, width, height. */
+    private static float[] faceRect(int u, int v, int w, int h, int d, int face) {
+        return switch (face) {
+            case Filth.TOP -> new float[]{u + d, v, w, d};
+            case Filth.BOTTOM -> new float[]{u + d + w, v, w, d};
+            case Filth.RIGHT -> new float[]{u, v + d, d, h};
+            case Filth.FRONT -> new float[]{u + d, v + d, w, h};
+            case Filth.LEFT -> new float[]{u + d + w, v + d, d, h};
+            default -> new float[]{u + 2 * d + w, v + d, w, h};
+        };
+    }
+
+    /**
+     * A splat of dung where it hit: lumps, a dark wet middle, crumbs around it, runs down the face
+     * while wet ({@code dry} 0), paler and cracked once dry (3). On the skin and on its outer layer,
+     * never past the edges of that face (the layout puts other parts of the body there).
+     */
+    private static void dung(NativeImage out, int scale, int splat, boolean slim, boolean wide, int dry) {
+        int part = Filth.part(splat);
+        if (part > Filth.LEFT_LEG) {
+            return;
+        }
+        if (!wide && (part == Filth.LEFT_ARM || part == Filth.LEFT_LEG)) {
+            // old 64x32 skins: the left limbs are the right ones mirrored
+            part--;
+        }
+        int[] box = BOXES[part];
+        int bw = slim && (part == Filth.RIGHT_ARM || part == Filth.LEFT_ARM) ? 3 : box[2];
+        float[] rect = faceRect(box[0], box[1], bw, box[3], box[4], Filth.face(splat));
+        float cx = rect[0] + Filth.u(splat) * rect[2];
+        float cy = rect[1] + Filth.v(splat) * rect[3];
+        float size = 0.85F + Filth.size(splat) * 0.42F;
+        int layers = wide || part == Filth.HEAD ? 2 : 1;
+        for (int layer = 0; layer < layers; layer++) {
+            float dx = layer == 0 ? 0.0F : OVERLAYS[part][0] - box[0];
+            float dy = layer == 0 ? 0.0F : OVERLAYS[part][1] - box[1];
+            float[] clip = {rect[0] + dx, rect[1] + dy, rect[2], rect[3]};
+            lumps(out, scale, cx + dx, cy + dy, size, new Random(splat * 31L + 5L), clip, dry, layer == 1);
+        }
+    }
+
+    private static final int[] DUNG_WET = {0xFF2E1B0C, 0xFF46290F, 0xFF5E3816, 0xFF7A4C22, 0xFFA07448};
+    private static final int[] DUNG_DRY = {0xFF3E2A18, 0xFF5A4028, 0xFF73563A, 0xFF8C7052, 0xFFA48A6A};
+
+    private static void lumps(NativeImage out, int scale, float cx, float cy, float size, Random r, float[] clip, int dry, boolean overlay) {
+        int[] ramp = dry >= 2 ? DUNG_DRY : DUNG_WET;
+        float k = dry / 3.0F;
+        // the halo of smeared brown
+        clipDot(out, scale, cx, cy, size * 1.25F, mixRamp(ramp, 1, 2, k), 0.55F - 0.15F * k, overlay, clip);
+        int lumps = 3 + r.nextInt(4);
+        for (int i = 0; i < lumps; i++) {
+            float a = r.nextFloat() * Mth.TWO_PI;
+            float d = r.nextFloat() * size * 0.7F;
+            float rad = size * (0.35F + r.nextFloat() * 0.35F);
+            float lx = cx + Mth.cos(a) * d;
+            float ly = cy + Mth.sin(a) * d * 0.8F;
+            clipDot(out, scale, lx, ly, rad, ramp[1], 0.95F, overlay, clip);
+            clipDot(out, scale, lx - rad * 0.2F, ly - rad * 0.25F, rad * 0.6F, ramp[2], 0.9F, overlay, clip);
+            if (dry < 2) {
+                // a wet shine on top of the lump
+                clipDot(out, scale, lx - rad * 0.35F, ly - rad * 0.4F, rad * 0.22F, ramp[4], 0.8F, overlay, clip);
+            } else if (r.nextInt(2) == 0) {
+                // dry and cracked
+                clipDot(out, scale, lx + rad * 0.2F, ly, rad * 0.12F, ramp[0], 0.9F, overlay, clip);
+            }
+        }
+        clipDot(out, scale, cx, cy, size * 0.4F, ramp[0], 0.9F, overlay, clip);
+        // crumbs flung round it
+        int crumbs = 4 + r.nextInt(5);
+        for (int i = 0; i < crumbs; i++) {
+            float a = r.nextFloat() * Mth.TWO_PI;
+            float d = size * (1.1F + r.nextFloat() * 1.1F);
+            clipDot(out, scale, cx + Mth.cos(a) * d, cy + Mth.sin(a) * d, 0.12F + r.nextFloat() * 0.18F, ramp[1 + r.nextInt(2)], 0.9F, overlay, clip);
+        }
+        // while wet, it runs down
+        if (dry < 2) {
+            int runs = 1 + r.nextInt(3);
+            for (int i = 0; i < runs; i++) {
+                float x = cx + (r.nextFloat() - 0.5F) * size * 1.2F;
+                float len = size * (0.8F + r.nextFloat() * 1.6F) * (dry == 0 ? 1.0F : 0.6F);
+                for (float t = 0.0F; t < len; t += 0.2F) {
+                    clipDot(out, scale, x + Mth.sin(t * 2.0F + i) * 0.08F, cy + size * 0.3F + t, 0.2F * (1.0F - t / (len + 0.4F)) + 0.08F, ramp[1],
+                            0.9F, overlay, clip);
+                }
+            }
+        }
+    }
+
+    private static int mixRamp(int[] ramp, int a, int b, float t) {
+        return mix(ramp[a], ramp[b], t);
+    }
+
+    /** A soft dot, kept inside {@code clip} (skin pixels: x, y, width, height). */
+    private static void clipDot(NativeImage out, int scale, float px, float py, float rad, int color, float alpha, boolean overlay, float[] clip) {
+        float cx = px * scale;
+        float cy = py * scale;
+        float rr = Math.max(0.6F, rad * scale);
+        int x0 = Math.max(Mth.floor(cx - rr), Mth.floor(clip[0] * scale));
+        int x1 = Math.min(Mth.ceil(cx + rr), Mth.ceil((clip[0] + clip[2]) * scale) - 1);
+        int y0 = Math.max(Mth.floor(cy - rr), Mth.floor(clip[1] * scale));
+        int y1 = Math.min(Mth.ceil(cy + rr), Mth.ceil((clip[1] + clip[3]) * scale) - 1);
+        for (int y = y0; y <= y1; y++) {
+            for (int x = x0; x <= x1; x++) {
+                if (x < 0 || y < 0 || x >= out.getWidth() || y >= out.getHeight()) {
+                    continue;
+                }
+                float dx = x + 0.5F - cx;
+                float dy = y + 0.5F - cy;
+                float d = Mth.sqrt(dx * dx + dy * dy) / rr;
+                if (d > 1.0F) {
+                    continue;
+                }
+                int c = out.getPixel(x, y);
+                if (overlay && c >>> 24 < 16) {
+                    continue;
+                }
+                float k = alpha * (d < 0.6F ? 1.0F : 1.0F - (d - 0.6F) / 0.4F);
+                int m = mix(c, color, k);
+                out.setPixel(x, y, (c >>> 24 == 0 ? 0xFF000000 : c & 0xFF000000) | (m & 0x00FFFFFF));
+            }
         }
     }
 

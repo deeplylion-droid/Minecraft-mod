@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "LIL",
+    "PPP"
+  ],
+  "key": {
+    "S": "minecraft:dark_oak_slab",
+    "L": "minecraft:dark_oak_log",
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:dark_oak_planks"
+  },
+  "result": {
+    "id": "punizioni:pillory",
+    "count": 1
+  }
+}

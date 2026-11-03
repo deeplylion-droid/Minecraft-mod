@@ -25,6 +25,8 @@ public final class Net {
         public static final int BONE = 6;
         public static final int PECK = 7;
         public static final int HANG = 8;
+        /** Dung in the face (strength 1) or elsewhere (less). */
+        public static final int POOP = 9;
 
         public static final Type<VictimFx> TYPE = new Type<>(Punizioni.id("victim_fx"));
         public static final StreamCodec<ByteBuf, VictimFx> CODEC = StreamCodec.composite(

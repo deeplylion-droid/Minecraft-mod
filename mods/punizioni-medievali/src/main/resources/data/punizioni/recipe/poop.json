@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:dirt",
+    "minecraft:cocoa_beans"
+  ],
+  "result": {
+    "id": "punizioni:poop",
+    "count": 4
+  }
+}

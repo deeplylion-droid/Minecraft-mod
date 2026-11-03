@@ -1,0 +1,14 @@
+{
+ "layers": {
+  "humanoid": [
+   {
+    "texture": "punizioni:jester"
+   }
+  ],
+  "humanoid_leggings": [
+   {
+    "texture": "punizioni:jester"
+   }
+  ]
+ }
+}

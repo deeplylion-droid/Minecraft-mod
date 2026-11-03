@@ -7,6 +7,7 @@ import com.punizioni.data.Limb;
 import com.punizioni.machine.Gallows;
 import com.punizioni.machine.IronMaiden;
 import com.punizioni.machine.MachineKind;
+import com.punizioni.machine.PilloryPose;
 import com.punizioni.machine.Pyre;
 import com.punizioni.machine.RackGeometry;
 import com.punizioni.machine.RatTable;
@@ -20,7 +21,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * How bodies look in the machines and after: chained up for the lash, spread on the rack (and
  * stretched like rubber), kneeling at the block, tied to the stake, face down under the blade, spread
- * on the wheel, hanging from the noose. Called at the end of PlayerModel.setupAnim (poses) and from
+ * on the wheel, hanging from the noose, bent over in the pillory. Called at the end of PlayerModel.setupAnim (poses) and from
  * AvatarRenderer (whole-body rotations and offsets).
  */
 public final class Poses {
@@ -56,6 +57,7 @@ public final class Poses {
                 case GUILLOTINE -> prone(m, v);
                 case WHEEL -> spread(m, v, t, 0.85F, 0.35F, false);
                 case GALLOWS -> hanged(m, v, t);
+                case PILLORY -> pillory(m, v, t);
                 default -> {
                 }
             }
@@ -292,6 +294,41 @@ public final class Poses {
         m.leftLeg.xRot = 0.0F;
         m.head.xRot = Mth.clamp(m.head.xRot, -0.3F, 0.6F);
         m.head.yRot = Mth.clamp(m.head.yRot, -0.4F, 0.4F);
+    }
+
+    /**
+     * Bent over behind the pillory's board: the head out in front of it, the arms through its side
+     * holes (PilloryPose). The head turns a little in its hole; a fresh splat of dung makes it jerk
+     * back and shake, the hands writhe.
+     */
+    private static void pillory(PlayerModel m, Visuals v, float t) {
+        float k = v.a;
+        m.body.xRot = PilloryPose.BEND * k;
+        m.body.y = PilloryPose.NECK_Y * k;
+        m.body.z = PilloryPose.NECK_Z * k;
+        float flinch = v.sinceSplat < 14.0F && v.alive ? 1.0F - v.sinceSplat / 14.0F : 0.0F;
+        m.head.y = Mth.lerp(k, 0.0F, PilloryPose.HEAD_Y);
+        m.head.z = Mth.lerp(k, 0.0F, PilloryPose.HEAD_Z);
+        m.head.xRot = Mth.clamp(m.head.xRot, -PilloryPose.HEAD_PITCH, PilloryPose.HEAD_PITCH) - 0.35F * flinch;
+        m.head.yRot = Mth.clamp(m.head.yRot, -PilloryPose.HEAD_YAW, PilloryPose.HEAD_YAW) + Mth.sin(t * 2.6F) * 0.18F * flinch;
+        m.head.zRot = 0.0F;
+        float writhe = tremble(t, 1.9F, 0.04F + 0.12F * flinch);
+        m.rightArm.x = -5.0F;
+        m.rightArm.y = Mth.lerp(k, m.rightArm.y, PilloryPose.SHOULDER_Y);
+        m.rightArm.z = PilloryPose.SHOULDER_Z * k;
+        m.rightArm.xRot = PilloryPose.ARM_X_ROT * k;
+        m.rightArm.yRot = PilloryPose.ARM_SPREAD * k;
+        m.rightArm.zRot = writhe;
+        m.leftArm.x = 5.0F;
+        m.leftArm.y = Mth.lerp(k, m.leftArm.y, PilloryPose.SHOULDER_Y);
+        m.leftArm.z = PilloryPose.SHOULDER_Z * k;
+        m.leftArm.xRot = PilloryPose.ARM_X_ROT * k;
+        m.leftArm.yRot = -PilloryPose.ARM_SPREAD * k;
+        m.leftArm.zRot = -writhe;
+        m.rightLeg.xRot = 0.0F;
+        m.leftLeg.xRot = 0.0F;
+        m.rightLeg.zRot = 0.04F;
+        m.leftLeg.zRot = -0.04F;
     }
 
     private static void hanged(PlayerModel m, Visuals v, float t) {

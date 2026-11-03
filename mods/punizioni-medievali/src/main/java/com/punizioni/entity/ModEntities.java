@@ -8,6 +8,7 @@ import com.punizioni.machine.Guillotine;
 import com.punizioni.machine.IronMaiden;
 import com.punizioni.machine.Machine;
 import com.punizioni.machine.MachineKind;
+import com.punizioni.machine.Pillory;
 import com.punizioni.machine.Pyre;
 import com.punizioni.machine.QuarteringRack;
 import com.punizioni.machine.RatTable;
@@ -52,6 +53,8 @@ public final class ModEntities {
             EntityType.Builder.of(BrazenBull::new, MobCategory.MISC).sized(3.4F, 2.6F));
     public static final EntityType<Gallows> GALLOWS = machine(MachineKind.GALLOWS,
             EntityType.Builder.of(Gallows::new, MobCategory.MISC).sized(3.2F, 5.2F));
+    public static final EntityType<Pillory> PILLORY = machine(MachineKind.PILLORY,
+            EntityType.Builder.of(Pillory::new, MobCategory.MISC).sized(2.3F, 2.5F));
 
     public static final EntityType<DraftHorse> DRAFT_HORSE = register("draft_horse",
             EntityType.Builder.of(DraftHorse::new, MobCategory.MISC).sized(1.3964844F, 1.6F).eyeHeight(1.52F).clientTrackingRange(10)
@@ -59,6 +62,11 @@ public final class ModEntities {
     public static final EntityType<Rat> RAT = register("rat",
             EntityType.Builder.of(Rat::new, MobCategory.MISC).sized(0.45F, 0.3F).eyeHeight(0.2F).clientTrackingRange(6).updateInterval(1)
                     .noSave());
+
+    /** A thrown lump of dung. */
+    public static final EntityType<PoopProjectile> POOP = register("poop",
+            EntityType.Builder.<PoopProjectile>of(PoopProjectile::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4)
+                    .updateInterval(10));
 
     private static <T extends Machine> EntityType<T> machine(MachineKind kind, EntityType.Builder<T> builder) {
         EntityType<T> type = register(kind.id(), builder.clientTrackingRange(10).updateInterval(2).fireImmune());

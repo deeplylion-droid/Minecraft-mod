@@ -78,6 +78,12 @@ public class MachineModel extends EntityModel<MachineRenderState> {
                     this.hatch.yRot -= s.a * 1.75F;
                 }
             }
+            case PILLORY -> {
+                // the upper half of the board slides up on its posts when open
+                if (this.lunetteTop != null) {
+                    this.lunetteTop.y -= (1.0F - s.a) * 7.0F;
+                }
+            }
             case GALLOWS -> {
                 float drop = s.a * 1.55F;
                 if (this.trapLeft != null) {

@@ -11,6 +11,7 @@ import com.punizioni.machine.Gallows;
 import com.punizioni.machine.Guillotine;
 import com.punizioni.machine.Machine;
 import com.punizioni.machine.MachineKind;
+import com.punizioni.machine.PilloryPose;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Avatar;
@@ -134,6 +135,14 @@ public final class VictimCamera {
                 eye = new Vector3f(0.0F, avatar.getEyeHeight(), hand ? -0.2F : 0.0F);
             }
             case BRAZEN_BULL -> eye = new Vector3f(0.0F, v.state == BrazenBull.IDLE ? avatar.getEyeHeight() : 0.62F, 0.0F);
+            case PILLORY -> {
+                // the head out in front of the board: the eyes in the face, looking at the crowd
+                float k = v.a;
+                eye = new Vector3f(0.0F, Mth.lerp(k, avatar.getEyeHeight(), (24.0F - PilloryPose.HEAD_Y + 3.6F) * PX),
+                        Mth.lerp(k, 0.0F, (PilloryPose.HEAD_Z - 3.2F) * PX));
+                minPitch = -40.0F;
+                maxPitch = 45.0F;
+            }
             default -> eye = new Vector3f(0.0F, avatar.getEyeHeight(), 0.0F);
         }
         m.transformPosition(eye);

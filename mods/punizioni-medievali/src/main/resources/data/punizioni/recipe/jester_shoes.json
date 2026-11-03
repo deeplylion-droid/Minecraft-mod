@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "N N",
+    "R Y"
+  ],
+  "key": {
+    "R": "minecraft:red_wool",
+    "N": "minecraft:gold_nugget",
+    "Y": "minecraft:yellow_wool"
+  },
+  "result": {
+    "id": "punizioni:jester_shoes",
+    "count": 1
+  }
+}

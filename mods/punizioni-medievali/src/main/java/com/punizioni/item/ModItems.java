@@ -92,6 +92,43 @@ public final class ModItems {
     /** The prisoner's rope: ties a player's hands and leads them on a 4-block rope (see server.Bonds). */
     public static final Item PRISONER_ROPE = register("prisoner_rope", Item::new, new Item.Properties().stacksTo(16));
 
+    /**
+     * The jester's motley: red and yellow halves, gold bells on every point. Like the king's
+     * regalia the vanilla armour layer draws nothing: hat, collar, tunic, hose and shoes are 3D
+     * models (OutfitsLayer), the points of the hat swing, the bells ring as the jester walks.
+     */
+    public static final ResourceKey<EquipmentAsset> JESTER_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Punizioni.id("jester"));
+    public static final ArmorMaterial JESTER = new ArmorMaterial(10,
+            Map.of(ArmorType.BOOTS, 1, ArmorType.LEGGINGS, 1, ArmorType.CHESTPLATE, 2, ArmorType.HELMET, 1, ArmorType.BODY, 2),
+            22, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, ItemTags.WOOL, JESTER_ASSET);
+
+    public static final Item JESTER_HAT = register("jester_hat", Item::new,
+            new Item.Properties().humanoidArmor(JESTER, ArmorType.HELMET).rarity(Rarity.UNCOMMON));
+    public static final Item JESTER_TUNIC = register("jester_tunic", Item::new,
+            new Item.Properties().humanoidArmor(JESTER, ArmorType.CHESTPLATE).rarity(Rarity.UNCOMMON));
+    public static final Item JESTER_HOSE = register("jester_hose", Item::new,
+            new Item.Properties().humanoidArmor(JESTER, ArmorType.LEGGINGS).rarity(Rarity.UNCOMMON));
+    public static final Item JESTER_SHOES = register("jester_shoes", Item::new,
+            new Item.Properties().humanoidArmor(JESTER, ArmorType.BOOTS).rarity(Rarity.UNCOMMON));
+
+    /** The prisoner's rags: a sackcloth hood and tunic, torn breeches, foot rags, rusty irons on wrists and ankles (3D, OutfitsLayer). */
+    public static final ResourceKey<EquipmentAsset> PEASANT_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Punizioni.id("peasant"));
+    public static final ArmorMaterial PEASANT = new ArmorMaterial(4,
+            Map.of(ArmorType.BOOTS, 0, ArmorType.LEGGINGS, 1, ArmorType.CHESTPLATE, 1, ArmorType.HELMET, 0, ArmorType.BODY, 1),
+            5, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F, ItemTags.WOOL, PEASANT_ASSET);
+
+    public static final Item PEASANT_HOOD = register("peasant_hood", Item::new,
+            new Item.Properties().humanoidArmor(PEASANT, ArmorType.HELMET));
+    public static final Item PEASANT_TUNIC = register("peasant_tunic", Item::new,
+            new Item.Properties().humanoidArmor(PEASANT, ArmorType.CHESTPLATE));
+    public static final Item PEASANT_BREECHES = register("peasant_breeches", Item::new,
+            new Item.Properties().humanoidArmor(PEASANT, ArmorType.LEGGINGS));
+    public static final Item PEASANT_WRAPS = register("peasant_wraps", Item::new,
+            new Item.Properties().humanoidArmor(PEASANT, ArmorType.BOOTS));
+
+    /** Dung: animals drop it now and then; thrown, it stains whoever it hits (see server.Dung). */
+    public static final Item POOP = register("poop", PoopItem::new, new Item.Properties().stacksTo(16));
+
     public static final Map<MachineKind, Item> MACHINES = new EnumMap<>(MachineKind.class);
 
     static {
@@ -126,6 +163,15 @@ public final class ModItems {
             output.accept(ROYAL_CROWN);
             output.accept(ROYAL_CAPE);
             output.accept(OVERSEER_WHIP);
+            output.accept(JESTER_HAT);
+            output.accept(JESTER_TUNIC);
+            output.accept(JESTER_HOSE);
+            output.accept(JESTER_SHOES);
+            output.accept(PEASANT_HOOD);
+            output.accept(PEASANT_TUNIC);
+            output.accept(PEASANT_BREECHES);
+            output.accept(PEASANT_WRAPS);
+            output.accept(POOP);
         });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
             output.accept(ROYAL_LENS);

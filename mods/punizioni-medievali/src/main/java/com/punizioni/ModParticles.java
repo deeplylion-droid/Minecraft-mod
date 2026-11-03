@@ -26,6 +26,13 @@ public final class ModParticles {
     public static final SimpleParticleType CRACK = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("crack"),
             FabricParticleTypes.simple(true));
 
+    /** A brown lump of dung: flies off a splat, falls and leaves a smear where it lands. */
+    public static final SimpleParticleType DUNG = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("dung"),
+            FabricParticleTypes.simple(true));
+    /** A fly buzzing round someone covered in dung. */
+    public static final SimpleParticleType FLY = Registry.register(BuiltInRegistries.PARTICLE_TYPE, Punizioni.id("fly"),
+            FabricParticleTypes.simple(false));
+
     public static void init() {
     }
 }

@@ -1,6 +1,7 @@
 package com.punizioni.client.render;
 
 import com.punizioni.data.Body;
+import com.punizioni.data.Filth;
 import com.punizioni.data.ModData;
 import com.punizioni.item.ModItems;
 import com.punizioni.machine.ChoppingBlock;
@@ -8,6 +9,7 @@ import com.punizioni.machine.Gallows;
 import com.punizioni.machine.Guillotine;
 import com.punizioni.machine.Machine;
 import com.punizioni.machine.MachineKind;
+import com.punizioni.machine.Pillory;
 import com.punizioni.machine.QuarteringRack;
 import com.punizioni.machine.Wheel;
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey;
@@ -52,6 +54,11 @@ public final class Visuals {
     public boolean crown, cape;
     /** Hands tied with the prisoner's rope; leading someone on one. */
     public boolean bound, captor;
+    /** The jester's motley and the prisoner's rags: bits for hat/hood (1), tunic (2), hose/breeches (4), shoes/wraps (8). */
+    public int jester, peasant;
+    /** Dung on them, and ticks since the last splat. */
+    public Filth filth = Filth.CLEAN;
+    public float sinceSplat = 1000.0F;
     /** The hand holding the overseer's whip (its lash is drawn from the handle), or null. */
     public @Nullable HumanoidArm whipArm;
     /** Drawn in the inventory's little window, not in the world: no cloth or lash simulation there. */
@@ -82,11 +89,18 @@ public final class Visuals {
         boolean stretched = body.stretchUntil() > now;
         boolean bound = ModData.isBound(entity);
         boolean captor = Captives.isCaptor(entity.getUUID());
+        int jester = outfit(entity, ModItems.JESTER_HAT, ModItems.JESTER_TUNIC, ModItems.JESTER_HOSE, ModItems.JESTER_SHOES);
+        int peasant = outfit(entity, ModItems.PEASANT_HOOD, ModItems.PEASANT_TUNIC, ModItems.PEASANT_BREECHES, ModItems.PEASANT_WRAPS);
+        Filth filth = ModData.filth(entity);
         if (!(entity.getVehicle() instanceof Machine) && body == Body.NONE && !hood && !apron && !breeches && !boots && !stretched && !crown && !cape
-                && whipArm == null && !bound && !captor) {
+                && whipArm == null && !bound && !captor && jester == 0 && peasant == 0 && filth.clean()) {
             return null;
         }
         Visuals v = new Visuals();
+        v.jester = jester;
+        v.peasant = peasant;
+        v.filth = filth;
+        v.sinceSplat = filth.lastHit() > 0L ? now - filth.lastHit() + partial : 1000.0F;
         v.crown = crown;
         v.cape = cape;
         v.bound = bound;
@@ -126,12 +140,24 @@ public final class Visuals {
                 }
                 case Gallows g -> v.a = g.drop(partial);
                 case Guillotine g -> v.a = g.blade(partial);
+                case Pillory p -> v.a = p.board(partial);
                 case ChoppingBlock c -> v.choice = c.limb().ordinal();
                 default -> {
                 }
             }
         }
         return v;
+    }
+
+    /** Which pieces of an outfit are worn: hat (1), tunic (2), legs (4), feet (8). */
+    private static int outfit(Avatar entity, net.minecraft.world.item.Item head, net.minecraft.world.item.Item chest, net.minecraft.world.item.Item legs,
+                              net.minecraft.world.item.Item feet) {
+        int bits = 0;
+        bits |= entity.getItemBySlot(EquipmentSlot.HEAD).is(head) ? 1 : 0;
+        bits |= entity.getItemBySlot(EquipmentSlot.CHEST).is(chest) ? 2 : 0;
+        bits |= entity.getItemBySlot(EquipmentSlot.LEGS).is(legs) ? 4 : 0;
+        bits |= entity.getItemBySlot(EquipmentSlot.FEET).is(feet) ? 8 : 0;
+        return bits;
     }
 
     /** Fills the render state of a player (or mannequin) with what the mod draws on them. */
@@ -184,8 +210,8 @@ public final class Visuals {
             state.leftHandItemStack = ItemStack.EMPTY;
             state.leftArmPose = HumanoidModel.ArmPose.EMPTY;
         }
-        if (v.body.marked()) {
-            state.skin = MarkedSkins.marked(state.skin, entity.getUUID(), v.body, entity.level().getGameTime());
+        if (v.body.marked() || !v.filth.clean()) {
+            state.skin = MarkedSkins.marked(state.skin, entity.getUUID(), v.body, v.filth, entity.level().getGameTime());
         }
         if (v.hood) {
             // the executioner has no name

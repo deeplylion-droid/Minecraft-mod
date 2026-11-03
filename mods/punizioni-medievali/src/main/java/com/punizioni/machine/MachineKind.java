@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 
 import java.util.Locale;
 
-/** The ten machines, with their names in the commands. */
+/** The machines, with their names in the commands. */
 public enum MachineKind {
     WHIPPING_POST("fustigazione"),
     IRON_MAIDEN("vergine"),
@@ -18,7 +18,8 @@ public enum MachineKind {
     GUILLOTINE("ghigliottina"),
     WHEEL("ruota"),
     BRAZEN_BULL("toro"),
-    GALLOWS("forca");
+    GALLOWS("forca"),
+    PILLORY("gogna");
 
     public static final MachineKind[] ALL = values();
 

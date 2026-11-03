@@ -39,6 +39,7 @@ public final class ScreenFx {
     }
 
     private static final Identifier SPLATTER = Punizioni.id("textures/gui/blood_splatter.png");
+    private static final Identifier POOP_SPLATTER = Punizioni.id("textures/gui/poop_splatter.png");
     private static final Identifier VIGNETTE = Punizioni.id("textures/gui/vignette.png");
     private static final RandomSource RANDOM = RandomSource.create();
 
@@ -46,6 +47,8 @@ public final class ScreenFx {
     }
 
     private static final List<Splat> SPLATS = new ArrayList<>();
+    /** Dung on the screen: it hits, slides down slowly and is wiped off bit by bit. */
+    private static final List<Splat> DUNG = new ArrayList<>();
 
     /** The last blow: when, what colour, how strong. */
     private static long flashTime = -1000L;
@@ -61,6 +64,7 @@ public final class ScreenFx {
 
     public static void reset() {
         SPLATS.clear();
+        DUNG.clear();
         flashTime = -1000L;
         shakeTime = -1000L;
     }
@@ -118,6 +122,11 @@ public final class ScreenFx {
                 flash(now, 0xFF000000, 0.6F * strength, 12.0F);
                 shake(now, 5.0F * strength, 20.0F);
             }
+            case Net.VictimFx.POOP -> {
+                flash(now, 0xFF4A2E12, 0.3F + 0.25F * strength, 8.0F);
+                shake(now, 1.2F + 2.4F * strength, 8.0F);
+                dung(now, strength);
+            }
             default -> {
             }
         }
@@ -162,6 +171,30 @@ public final class ScreenFx {
         return shakeStrength * k * k;
     }
 
+    /** In the face (strength 1): one big splat over the middle of the view. Elsewhere: at an edge. */
+    private static void dung(long now, float strength) {
+        if (strength >= 0.9F) {
+            DUNG.add(new Splat(0.38F + RANDOM.nextFloat() * 0.24F, 0.34F + RANDOM.nextFloat() * 0.24F, 1.45F + RANDOM.nextFloat() * 0.4F, RANDOM.nextInt(4),
+                    0.0F, now, 150));
+            int bits = 2 + RANDOM.nextInt(3);
+            for (int i = 0; i < bits; i++) {
+                DUNG.add(new Splat(0.08F + RANDOM.nextFloat() * 0.84F, 0.08F + RANDOM.nextFloat() * 0.8F, 0.35F + RANDOM.nextFloat() * 0.35F,
+                        RANDOM.nextInt(4), 0.0F, now, 120));
+            }
+        } else {
+            int n = strength >= 0.5F ? 2 : 1;
+            for (int i = 0; i < n; i++) {
+                boolean side = RANDOM.nextBoolean();
+                float x = side ? (RANDOM.nextBoolean() ? 0.06F : 0.94F) + (RANDOM.nextFloat() - 0.5F) * 0.1F : 0.15F + RANDOM.nextFloat() * 0.7F;
+                float y = side ? 0.2F + RANDOM.nextFloat() * 0.65F : (strength >= 0.5F ? 0.05F : 0.95F) + (RANDOM.nextFloat() - 0.5F) * 0.08F;
+                DUNG.add(new Splat(x, y, 0.5F + RANDOM.nextFloat() * 0.4F + 0.3F * strength, RANDOM.nextInt(4), 0.0F, now, 90));
+            }
+        }
+        while (DUNG.size() > 14) {
+            DUNG.remove(0);
+        }
+    }
+
     private static void splats(long now, int n, float size, int life) {
         for (int i = 0; i < n; i++) {
             float x = 0.1F + RANDOM.nextFloat() * 0.8F;
@@ -181,6 +214,7 @@ public final class ScreenFx {
         }
         long now = mc.level.getGameTime();
         SPLATS.removeIf(s -> now - s.born > s.life);
+        DUNG.removeIf(s -> now - s.born > s.life);
         boolean beating = false;
         float rate = 1.0F;
         if (mc.player.getVehicle() instanceof Machine m && mc.player.isAlive()) {
@@ -359,6 +393,21 @@ public final class ScreenFx {
             int u = (s.variant & 1) * 128;
             int v = (s.variant >> 1) * 128;
             g.blit(RenderPipelines.GUI_TEXTURED, SPLATTER, x, y, u, v, (int) size, (int) size, 128, 128, 256, 256, ARGB.white(Mth.clamp(alpha, 0.0F, 1.0F)));
+        }
+
+        // dung on the screen: it slides down slowly and gets wiped off
+        for (Splat s : DUNG) {
+            float age = now - s.born + partial;
+            float k = age / s.life;
+            float alpha = k < 0.6F ? 0.97F : 0.97F * (1.0F - (k - 0.6F) / 0.4F);
+            float size = Math.min(w, h) * 0.5F * s.size * (age < 2.0F ? 0.75F + 0.125F * age : 1.0F);
+            float run = Math.min(1.0F, age / 160.0F) * size * 0.18F;
+            int x = (int) (s.x * w - size / 2.0F);
+            int y = (int) (s.y * h - size / 2.0F + run);
+            int u = (s.variant & 1) * 128;
+            int v = (s.variant >> 1) * 128;
+            g.blit(RenderPipelines.GUI_TEXTURED, POOP_SPLATTER, x, y, u, v, (int) size, (int) size, 128, 128, 256, 256,
+                    ARGB.white(Mth.clamp(alpha, 0.0F, 1.0F)));
         }
 
         float flash = flashLeft(now, partial);

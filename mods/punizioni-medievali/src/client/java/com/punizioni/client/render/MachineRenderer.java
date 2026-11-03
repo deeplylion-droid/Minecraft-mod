@@ -108,6 +108,7 @@ public class MachineRenderer<T extends Machine> extends EntityRenderer<T, Machin
                 s.b = g.drop(partial);
             }
             case ChoppingBlock c -> s.choice = c.limb().ordinal();
+            case com.punizioni.machine.Pillory p -> s.a = p.board(partial);
             default -> {
             }
         }

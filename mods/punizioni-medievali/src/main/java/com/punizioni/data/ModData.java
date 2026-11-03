@@ -34,6 +34,22 @@ public final class ModData {
         return entity.hasAttached(BOUND);
     }
 
+    /** Dung on the body: saved, washed off in water, known by every client. */
+    public static final AttachmentType<Filth> FILTH = AttachmentRegistry.create(Punizioni.id("filth"),
+            b -> b.persistent(Filth.CODEC).syncWith(Filth.STREAM_CODEC, AttachmentSyncPredicate.all()));
+
+    public static Filth filth(Entity entity) {
+        return entity.getAttachedOrElse(FILTH, Filth.CLEAN);
+    }
+
+    public static void setFilth(Entity entity, Filth filth) {
+        if (filth.clean()) {
+            entity.removeAttached(FILTH);
+        } else {
+            entity.setAttached(FILTH, filth);
+        }
+    }
+
     public static void init() {
     }
 }

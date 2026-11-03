@@ -290,13 +290,18 @@ public abstract class Machine extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        if (hand != InteractionHand.MAIN_HAND || player.getVehicle() == this || player.isSpectator()) {
+        if (hand != InteractionHand.MAIN_HAND || player.getVehicle() == this || player.isSpectator() || this.ignoresClickWith(player.getItemInHand(hand))) {
             return InteractionResult.PASS;
         }
         if (!(player instanceof ServerPlayer sp) || !(this.level() instanceof ServerLevel level)) {
             return InteractionResult.SUCCESS;
         }
         return this.use(level, sp, player.getItemInHand(hand));
+    }
+
+    /** A right click holding this goes on to the item (the dung is thrown at the pillory, it does not open it). */
+    public boolean ignoresClickWith(ItemStack stack) {
+        return false;
     }
 
     /** The executioner's right click (on the machine, or on whoever is held in it). */

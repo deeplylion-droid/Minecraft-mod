@@ -356,9 +356,9 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 ![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
 
-Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.2.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.3.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
-- **Dieci macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
+- **Undici macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
 - **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
 - **Mani, piedi e ossa non tornano**: si guarisce solo morendo. Il boia decide se fermarsi o andare fino in fondo.
 - Chi subisce vede la punizione **dai suoi occhi** (sdraiato sul cavalletto, a testa in giù sotto la lama, mentre la ruota gira, dentro il toro, appeso alla corda) con sangue sullo schermo, colpi e buio; chi guarda vede tutto da fuori, con sangue, pezzi che volano, fuoco, ratti e corvi.
@@ -375,6 +375,7 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 | **Ruota** | legato ai raggi; colpisci con la **mazza del boia** (un osso alla volta, restano storti); poi tasto destro: la ruota sale in cima al palo e **gira** | arrivano i **corvi** a beccare; accovacciato + tasto destro la riporta giù |
 | **Toro di bronzo** | chi è davanti allo sportello ci viene chiuso dentro; accendi il fuoco sotto | il bronzo diventa rosso, il fumo esce dalle narici e **le urla escono come muggiti**; un secchio d'acqua lo raffredda |
 | **Forca** | il cappio al collo; tasto destro: si apre la botola | il corpo dondola e ruota; una spada, un'ascia o le cesoie tagliano la corda. Poi arrivano i corvi |
+| **Gogna** (dalla 1.3.0) | chi sta dietro l'asse viene chiuso dentro, piegato, con **testa e mani fuori**; suona la campana e tutti leggono *Luigi è alla gogna! Tirategli la cacca!* | il pubblico gli tira la **cacca** (vedi sotto); di nuovo tasto destro: l'asse si riapre |
 
 **Il boia**: cappuccio nero con i buchi per gli occhi (nasconde il nome sopra la testa), grembiule di cuoio insanguinato con bracciali borchiati, brache e stivali, tutti **in 3D** sul personaggio. Più il gatto a nove code, la scure, la mazza e la torcia, in 3D in mano.
 
@@ -392,6 +393,18 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 ![Il prigioniero legato come un salame e portato al guinzaglio](docs/punizioni-medievali-corda.png)
 
 **Corda da prigioniero (dalla 1.2.0)**: tasto destro su un giocatore con la corda in mano e lo **leghi come un salame**: braccia strette al corpo e giri di corda dalle spalle alle caviglie, con il nodo sulla pancia. Non può più colpire, scavare, costruire, usare oggetti né aprire niente, cammina a saltelli (più piano) e **ti segue al guinzaglio** con una corda di 4 blocchi: se resta indietro viene tirato, se c'è un gradino lo scavalca, se vi separate con un teletrasporto o un portale viene riportato da te. **Da solo non può liberarsi**: lo slega solo chi l'ha legato (tasto destro su di lui, la corda torna in mano) o chiunque **tagli la corda con le cesoie**. Tasto destro su una **staccionata** mentre lo porti: lo leghi lì (la corda resta annodata al palo); di nuovo tasto destro sulla staccionata (o su di lui) per riprenderlo. Chiunque abbia una corda in mano può prendere in consegna un prigioniero legato a un palo.
+
+**Giullare, prigioniero, gogna e cacca (dalla 1.3.0)**:
+
+![Il giullare, il prigioniero alla gogna e la cacca](docs/punizioni-medievali-gogna.png)
+
+| Cosa | Com'è |
+|---|---|
+| **Vestito da giullare** (cappello, giubba, calzamaglia, scarpe) | tutto **in 3D**, rosso e giallo a quarti: cappello a **tre punte** con un sonaglio d'oro in cima a ognuna, che **ballano** a ogni passo, a ogni salto e quando giri (partire, fermarsi, saltare, atterrare: si vede); colletto a punte con i campanelli, giubba con l'orlo a punte che si muove con le gambe, maniche e calzamaglia dei colori opposti, **scarpe a punta arricciata** con un campanello. **I sonagli suonano** a ogni passo, a ogni salto e quando il giullare viene colpito: più pezzi indossi, più forte |
+| **Vestito da prigioniero** (cappuccio, saio, brache, pezze) | tutto **in 3D**: cappuccio di juta sfilacciato con la **coda lunga** che pende sulla schiena, saio di sacco rattoppato con una **corda per cintura**, stracci che pendono e ondeggiano, maniche strappate con le **manette arrugginite** ai polsi e un pezzo di **catena spezzata** che dondola, brache strappate sotto il ginocchio, pezze ai piedi e **ferri alle caviglie** |
+| **Gogna** | palco di legno, due pali, l'asse in due metà con tre buchi (collo e polsi), lucchetto, la targa **VERGOGNA**, verdura marcia per terra e un **secchio di cacca** per il pubblico. Chi è dentro vede **dai suoi occhi**, con la testa fuori dall'asse, la folla e la cacca che arriva |
+| **Cacca** | tasto destro: la **lanci** come una palla di neve (anche col distributore). **Mucche, maiali, pecore, capre e cavalli ne fanno ogni tanto** (come le galline con le uova, con un *plop*); si fa anche con terra + semi di cacao (×4). Contro la gogna colpisce davvero quello che centri: **la faccia, le mani, la schiena**, o l'asse di legno |
+| **Sporco** | dove la cacca colpisce **resta una macchia sulla skin, proprio in quel punto** (fresca e bagnata che cola, poi secca e screpolata; fino a 24 macchie), con sopra un **grumo di cacca in 3D** che si vede anche sui vestiti e sull'armatura. Chi la prende vede uno **schizzo marrone sullo schermo** (in faccia: enorme, in mezzo alla vista), chi la tira legge *Dritto in faccia a Luigi!*. Con 4 macchie o più gli girano intorno le **mosche** che ronzano. **Si lava nell'acqua** (in un attimo) **o sotto la pioggia** (piano piano): *Ti sei lavato* |
 
 Le malefatte che la lente vede (si ricordano per un'ora; un riavvio del server le dimentica):
 
@@ -431,12 +444,22 @@ Mantello reale     lana bianca, lingotto d'oro, lana bianca / lana rossa ×3 / l
 Lente del re       _ oro _ / oro, lastra di vetro, oro / _ bastone _
 Frusta del sorv.   _ _ cuoio / _ cuoio _ / bastone _ _
 Corda (×2)         filo, filo / filo, cuoio / _ _ filo (come un guinzaglio, col cuoio al posto dello slime)
+Cappello giullare  lana rossa, pepita d'oro, lana gialla / lana rossa _ lana gialla
+Giubba giullare    rossa _ gialla / rossa, pepita d'oro, gialla / gialla, pepita d'oro, rossa
+Calzamaglia        rossa, pepita d'oro, gialla / rossa _ gialla / rossa _ gialla
+Scarpe giullare    pepita d'oro _ pepita d'oro / lana rossa _ lana gialla
+Cappuccio di sacco lana marrone ×5 (come un elmo)
+Saio               pepita di ferro _ pepita di ferro / lana marrone, filo, lana marrone / lana marrone ×3
+Brache stracciate  lana marrone ×7 (come dei gambali)
+Pezze e ceppi      lana marrone _ lana marrone / pepita di ferro _ pepita di ferro
+Gogna              lastra ×3 / tronco, lingotto di ferro, tronco / assi ×3 (lastre, tronchi e assi di quercia scura)
+Cacca (×4)         terra + semi di cacao (senza forma)
 ```
 (assi e tronchi sono di quercia scura)
 
 | Comando (operatori) | Cosa fa |
 |---|---|
-| `/punizione <macchinario> <vittime>` | porta le vittime nel macchinario più vicino e comincia (`fustigazione`, `vergine`, `squartamento`, `ceppo`, `ratti`, `rogo`, `ghigliottina`, `ruota`, `toro`, `forca`) |
+| `/punizione <macchinario> <vittime>` | porta le vittime nel macchinario più vicino e comincia (`fustigazione`, `vergine`, `squartamento`, `ceppo`, `ratti`, `rogo`, `ghigliottina`, `ruota`, `toro`, `forca`, `gogna`) |
 | `/punizione avanza [macchinario]` | il passo dopo, come un clic del boia con l'attrezzo giusto |
 | `/punizione libera [vittime]` | libera chi è dentro |
 | `/punizione guarisci <vittime>` | mani, piedi, ossa, segni: tutto come prima |

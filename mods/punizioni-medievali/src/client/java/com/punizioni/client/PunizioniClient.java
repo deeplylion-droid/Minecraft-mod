@@ -4,13 +4,19 @@ import com.punizioni.ModParticles;
 import com.punizioni.Punizioni;
 import com.punizioni.client.bonds.BondsLayer;
 import com.punizioni.client.bonds.Captives;
+import com.punizioni.client.fx.Flies;
 import com.punizioni.client.fx.Gibs;
 import com.punizioni.client.fx.ScreenFx;
 import com.punizioni.client.fx.VictimCamera;
 import com.punizioni.client.particle.AshParticle;
 import com.punizioni.client.particle.BloodParticle;
 import com.punizioni.client.particle.CrackParticle;
+import com.punizioni.client.particle.DungParticle;
 import com.punizioni.client.particle.EmberParticle;
+import com.punizioni.client.particle.FlyParticle;
+import com.punizioni.client.outfit.DungLayer;
+import com.punizioni.client.outfit.OutfitsLayer;
+import com.punizioni.client.outfit.Sway;
 import com.punizioni.client.particle.SparkleParticle;
 import com.punizioni.client.render.BodyLayer;
 import com.punizioni.client.render.MachineRenderer;
@@ -40,6 +46,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.HorseRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -60,12 +67,15 @@ public class PunizioniClient implements ClientModInitializer {
         }
         EntityRendererRegistry.register(ModEntities.DRAFT_HORSE, HorseRenderer::new);
         EntityRendererRegistry.register(ModEntities.RAT, RatRenderer::new);
+        EntityRendererRegistry.register(ModEntities.POOP, ThrownItemRenderer::new);
 
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof AvatarRenderer<?> avatar) {
                 helper.register(new BodyLayer(avatar, context.getResourceManager()));
                 helper.register(new RoyalLayer(avatar, context.getResourceManager()));
                 helper.register(new BondsLayer(avatar, context.getResourceManager()));
+                helper.register(new OutfitsLayer(avatar, context.getResourceManager()));
+                helper.register(new DungLayer(avatar));
             }
         });
         ParticleProviderRegistry.getInstance().register(ModParticles.BLOOD, BloodParticle.Provider::new);
@@ -73,6 +83,8 @@ public class PunizioniClient implements ClientModInitializer {
         ParticleProviderRegistry.getInstance().register(ModParticles.ASH, AshParticle.Provider::new);
         ParticleProviderRegistry.getInstance().register(ModParticles.SPARKLE, SparkleParticle.Provider::new);
         ParticleProviderRegistry.getInstance().register(ModParticles.CRACK, CrackParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.DUNG, DungParticle.Provider::new);
+        ParticleProviderRegistry.getInstance().register(ModParticles.FLY, FlyParticle.Provider::new);
         MenuScreens.register(Inspection.MENU, ContainerScreen::new);
         ClientPlayNetworking.registerGlobalReceiver(Net.Guilty.TYPE, (payload, context) -> Guilty.receive(payload.ids()));
 
@@ -103,6 +115,8 @@ public class PunizioniClient implements ClientModInitializer {
             Lashes.tick(mc);
             Capes.tick(mc);
             Captives.tick(mc);
+            Flies.tick(mc);
+            Sway.endFrame();
             // vanilla says "press shift to get off": not from a machine
             boolean held = mc.player != null && mc.player.getVehicle() instanceof Machine;
             if (held && !wasHeld) {
@@ -121,6 +135,8 @@ public class PunizioniClient implements ClientModInitializer {
             Capes.reset();
             Captives.reset();
             Guilty.reset();
+            Flies.reset();
+            Sway.reset();
         });
 
         DESCRIBED.add(ModItems.EXECUTIONER_HOOD);
@@ -137,6 +153,15 @@ public class PunizioniClient implements ClientModInitializer {
         DESCRIBED.add(ModItems.ROYAL_LENS);
         DESCRIBED.add(ModItems.OVERSEER_WHIP);
         DESCRIBED.add(ModItems.PRISONER_ROPE);
+        DESCRIBED.add(ModItems.JESTER_HAT);
+        DESCRIBED.add(ModItems.JESTER_TUNIC);
+        DESCRIBED.add(ModItems.JESTER_HOSE);
+        DESCRIBED.add(ModItems.JESTER_SHOES);
+        DESCRIBED.add(ModItems.PEASANT_HOOD);
+        DESCRIBED.add(ModItems.PEASANT_TUNIC);
+        DESCRIBED.add(ModItems.PEASANT_BREECHES);
+        DESCRIBED.add(ModItems.PEASANT_WRAPS);
+        DESCRIBED.add(ModItems.POOP);
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, flag, lines) -> {
             if (DESCRIBED.contains(stack.getItem())) {
                 String base = "item." + Punizioni.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + ".desc";

@@ -245,5 +245,52 @@
         "attenuation_distance": 96
       }
     ]
+  },
+  "jingle": {
+    "subtitle": "subtitles.punizioni.jingle",
+    "sounds": [
+      {
+        "name": "punizioni:jingle1"
+      },
+      {
+        "name": "punizioni:jingle2"
+      },
+      {
+        "name": "punizioni:jingle3"
+      }
+    ]
+  },
+  "splat": {
+    "subtitle": "subtitles.punizioni.splat",
+    "sounds": [
+      {
+        "name": "punizioni:splat1"
+      },
+      {
+        "name": "punizioni:splat2"
+      },
+      {
+        "name": "punizioni:splat3"
+      }
+    ]
+  },
+  "plop": {
+    "subtitle": "subtitles.punizioni.plop",
+    "sounds": [
+      {
+        "name": "punizioni:plop1"
+      },
+      {
+        "name": "punizioni:plop2"
+      }
+    ]
+  },
+  "flies": {
+    "subtitle": "subtitles.punizioni.flies",
+    "sounds": [
+      {
+        "name": "punizioni:flies1"
+      }
+    ]
   }
 }
