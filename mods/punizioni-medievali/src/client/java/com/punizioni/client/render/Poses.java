@@ -65,6 +65,13 @@ public final class Poses {
         if (v.bound && v.kind == null) {
             tied(m, t);
         }
+        if (v.sinceGruel < com.punizioni.client.fx.Disgusts.LENGTH && v.alive) {
+            // gruel: the head shakes "no, no" and jerks back
+            float k = 1.0F - v.sinceGruel / com.punizioni.client.fx.Disgusts.LENGTH;
+            m.head.yRot += Mth.sin(v.sinceGruel * 1.7F) * 0.45F * k;
+            m.head.xRot -= 0.25F * k;
+            m.head.zRot += Mth.sin(v.sinceGruel * 0.9F) * 0.12F * k;
+        }
         if (v.stretch > 0.001F) {
             stretch(m, v.stretch);
         }

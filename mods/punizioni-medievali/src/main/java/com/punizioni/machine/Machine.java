@@ -290,7 +290,18 @@ public abstract class Machine extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
-        if (hand != InteractionHand.MAIN_HAND || player.getVehicle() == this || player.isSpectator() || this.ignoresClickWith(player.getItemInHand(hand))) {
+        if (hand != InteractionHand.MAIN_HAND || player.getVehicle() == this || player.isSpectator()) {
+            return InteractionResult.PASS;
+        }
+        ItemStack held = player.getItemInHand(hand);
+        if (held.is(com.punizioni.item.ModItems.GRUEL) && this.victim() instanceof Player poor && poor != player && poor.isAlive()) {
+            // a bowl of gruel for whoever is held here (a click on the machine or on them)
+            if (this.level() instanceof ServerLevel level) {
+                com.punizioni.server.Gruel.feed(level, player, poor, held, hand);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        if (this.ignoresClickWith(held)) {
             return InteractionResult.PASS;
         }
         if (!(player instanceof ServerPlayer sp) || !(this.level() instanceof ServerLevel level)) {
@@ -301,7 +312,8 @@ public abstract class Machine extends Entity {
 
     /** A right click holding this goes on to the item (the dung is thrown at the pillory, it does not open it). */
     public boolean ignoresClickWith(ItemStack stack) {
-        return false;
+        // with nobody inside, a bowl of gruel is for eating, not a command for the machine
+        return stack.is(com.punizioni.item.ModItems.GRUEL);
     }
 
     /** The executioner's right click (on the machine, or on whoever is held in it). */

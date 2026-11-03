@@ -68,6 +68,13 @@ public final class ModEntities {
             EntityType.Builder.<PoopProjectile>of(PoopProjectile::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4)
                     .updateInterval(10));
 
+    /** A roast pig on its platter, to set on a table. */
+    public static final EntityType<RoastPig> ROAST_PIG = register("roast_pig",
+            EntityType.Builder.<RoastPig>of(RoastPig::new, MobCategory.MISC).sized(1.4F, 0.6F).clientTrackingRange(8).updateInterval(10).fireImmune());
+    /** A pot of gruel on its fire. */
+    public static final EntityType<GruelPot> GRUEL_POT = register("gruel_pot",
+            EntityType.Builder.<GruelPot>of(GruelPot::new, MobCategory.MISC).sized(1.0F, 1.1F).clientTrackingRange(8).updateInterval(10).fireImmune());
+
     private static <T extends Machine> EntityType<T> machine(MachineKind kind, EntityType.Builder<T> builder) {
         EntityType<T> type = register(kind.id(), builder.clientTrackingRange(10).updateInterval(2).fireImmune());
         MACHINES.put(kind, type);

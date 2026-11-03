@@ -23,6 +23,13 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
+import com.punizioni.entity.ModEntities;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -129,6 +136,25 @@ public final class ModItems {
     /** Dung: animals drop it now and then; thrown, it stains whoever it hits (see server.Dung). */
     public static final Item POOP = register("poop", PoopItem::new, new Item.Properties().stacksTo(16));
 
+    /** A whole roast pig on its platter: set it on a table; a right click tears off the piece you look at. */
+    public static final Item ROAST_PIG = register("roast_pig", p -> new PropItem(() -> ModEntities.ROAST_PIG, p),
+            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+    /** The pieces of the roast. */
+    public static final Item ROAST_LEG = register("roast_leg", Item::new,
+            new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8F).build()));
+    public static final Item ROAST_RIBS = register("roast_ribs", Item::new,
+            new Item.Properties().food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.8F).build()));
+    public static final Item ROAST_HAM = register("roast_ham", Item::new,
+            new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.9F).build()));
+    /** A pot of gruel on its fire: bowls fill from it. */
+    public static final Item GRUEL_POT = register("gruel_pot", p -> new PropItem(() -> ModEntities.GRUEL_POT, p), new Item.Properties().stacksTo(1));
+    /** A bowl of gruel: fills a little, tastes awful; right click someone to feed them. */
+    public static final Item GRUEL = register("gruel", GruelItem::new, new Item.Properties().stacksTo(16)
+            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.1F).alwaysEdible().build(),
+                    Consumables.defaultFood().onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 140, 0), 0.35F))
+                            .build())
+            .usingConvertsTo(Items.BOWL));
+
     public static final Map<MachineKind, Item> MACHINES = new EnumMap<>(MachineKind.class);
 
     static {
@@ -172,6 +198,14 @@ public final class ModItems {
             output.accept(PEASANT_BREECHES);
             output.accept(PEASANT_WRAPS);
             output.accept(POOP);
+        });
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> {
+            output.accept(ROAST_PIG);
+            output.accept(ROAST_LEG);
+            output.accept(ROAST_RIBS);
+            output.accept(ROAST_HAM);
+            output.accept(GRUEL_POT);
+            output.accept(GRUEL);
         });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(output -> {
             output.accept(ROYAL_LENS);

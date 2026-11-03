@@ -122,6 +122,10 @@ public final class ScreenFx {
                 flash(now, 0xFF000000, 0.6F * strength, 12.0F);
                 shake(now, 5.0F * strength, 20.0F);
             }
+            case Net.VictimFx.GRUEL -> {
+                flash(now, 0xFF6E8A2A, 0.6F, 34.0F);
+                shake(now, 1.0F, 10.0F);
+            }
             case Net.VictimFx.POOP -> {
                 flash(now, 0xFF4A2E12, 0.3F + 0.25F * strength, 8.0F);
                 shake(now, 1.2F + 2.4F * strength, 8.0F);

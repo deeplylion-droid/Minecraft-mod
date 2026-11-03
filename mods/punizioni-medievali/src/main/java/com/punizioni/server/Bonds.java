@@ -114,6 +114,10 @@ public final class Bonds {
         Bound b = ModData.bound(target);
         boolean server = player instanceof ServerPlayer;
         if (b != null) {
+            if (held.is(ModItems.GRUEL)) {
+                // feeding the prisoner: the bowl does it
+                return InteractionResult.PASS;
+            }
             if (held.is(Items.SHEARS)) {
                 if (server) {
                     cut((ServerPlayer) target, (ServerPlayer) player, held, hand);

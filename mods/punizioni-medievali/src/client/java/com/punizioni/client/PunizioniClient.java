@@ -4,6 +4,7 @@ import com.punizioni.ModParticles;
 import com.punizioni.Punizioni;
 import com.punizioni.client.bonds.BondsLayer;
 import com.punizioni.client.bonds.Captives;
+import com.punizioni.client.fx.Disgusts;
 import com.punizioni.client.fx.Flies;
 import com.punizioni.client.fx.Gibs;
 import com.punizioni.client.fx.ScreenFx;
@@ -20,6 +21,7 @@ import com.punizioni.client.outfit.Sway;
 import com.punizioni.client.particle.SparkleParticle;
 import com.punizioni.client.render.BodyLayer;
 import com.punizioni.client.render.MachineRenderer;
+import com.punizioni.client.render.PropRenderer;
 import com.punizioni.client.render.MarkedSkins;
 import com.punizioni.client.render.RatRenderer;
 import com.punizioni.client.royal.Capes;
@@ -68,6 +70,8 @@ public class PunizioniClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.DRAFT_HORSE, HorseRenderer::new);
         EntityRendererRegistry.register(ModEntities.RAT, RatRenderer::new);
         EntityRendererRegistry.register(ModEntities.POOP, ThrownItemRenderer::new);
+        EntityRendererRegistry.register(ModEntities.ROAST_PIG, context -> new PropRenderer<>(context, "roast_pig", false));
+        EntityRendererRegistry.register(ModEntities.GRUEL_POT, context -> new PropRenderer<>(context, "gruel_pot", true));
 
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof AvatarRenderer<?> avatar) {
@@ -89,6 +93,7 @@ public class PunizioniClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(Net.Guilty.TYPE, (payload, context) -> Guilty.receive(payload.ids()));
 
         ClientPlayNetworking.registerGlobalReceiver(Net.VictimFx.TYPE, (payload, context) -> ScreenFx.hit(payload.kind(), payload.strength()));
+        ClientPlayNetworking.registerGlobalReceiver(Net.Disgust.TYPE, (payload, context) -> Disgusts.received(payload.entity()));
         ClientPlayNetworking.registerGlobalReceiver(Net.ChopFx.TYPE, (payload, context) -> {
             if (context.client().level != null) {
                 Gibs.chop(context.client().level, payload.machine(), payload.victim(), payload.limb());
@@ -137,6 +142,7 @@ public class PunizioniClient implements ClientModInitializer {
             Guilty.reset();
             Flies.reset();
             Sway.reset();
+            Disgusts.reset();
         });
 
         DESCRIBED.add(ModItems.EXECUTIONER_HOOD);
@@ -162,6 +168,12 @@ public class PunizioniClient implements ClientModInitializer {
         DESCRIBED.add(ModItems.PEASANT_BREECHES);
         DESCRIBED.add(ModItems.PEASANT_WRAPS);
         DESCRIBED.add(ModItems.POOP);
+        DESCRIBED.add(ModItems.ROAST_PIG);
+        DESCRIBED.add(ModItems.ROAST_LEG);
+        DESCRIBED.add(ModItems.ROAST_RIBS);
+        DESCRIBED.add(ModItems.ROAST_HAM);
+        DESCRIBED.add(ModItems.GRUEL_POT);
+        DESCRIBED.add(ModItems.GRUEL);
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, flag, lines) -> {
             if (DESCRIBED.contains(stack.getItem())) {
                 String base = "item." + Punizioni.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + ".desc";

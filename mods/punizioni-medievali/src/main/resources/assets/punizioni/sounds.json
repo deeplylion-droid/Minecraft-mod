@@ -292,5 +292,44 @@
         "name": "punizioni:flies1"
       }
     ]
+  },
+  "roast_tear": {
+    "subtitle": "subtitles.punizioni.roast_tear",
+    "sounds": [
+      {
+        "name": "punizioni:roast_tear1"
+      },
+      {
+        "name": "punizioni:roast_tear2"
+      },
+      {
+        "name": "punizioni:roast_tear3"
+      }
+    ]
+  },
+  "gruel_bubble": {
+    "subtitle": "subtitles.punizioni.gruel_bubble",
+    "sounds": [
+      {
+        "name": "punizioni:gruel_bubble1"
+      },
+      {
+        "name": "punizioni:gruel_bubble2"
+      },
+      {
+        "name": "punizioni:gruel_bubble3"
+      }
+    ]
+  },
+  "gruel_ladle": {
+    "subtitle": "subtitles.punizioni.gruel_ladle",
+    "sounds": [
+      {
+        "name": "punizioni:gruel_ladle1"
+      },
+      {
+        "name": "punizioni:gruel_ladle2"
+      }
+    ]
   }
 }

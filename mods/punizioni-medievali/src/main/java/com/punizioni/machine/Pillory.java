@@ -69,7 +69,7 @@ public class Pillory extends Machine {
     /** With dung in hand a click throws it: the board stays shut. */
     @Override
     public boolean ignoresClickWith(ItemStack stack) {
-        return stack.is(ModItems.POOP);
+        return stack.is(ModItems.POOP) || super.ignoresClickWith(stack);
     }
 
     /** The upper half of the board: 0 up (open), 1 down on the neck and the wrists. */

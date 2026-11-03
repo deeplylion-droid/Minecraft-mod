@@ -59,6 +59,8 @@ public final class Visuals {
     /** Dung on them, and ticks since the last splat. */
     public Filth filth = Filth.CLEAN;
     public float sinceSplat = 1000.0F;
+    /** Ticks since they ate gruel (the grimace). */
+    public float sinceGruel = 1000.0F;
     /** The hand holding the overseer's whip (its lash is drawn from the handle), or null. */
     public @Nullable HumanoidArm whipArm;
     /** Drawn in the inventory's little window, not in the world: no cloth or lash simulation there. */
@@ -92,11 +94,14 @@ public final class Visuals {
         int jester = outfit(entity, ModItems.JESTER_HAT, ModItems.JESTER_TUNIC, ModItems.JESTER_HOSE, ModItems.JESTER_SHOES);
         int peasant = outfit(entity, ModItems.PEASANT_HOOD, ModItems.PEASANT_TUNIC, ModItems.PEASANT_BREECHES, ModItems.PEASANT_WRAPS);
         Filth filth = ModData.filth(entity);
+        float sinceGruel = com.punizioni.client.fx.Disgusts.since(entity.getId(), now, partial);
         if (!(entity.getVehicle() instanceof Machine) && body == Body.NONE && !hood && !apron && !breeches && !boots && !stretched && !crown && !cape
-                && whipArm == null && !bound && !captor && jester == 0 && peasant == 0 && filth.clean()) {
+                && whipArm == null && !bound && !captor && jester == 0 && peasant == 0 && filth.clean()
+                && sinceGruel > com.punizioni.client.fx.Disgusts.LENGTH) {
             return null;
         }
         Visuals v = new Visuals();
+        v.sinceGruel = sinceGruel;
         v.jester = jester;
         v.peasant = peasant;
         v.filth = filth;

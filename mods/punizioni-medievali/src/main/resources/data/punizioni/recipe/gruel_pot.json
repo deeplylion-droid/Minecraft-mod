@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:cauldron",
+    "minecraft:campfire"
+  ],
+  "result": {
+    "id": "punizioni:gruel_pot",
+    "count": 1
+  }
+}

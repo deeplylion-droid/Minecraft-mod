@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PAP",
+    "PPP",
+    "SSS"
+  ],
+  "key": {
+    "P": "minecraft:cooked_porkchop",
+    "A": "minecraft:apple",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "punizioni:roast_pig",
+    "count": 1
+  }
+}

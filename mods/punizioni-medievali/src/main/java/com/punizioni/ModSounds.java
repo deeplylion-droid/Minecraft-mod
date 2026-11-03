@@ -38,6 +38,9 @@ public final class ModSounds {
     public static final SoundEvent SPLAT = register("splat");
     public static final SoundEvent PLOP = register("plop");
     public static final SoundEvent FLIES = register("flies");
+    public static final SoundEvent ROAST_TEAR = register("roast_tear");
+    public static final SoundEvent GRUEL_BUBBLE = register("gruel_bubble");
+    public static final SoundEvent GRUEL_LADLE = register("gruel_ladle");
 
     private static SoundEvent register(String name) {
         Identifier id = Punizioni.id(name);

@@ -27,6 +27,8 @@ public final class Net {
         public static final int HANG = 8;
         /** Dung in the face (strength 1) or elsewhere (less). */
         public static final int POOP = 9;
+        /** A bowl of gruel went down: the screen goes green for a moment. */
+        public static final int GRUEL = 10;
 
         public static final Type<VictimFx> TYPE = new Type<>(Punizioni.id("victim_fx"));
         public static final StreamCodec<ByteBuf, VictimFx> CODEC = StreamCodec.composite(
@@ -85,11 +87,23 @@ public final class Net {
         }
     }
 
+    /** Someone ate gruel: everyone around sees them pull a face. */
+    public record Disgust(int entity) implements CustomPacketPayload {
+        public static final Type<Disgust> TYPE = new Type<>(Punizioni.id("disgust"));
+        public static final StreamCodec<ByteBuf, Disgust> CODEC = ByteBufCodecs.VAR_INT.map(Disgust::new, Disgust::entity);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public static void init() {
         PayloadTypeRegistry.clientboundPlay().register(VictimFx.TYPE, VictimFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ChopFx.TYPE, ChopFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(TearFx.TYPE, TearFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(HeadFx.TYPE, HeadFx.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Guilty.TYPE, Guilty.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Disgust.TYPE, Disgust.CODEC);
     }
 }

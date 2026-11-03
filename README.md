@@ -356,7 +356,7 @@ Un'infezione zombie in **5 stadi**, horror e dark, per **Forge 1.20.1** (47.x), 
 
 ![I dieci macchinari, il boia e cosa vede chi li subisce](docs/punizioni-medievali-preview.png)
 
-Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.3.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
+Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric 26.3** (con Fabric API). Jar: `punizioni-1.4.0.jar` nelle [Releases](../../releases). Va installata sul server e da tutti i giocatori.
 
 - **Undici macchinari**, da piazzare come un supporto per armature (guardano verso chi li piazza). **Chi sta davanti al macchinario quando il boia lo usa (tasto destro) ci finisce dentro**: niente corde da portare in giro. Mentre c'è qualcuno dentro, i clic su di lui arrivano al macchinario. Per smontarlo: accovacciati e colpiscilo due volte.
 - **Le punizioni mortali non fanno perdere niente**: chi muore in un macchinario (o dissanguato dopo) rinasce con l'inventario e l'esperienza.
@@ -406,6 +406,16 @@ Punizioni medievali crude, sanguinose e scenografiche, tutte in 3D, per **Fabric
 | **Cacca** | tasto destro: la **lanci** come una palla di neve (anche col distributore). **Mucche, maiali, pecore, capre e cavalli ne fanno ogni tanto** (come le galline con le uova, con un *plop*); si fa anche con terra + semi di cacao (×4). Contro la gogna colpisce davvero quello che centri: **la faccia, le mani, la schiena**, o l'asse di legno |
 | **Sporco** | dove la cacca colpisce **resta una macchia sulla skin, proprio in quel punto** (fresca e bagnata che cola, poi secca e screpolata; fino a 24 macchie), con sopra un **grumo di cacca in 3D** che si vede anche sui vestiti e sull'armatura. Chi la prende vede uno **schizzo marrone sullo schermo** (in faccia: enorme, in mezzo alla vista), chi la tira legge *Dritto in faccia a Luigi!*. Con 4 macchie o più gli girano intorno le **mosche** che ronzano. **Si lava nell'acqua** (in un attimo) **o sotto la pioggia** (piano piano): *Ti sei lavato* |
 
+**Banchetto e sbobba (dalla 1.4.0)**:
+
+![Il maiale arrosto sul tavolo, un pezzo in mano, il pentolone di sbobba e la sbobba al prigioniero](docs/punizioni-medievali-banchetto.png)
+
+| Cosa | Com'è |
+|---|---|
+| **Maiale arrosto** | un maiale intero **in 3D** sul vassoio di legno, dorato e croccante, con la **mela in bocca**, carote, patate, cipolle e rosmarino intorno; fuma ancora. Si mette sopra un blocco (un tavolo di lastre va benissimo), anche in diagonale. **Tasto destro: ti stacchi il pezzo che guardi** (una coscia, le costine, il prosciutto, la lonza, la mela) e te lo ritrovi **in mano, in 3D**, da mangiare quando vuoi; dal maiale quel pezzo sparisce per tutti e sotto si vede la carne con le costole. Quando restano le ossa, un altro clic le raccoglie (×3). Accovacciato + due colpi: lo porti via (con i pezzi rimasti) |
+| **Pentolone di sbobba** | un pentolone di ferro **in 3D** appeso a un treppiede sopra il fuoco, pieno di sbobba grigioverde che bolle e fuma, con dentro un osso, una rapa, una suola di scarpa, la coda di un ratto e una lisca. **Tasto destro con una ciotola vuota: la riempi** (16 porzioni al massimo, la sbobba scende man mano). Si riempie con un **secchio d'acqua** (+6) e con gli **avanzi** (+1 ciascuno: carne marcia, ossa, patate anche velenose, carote, barbabietole, grano, semi, funghi, pane, alghe, occhi di ragno... e cacca) |
+| **Ciotola di sbobba** | **tasto destro su un giocatore: gliela fai mangiare subito**, anche se non ha fame e anche se è alla gogna o legato (a te resta la ciotola vuota). Oppure mangiala tu. **Sfama poco e fa schifo**: chi la mangia scuote la testa disgustato (lo vedono tutti), lo schermo gli diventa verde per un attimo, rutta, e una volta su tre ha qualche secondo di nausea |
+
 Le malefatte che la lente vede (si ricordano per un'ora; un riavvio del server le dimentica):
 
 | Malefatta | Quanto è grave |
@@ -454,6 +464,8 @@ Brache stracciate  lana marrone ×7 (come dei gambali)
 Pezze e ceppi      lana marrone _ lana marrone / pepita di ferro _ pepita di ferro
 Gogna              lastra ×3 / tronco, lingotto di ferro, tronco / assi ×3 (lastre, tronchi e assi di quercia scura)
 Cacca (×4)         terra + semi di cacao (senza forma)
+Maiale arrosto     braciola cotta, mela, braciola cotta / braciola cotta ×3 / lastra di legno ×3
+Pentolone sbobba   calderone + falò (senza forma)
 ```
 (assi e tronchi sono di quercia scura)
 
