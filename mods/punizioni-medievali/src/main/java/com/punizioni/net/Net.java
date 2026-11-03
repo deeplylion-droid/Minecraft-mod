@@ -29,6 +29,10 @@ public final class Net {
         public static final int POOP = 9;
         /** A bowl of gruel went down: the screen goes green for a moment. */
         public static final int GRUEL = 10;
+        /** A witch's curse took hold (strength = which one: CurseKind's index). */
+        public static final int CURSE = 11;
+        /** The head in the butt gets a fart in the face. */
+        public static final int FART = 12;
 
         public static final Type<VictimFx> TYPE = new Type<>(Punizioni.id("victim_fx"));
         public static final StreamCodec<ByteBuf, VictimFx> CODEC = StreamCodec.composite(

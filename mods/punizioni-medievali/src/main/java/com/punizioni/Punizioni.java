@@ -8,6 +8,7 @@ import com.punizioni.misdeed.Misdeeds;
 import com.punizioni.net.Net;
 import com.punizioni.server.Amputations;
 import com.punizioni.server.Bonds;
+import com.punizioni.server.Curses;
 import com.punizioni.server.Deaths;
 import com.punizioni.server.Dung;
 import com.punizioni.server.Jester;
@@ -27,7 +28,9 @@ import org.slf4j.LoggerFactory;
  * wheel, brazen bull, gallows, pillory). Whoever stands in a machine when the executioner works it is caught;
  * the deadly finales do not cost the inventory. For the king: crown, mantle, the lens that sees
  * pockets and misdeeds, and the overseer's whip. The prisoner's rope; the jester's motley and the
- * prisoner's rags; the pillory, and dung to throw at whoever is in it.
+ * prisoner's rags; the pillory, and dung to throw at whoever is in it; the roast pig and the gruel;
+ * the witch, her giant cauldron and her three curses in a bottle (the toad, the head in the butt, the
+ * balloon).
  */
 public class Punizioni implements ModInitializer {
     public static final String MOD_ID = "punizioni";
@@ -52,6 +55,7 @@ public class Punizioni implements ModInitializer {
         Royalty.init();
         Bonds.init();
         Jester.init();
+        Curses.init();
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> Misdeeds.forget(handler.player));
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> PunizioneCommand.register(dispatcher));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -61,6 +65,7 @@ public class Punizioni implements ModInitializer {
                 Bonds.tick(server);
                 Dung.tick(server);
                 Jester.tick(server);
+                Curses.tick(server);
             } catch (RuntimeException e) {
                 LOGGER.error("Punizioni tick failed", e);
             }

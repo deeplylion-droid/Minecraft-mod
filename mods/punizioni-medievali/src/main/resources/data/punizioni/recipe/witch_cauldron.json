@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " W ",
+    "ICI",
+    "IFI"
+  ],
+  "key": {
+    "W": "minecraft:nether_wart",
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:cauldron",
+    "F": "minecraft:campfire"
+  },
+  "result": {
+    "id": "punizioni:witch_cauldron",
+    "count": 1
+  }
+}

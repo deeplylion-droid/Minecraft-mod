@@ -87,6 +87,10 @@ public final class VictimCamera {
         if (headMachine >= 0) {
             return headView(partial);
         }
+        View zip = com.punizioni.client.witch.Cursed.zipView(entity, partial);
+        if (zip != null) {
+            return zip;
+        }
         if (!(entity.getVehicle() instanceof Machine machine)) {
             return null;
         }

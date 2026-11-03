@@ -72,6 +72,8 @@ public class PunizioniClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.POOP, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.ROAST_PIG, context -> new PropRenderer<>(context, "roast_pig", false));
         EntityRendererRegistry.register(ModEntities.GRUEL_POT, context -> new PropRenderer<>(context, "gruel_pot", true));
+        EntityRendererRegistry.register(ModEntities.WITCH_CAULDRON, com.punizioni.client.witch.CauldronRenderer::new);
+        EntityRendererRegistry.register(ModEntities.CURSE_POTION, ThrownItemRenderer::new);
 
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof AvatarRenderer<?> avatar) {
@@ -80,6 +82,7 @@ public class PunizioniClient implements ClientModInitializer {
                 helper.register(new BondsLayer(avatar, context.getResourceManager()));
                 helper.register(new OutfitsLayer(avatar, context.getResourceManager()));
                 helper.register(new DungLayer(avatar));
+                helper.register(new com.punizioni.client.witch.CurseLayer(avatar, context.getResourceManager()));
             }
         });
         ParticleProviderRegistry.getInstance().register(ModParticles.BLOOD, BloodParticle.Provider::new);
@@ -121,6 +124,7 @@ public class PunizioniClient implements ClientModInitializer {
             Capes.tick(mc);
             Captives.tick(mc);
             Flies.tick(mc);
+            com.punizioni.client.witch.Cursed.tick(mc);
             Sway.endFrame();
             // vanilla says "press shift to get off": not from a machine
             boolean held = mc.player != null && mc.player.getVehicle() instanceof Machine;
@@ -131,6 +135,7 @@ public class PunizioniClient implements ClientModInitializer {
         });
         LevelRenderEvents.COLLECT_SUBMITS.register(Gibs::submit);
         LevelRenderEvents.COLLECT_SUBMITS.register(Captives::submit);
+        LevelRenderEvents.COLLECT_SUBMITS.register(com.punizioni.client.witch.Cursed::submit);
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             ScreenFx.reset();
             Gibs.reset();
@@ -143,6 +148,7 @@ public class PunizioniClient implements ClientModInitializer {
             Flies.reset();
             Sway.reset();
             Disgusts.reset();
+            com.punizioni.client.witch.Cursed.reset();
         });
 
         DESCRIBED.add(ModItems.EXECUTIONER_HOOD);
@@ -174,11 +180,26 @@ public class PunizioniClient implements ClientModInitializer {
         DESCRIBED.add(ModItems.ROAST_HAM);
         DESCRIBED.add(ModItems.GRUEL_POT);
         DESCRIBED.add(ModItems.GRUEL);
+        DESCRIBED.add(ModItems.WITCH_HAT);
+        DESCRIBED.add(ModItems.WITCH_DRESS);
+        DESCRIBED.add(ModItems.WITCH_STOCKINGS);
+        DESCRIBED.add(ModItems.WITCH_BOOTS);
+        DESCRIBED.add(ModItems.WITCH_CAULDRON);
+        DESCRIBED.add(ModItems.TOAD_POTION);
+        DESCRIBED.add(ModItems.BUTT_POTION);
+        DESCRIBED.add(ModItems.BALLOON_POTION);
         ItemTooltipCallback.EVENT.register((stack, tooltipContext, flag, lines) -> {
             if (DESCRIBED.contains(stack.getItem())) {
                 String base = "item." + Punizioni.MOD_ID + "." + BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + ".desc";
                 lines.add(Component.translatable(base + "1").withStyle(ChatFormatting.DARK_RED));
                 lines.add(Component.translatable(base + "2").withStyle(ChatFormatting.GRAY));
+                if (stack.is(ModItems.WITCH_CAULDRON)) {
+                    // the three curses and what goes in them
+                    for (int i = 0; i < 3; i++) {
+                        lines.add(Component.translatable(base.substring(0, base.length() - ".desc".length()) + ".recipe" + i)
+                                .withStyle(ChatFormatting.DARK_PURPLE));
+                    }
+                }
             }
         });
     }

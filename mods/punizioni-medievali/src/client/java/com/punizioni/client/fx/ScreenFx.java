@@ -126,6 +126,15 @@ public final class ScreenFx {
                 flash(now, 0xFF6E8A2A, 0.6F, 34.0F);
                 shake(now, 1.0F, 10.0F);
             }
+            case Net.VictimFx.CURSE -> {
+                com.punizioni.witch.CurseKind curse = com.punizioni.witch.CurseKind.byIndex((int) strength);
+                flash(now, 0xFF000000 | (curse != null ? curse.color() : 0x8040A0), 0.85F, 30.0F);
+                shake(now, 3.0F, 18.0F);
+            }
+            case Net.VictimFx.FART -> {
+                flash(now, 0xFF6E7A2A, 0.7F, 40.0F);
+                shake(now, 2.5F, 14.0F);
+            }
             case Net.VictimFx.POOP -> {
                 flash(now, 0xFF4A2E12, 0.3F + 0.25F * strength, 8.0F);
                 shake(now, 1.2F + 2.4F * strength, 8.0F);
@@ -413,6 +422,8 @@ public final class ScreenFx {
             g.blit(RenderPipelines.GUI_TEXTURED, POOP_SPLATTER, x, y, u, v, (int) size, (int) size, 128, 128, 256, 256,
                     ARGB.white(Mth.clamp(alpha, 0.0F, 1.0F)));
         }
+
+        com.punizioni.client.witch.CurseHud.draw(g, mc, partial, w, h);
 
         float flash = flashLeft(now, partial);
         if (flash > 0.0F) {

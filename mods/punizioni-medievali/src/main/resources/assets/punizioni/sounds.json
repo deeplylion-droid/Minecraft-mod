@@ -331,5 +331,187 @@
         "name": "punizioni:gruel_ladle2"
       }
     ]
+  },
+  "witch_cackle": {
+    "subtitle": "subtitles.punizioni.witch_cackle",
+    "sounds": [
+      {
+        "name": "punizioni:witch_cackle1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "punizioni:witch_cackle2",
+        "attenuation_distance": 40
+      }
+    ]
+  },
+  "cauldron_bubble": {
+    "subtitle": "subtitles.punizioni.cauldron_bubble",
+    "sounds": [
+      {
+        "name": "punizioni:cauldron_bubble1"
+      },
+      {
+        "name": "punizioni:cauldron_bubble2"
+      },
+      {
+        "name": "punizioni:cauldron_bubble3"
+      }
+    ]
+  },
+  "cauldron_splash": {
+    "subtitle": "subtitles.punizioni.cauldron_splash",
+    "sounds": [
+      {
+        "name": "punizioni:cauldron_splash1"
+      },
+      {
+        "name": "punizioni:cauldron_splash2"
+      }
+    ]
+  },
+  "cauldron_ready": {
+    "subtitle": "subtitles.punizioni.cauldron_ready",
+    "sounds": [
+      {
+        "name": "punizioni:cauldron_ready1",
+        "attenuation_distance": 40
+      }
+    ]
+  },
+  "cauldron_fail": {
+    "subtitle": "subtitles.punizioni.cauldron_fail",
+    "sounds": [
+      {
+        "name": "punizioni:cauldron_fail1"
+      }
+    ]
+  },
+  "cauldron_spit": {
+    "subtitle": "subtitles.punizioni.cauldron_spit",
+    "sounds": [
+      {
+        "name": "punizioni:cauldron_spit1"
+      },
+      {
+        "name": "punizioni:cauldron_spit2"
+      }
+    ]
+  },
+  "curse_cast": {
+    "subtitle": "subtitles.punizioni.curse_cast",
+    "sounds": [
+      {
+        "name": "punizioni:curse_cast1"
+      },
+      {
+        "name": "punizioni:curse_cast2"
+      }
+    ]
+  },
+  "toad_croak": {
+    "subtitle": "subtitles.punizioni.toad_croak",
+    "sounds": [
+      {
+        "name": "punizioni:toad_croak1"
+      },
+      {
+        "name": "punizioni:toad_croak2"
+      },
+      {
+        "name": "punizioni:toad_croak3"
+      }
+    ]
+  },
+  "toad_transform": {
+    "subtitle": "subtitles.punizioni.toad_transform",
+    "sounds": [
+      {
+        "name": "punizioni:toad_transform1"
+      }
+    ]
+  },
+  "tongue": {
+    "subtitle": "subtitles.punizioni.tongue",
+    "sounds": [
+      {
+        "name": "punizioni:tongue1"
+      },
+      {
+        "name": "punizioni:tongue2"
+      }
+    ]
+  },
+  "butt_slurp": {
+    "subtitle": "subtitles.punizioni.butt_slurp",
+    "sounds": [
+      {
+        "name": "punizioni:butt_slurp1"
+      }
+    ]
+  },
+  "muffled": {
+    "subtitle": "subtitles.punizioni.muffled",
+    "sounds": [
+      {
+        "name": "punizioni:muffled1"
+      },
+      {
+        "name": "punizioni:muffled2"
+      },
+      {
+        "name": "punizioni:muffled3"
+      }
+    ]
+  },
+  "butt_fart": {
+    "subtitle": "subtitles.punizioni.butt_fart",
+    "sounds": [
+      {
+        "name": "punizioni:butt_fart1"
+      },
+      {
+        "name": "punizioni:butt_fart2"
+      }
+    ]
+  },
+  "balloon_inflate": {
+    "subtitle": "subtitles.punizioni.balloon_inflate",
+    "sounds": [
+      {
+        "name": "punizioni:balloon_inflate1"
+      }
+    ]
+  },
+  "balloon_squeak": {
+    "subtitle": "subtitles.punizioni.balloon_squeak",
+    "sounds": [
+      {
+        "name": "punizioni:balloon_squeak1"
+      },
+      {
+        "name": "punizioni:balloon_squeak2"
+      },
+      {
+        "name": "punizioni:balloon_squeak3"
+      }
+    ]
+  },
+  "balloon_pop": {
+    "subtitle": "subtitles.punizioni.balloon_pop",
+    "sounds": [
+      {
+        "name": "punizioni:balloon_pop1",
+        "attenuation_distance": 40
+      }
+    ]
+  },
+  "balloon_deflate": {
+    "subtitle": "subtitles.punizioni.balloon_deflate",
+    "sounds": [
+      {
+        "name": "punizioni:balloon_deflate1"
+      }
+    ]
   }
 }

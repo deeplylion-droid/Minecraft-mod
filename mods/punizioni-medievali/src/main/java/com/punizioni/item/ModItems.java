@@ -155,6 +155,34 @@ public final class ModItems {
                             .build())
             .usingConvertsTo(Items.BOWL));
 
+    /**
+     * The witch's clothes: the tall pointed hat with its crooked tip, the ragged black dress with
+     * bell sleeves, the striped stockings, the pointed buckled boots (3D, OutfitsLayer). Whoever
+     * wears the hat is a witch: only a witch can brew in the giant cauldron.
+     */
+    public static final ResourceKey<EquipmentAsset> WITCH_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Punizioni.id("witch"));
+    public static final ArmorMaterial WITCH = new ArmorMaterial(12,
+            Map.of(ArmorType.BOOTS, 1, ArmorType.LEGGINGS, 1, ArmorType.CHESTPLATE, 2, ArmorType.HELMET, 1, ArmorType.BODY, 2),
+            25, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F, ItemTags.WOOL, WITCH_ASSET);
+
+    public static final Item WITCH_HAT = register("witch_hat", Item::new,
+            new Item.Properties().humanoidArmor(WITCH, ArmorType.HELMET).rarity(Rarity.UNCOMMON));
+    public static final Item WITCH_DRESS = register("witch_dress", Item::new,
+            new Item.Properties().humanoidArmor(WITCH, ArmorType.CHESTPLATE).rarity(Rarity.UNCOMMON));
+    public static final Item WITCH_STOCKINGS = register("witch_stockings", Item::new,
+            new Item.Properties().humanoidArmor(WITCH, ArmorType.LEGGINGS).rarity(Rarity.UNCOMMON));
+    public static final Item WITCH_BOOTS = register("witch_boots", Item::new,
+            new Item.Properties().humanoidArmor(WITCH, ArmorType.BOOTS).rarity(Rarity.UNCOMMON));
+
+    /** The giant cauldron: a witch throws the ingredients in and fills bottles with the curse. */
+    public static final Item WITCH_CAULDRON = register("witch_cauldron", p -> new PropItem(() -> ModEntities.WITCH_CAULDRON, p),
+            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+    /** The three curses, thrown like splash potions (from a dispenser too). */
+    public static final Item TOAD_POTION = register("toad_potion", CursePotionItem::new, new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON));
+    public static final Item BUTT_POTION = register("butt_potion", CursePotionItem::new, new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON));
+    public static final Item BALLOON_POTION = register("balloon_potion", CursePotionItem::new,
+            new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON));
+
     public static final Map<MachineKind, Item> MACHINES = new EnumMap<>(MachineKind.class);
 
     static {
@@ -198,6 +226,13 @@ public final class ModItems {
             output.accept(PEASANT_BREECHES);
             output.accept(PEASANT_WRAPS);
             output.accept(POOP);
+            output.accept(WITCH_HAT);
+            output.accept(WITCH_DRESS);
+            output.accept(WITCH_STOCKINGS);
+            output.accept(WITCH_BOOTS);
+            output.accept(TOAD_POTION);
+            output.accept(BUTT_POTION);
+            output.accept(BALLOON_POTION);
         });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS).register(output -> {
             output.accept(ROAST_PIG);
@@ -213,6 +248,7 @@ public final class ModItems {
         });
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output -> {
             output.accept(EXECUTIONER_TORCH);
+            output.accept(WITCH_CAULDRON);
             for (MachineKind kind : MachineKind.ALL) {
                 output.accept(MACHINES.get(kind));
             }

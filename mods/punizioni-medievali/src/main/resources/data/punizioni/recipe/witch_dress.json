@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "B B",
+    "BPB",
+    "BBB"
+  ],
+  "key": {
+    "B": "minecraft:black_wool",
+    "P": "minecraft:purple_dye"
+  },
+  "result": {
+    "id": "punizioni:witch_dress",
+    "count": 1
+  }
+}

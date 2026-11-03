@@ -88,9 +88,105 @@ public final class Poses {
             // the hood covers the hat layer
             m.hat.visible = false;
         }
+        if (v.curse != null) {
+            curse(m, v, s);
+        }
+    }
+
+    // ------------------------------------------------------------------ the witch's curses
+
+    private static void curse(PlayerModel m, Visuals v, AvatarRenderState s) {
+        switch (v.curse) {
+            case TOAD -> {
+                // the CurseLayer draws the toad
+                m.head.visible = false;
+                m.body.visible = false;
+                m.rightArm.visible = false;
+                m.leftArm.visible = false;
+                m.rightLeg.visible = false;
+                m.leftLeg.visible = false;
+            }
+            case BALLOON -> {
+                // the round body, the arms and the legs are the CurseLayer's; the head sits on top
+                m.body.visible = false;
+                m.rightArm.visible = false;
+                m.leftArm.visible = false;
+                m.rightLeg.visible = false;
+                m.leftLeg.visible = false;
+                if (v.popAge >= 0.0F) {
+                    m.head.visible = false;
+                } else {
+                    float k = com.punizioni.client.witch.BalloonShape.inflation(v.curseAge);
+                    m.head.x = 0.0F;
+                    m.head.y = com.punizioni.client.witch.BalloonShape.neckY(k) + com.punizioni.client.witch.Balloons.headBob(v);
+                    m.head.z = 0.0F;
+                    m.head.xRot = Mth.clamp(m.head.xRot, -0.6F, 0.6F);
+                }
+            }
+            case BUTT -> butt(m, v, s);
+        }
+    }
+
+    /**
+     * The head in the butt: it slides down the back and sinks into the backside, face out; the body
+     * has turned round, so the face looks the way the player looks. Now and then (the grunts) the
+     * hands reach back and tug at it; a fart in its own face makes it shake.
+     */
+    private static void butt(PlayerModel m, Visuals v, AvatarRenderState s) {
+        float k = Mth.clamp(v.curseAge / 14.0F, 0.0F, 1.0F);
+        k = k * k * (3.0F - 2.0F * k);
+        // the legs' pivot is the hips, crouching or not
+        float hipY = (m.rightLeg.y + m.leftLeg.y) * 0.5F;
+        float hipZ = (m.rightLeg.z + m.leftLeg.z) * 0.5F;
+        float y = hipY + 3.6F;
+        float z = hipZ + 2.6F;
+        float yaw = Mth.clamp(s.yRot, -40.0F, 40.0F);
+        float pitch = Mth.clamp(s.xRot, -35.0F, 35.0F);
+        m.head.x = 0.0F;
+        m.head.y = Mth.lerp(k, 0.0F, y);
+        m.head.z = Mth.lerp(k, 0.0F, z);
+        // facing the way the player looks: round from the turned body
+        m.head.yRot = (yaw - 180.0F * v.turn) * Mth.DEG_TO_RAD;
+        m.head.xRot = pitch * Mth.DEG_TO_RAD * k + (1.0F - k) * m.head.xRot;
+        m.head.zRot = 0.0F;
+        // squashed in
+        float squash = 1.0F - 0.08F * k;
+        m.head.xScale = 1.0F + 0.06F * k;
+        m.head.yScale = squash;
+        if (v.fart >= 0.0F && v.fart < 30.0F) {
+            float f = 1.0F - v.fart / 30.0F;
+            m.head.zRot += Mth.sin(v.fart * 2.3F) * 0.25F * f;
+            m.head.yScale *= 1.0F + 0.12F * f * Mth.sin(v.fart * 1.7F);
+        }
+        if (!v.alive || v.kind != null) {
+            return;
+        }
+        // the hands try to pull it out
+        float tug = 0.0F;
+        if (v.grunt >= 0.0F && v.grunt < 34.0F) {
+            tug = Mth.sin(Mth.clamp(v.grunt / 34.0F, 0.0F, 1.0F) * Mth.PI);
+        }
+        if (v.fart >= 0.0F && v.fart < 30.0F) {
+            tug = Math.max(tug, 0.7F * (1.0F - v.fart / 30.0F));
+        }
+        if (tug > 0.01F) {
+            float shake = Mth.sin(v.time * 1.6F) * 0.18F;
+            m.rightArm.xRot = Mth.lerp(tug, m.rightArm.xRot, 1.05F + shake);
+            m.leftArm.xRot = Mth.lerp(tug, m.leftArm.xRot, 1.05F - shake);
+            m.rightArm.zRot = Mth.lerp(tug, m.rightArm.zRot, 0.32F);
+            m.leftArm.zRot = Mth.lerp(tug, m.leftArm.zRot, -0.32F);
+            m.rightArm.yRot = 0.0F;
+            m.leftArm.yRot = 0.0F;
+            m.body.xRot += 0.12F * tug;
+        }
     }
 
     private static void reset(PlayerModel m) {
+        m.body.visible = true;
+        m.rightArm.visible = true;
+        m.leftArm.visible = true;
+        m.rightLeg.visible = true;
+        m.leftLeg.visible = true;
         m.rightArm.skipDraw = false;
         m.leftArm.skipDraw = false;
         m.rightLeg.skipDraw = false;

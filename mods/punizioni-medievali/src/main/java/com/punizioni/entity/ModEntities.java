@@ -75,6 +75,15 @@ public final class ModEntities {
     public static final EntityType<GruelPot> GRUEL_POT = register("gruel_pot",
             EntityType.Builder.<GruelPot>of(GruelPot::new, MobCategory.MISC).sized(1.0F, 1.1F).clientTrackingRange(8).updateInterval(10).fireImmune());
 
+    /** The witch's giant cauldron on its fire. */
+    public static final EntityType<WitchCauldron> WITCH_CAULDRON = register("witch_cauldron",
+            EntityType.Builder.<WitchCauldron>of(WitchCauldron::new, MobCategory.MISC).sized(2.0F, 1.45F).clientTrackingRange(10).updateInterval(5)
+                    .fireImmune());
+    /** A thrown bottle of curse. */
+    public static final EntityType<CursePotion> CURSE_POTION = register("curse_potion",
+            EntityType.Builder.<CursePotion>of(CursePotion::new, MobCategory.MISC).noLootTable().sized(0.25F, 0.25F).clientTrackingRange(4)
+                    .updateInterval(10));
+
     private static <T extends Machine> EntityType<T> machine(MachineKind kind, EntityType.Builder<T> builder) {
         EntityType<T> type = register(kind.id(), builder.clientTrackingRange(10).updateInterval(2).fireImmune());
         MACHINES.put(kind, type);

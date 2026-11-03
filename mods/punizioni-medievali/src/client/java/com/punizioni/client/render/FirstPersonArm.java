@@ -37,6 +37,8 @@ public final class FirstPersonArm {
     public static void before(AvatarRenderer<?> renderer, ModelPart arm) {
         PlayerModel model = renderer.getModel();
         boolean right = arm == model.rightArm;
+        // a cursed player drawn last in the world may have left the shared arm hidden
+        arm.visible = true;
         boolean changed = BodyLayer.changed(body(), right ? 0 : 1);
         arm.skipDraw = changed;
         (right ? model.rightSleeve : model.leftSleeve).skipDraw = changed;

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " B ",
+    " B ",
+    "BSB"
+  ],
+  "key": {
+    "B": "minecraft:black_wool",
+    "S": "minecraft:spider_eye"
+  },
+  "result": {
+    "id": "punizioni:witch_hat",
+    "count": 1
+  }
+}

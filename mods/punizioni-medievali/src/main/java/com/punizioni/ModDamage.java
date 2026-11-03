@@ -30,6 +30,8 @@ public final class ModDamage {
     public static final ResourceKey<DamageType> BULL = key("bull");
     public static final ResourceKey<DamageType> HANGING = key("hanging");
     public static final ResourceKey<DamageType> CROWS = key("crows");
+    /** A witch's balloon, popped: dying of it keeps the inventory too. */
+    public static final ResourceKey<DamageType> POPPED = key("popped");
     /** Every damage type above: dying of one keeps the inventory. */
     public static final TagKey<DamageType> PUNISHMENT = TagKey.create(Registries.DAMAGE_TYPE, Punizioni.id("punishment"));
 

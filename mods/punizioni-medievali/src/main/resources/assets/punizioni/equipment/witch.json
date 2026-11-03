@@ -1,0 +1,14 @@
+{
+ "layers": {
+  "humanoid": [
+   {
+    "texture": "punizioni:witch"
+   }
+  ],
+  "humanoid_leggings": [
+   {
+    "texture": "punizioni:witch"
+   }
+  ]
+ }
+}

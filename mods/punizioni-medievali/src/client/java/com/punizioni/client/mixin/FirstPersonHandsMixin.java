@@ -24,7 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Your hands in first person: a hand that is gone holds nothing (the stump shows instead of the
- * item); chained in a machine, or seeing from a head in a basket, there are no hands in view at all.
+ * item); chained in a machine, seeing from a head in a basket, or turned into a toad, there are no
+ * hands in view at all.
  */
 @Mixin(FirstPersonHandsAndItemsRenderer.class)
 public abstract class FirstPersonHandsMixin {
@@ -39,7 +40,7 @@ public abstract class FirstPersonHandsMixin {
         FirstPersonLash.begin(poseStack);
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && (mc.player.getVehicle() instanceof Machine || VictimCamera.sinceHead(partialTicks) >= 0.0F
-                || ModData.isBound(mc.player))) {
+                || ModData.isBound(mc.player) || ModData.cursed(mc.player, com.punizioni.witch.CurseKind.TOAD))) {
             ci.cancel();
         }
     }

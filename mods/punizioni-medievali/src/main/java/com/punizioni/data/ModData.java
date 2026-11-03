@@ -50,6 +50,20 @@ public final class ModData {
         }
     }
 
+    /** A witch's curse: saved, lost on death (that is the only cure), known by every client. */
+    public static final AttachmentType<Curse> CURSE = AttachmentRegistry.create(Punizioni.id("curse"),
+            b -> b.persistent(Curse.CODEC).syncWith(Curse.STREAM_CODEC, AttachmentSyncPredicate.all()));
+
+    public static @org.jspecify.annotations.Nullable Curse curse(Entity entity) {
+        return entity.getAttached(CURSE);
+    }
+
+    /** Whether this curse is on them. */
+    public static boolean cursed(Entity entity, com.punizioni.witch.CurseKind kind) {
+        Curse c = entity.getAttached(CURSE);
+        return c != null && c.is(kind);
+    }
+
     public static void init() {
     }
 }

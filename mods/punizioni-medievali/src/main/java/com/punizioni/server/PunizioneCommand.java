@@ -81,7 +81,16 @@ public final class PunizioneCommand {
                                                                 IntegerArgumentType.getInteger(c, "bruciature"))))))))
                 .then(Commands.literal("allunga")
                         .then(Commands.argument("vittima", EntityArgument.entity())
-                                .executes(c -> stretch(c.getSource(), EntityArgument.getEntity(c, "vittima")))));
+                                .executes(c -> stretch(c.getSource(), EntityArgument.getEntity(c, "vittima")))))
+                .then(Commands.literal("maledizione")
+                        .then(Commands.argument("vittime", EntityArgument.players())
+                                .then(Commands.argument("quale", StringArgumentType.word())
+                                        .suggests((c, b) -> SharedSuggestionProvider.suggest(CURSES, b))
+                                        .executes(c -> curse(c.getSource(), EntityArgument.getPlayers(c, "vittime"),
+                                                StringArgumentType.getString(c, "quale"))))))
+                .then(Commands.literal("scoppia")
+                        .then(Commands.argument("vittime", EntityArgument.players())
+                                .executes(c -> pop(c.getSource(), EntityArgument.getPlayers(c, "vittime")))));
         dispatcher.register(root);
     }
 
@@ -145,6 +154,39 @@ public final class PunizioneCommand {
         }
         int done = n;
         source.sendSuccess(() -> Component.translatable("punizioni.command.released", done), true);
+        return n;
+    }
+
+    private static final String[] CURSES = {"rospo", "sedere", "pallone", "nessuna"};
+
+    /** A witch's curse on them (or off: "nessuna"), without the bottle. */
+    private static int curse(CommandSourceStack source, Collection<ServerPlayer> victims, String name) throws CommandSyntaxException {
+        com.punizioni.witch.CurseKind kind = com.punizioni.witch.CurseKind.byName(name);
+        if (kind == null && !name.equals("nessuna")) {
+            throw error("punizioni.command.unknown_curse", name);
+        }
+        for (ServerPlayer p : victims) {
+            if (kind == null) {
+                Curses.lift(p);
+            } else {
+                Curses.curse(p, kind, source.getEntity());
+            }
+        }
+        source.sendSuccess(() -> Component.translatable("punizioni.command.cursed", victims.size()), true);
+        return victims.size();
+    }
+
+    /** Pops their balloon (as if a blade had touched it). */
+    private static int pop(CommandSourceStack source, Collection<ServerPlayer> victims) {
+        int n = 0;
+        for (ServerPlayer p : victims) {
+            if (Curses.balloon(p)) {
+                Curses.pop(p, source.getPlayer());
+                n++;
+            }
+        }
+        int done = n;
+        source.sendSuccess(() -> Component.translatable("punizioni.command.popped", done), true);
         return n;
     }
 

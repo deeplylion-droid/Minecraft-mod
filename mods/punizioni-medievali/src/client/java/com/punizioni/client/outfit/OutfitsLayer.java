@@ -24,7 +24,7 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The jester's motley and the prisoner's rags in 3D, on the parts of the player model: the
+ * The jester's motley, the prisoner's rags and the witch's clothes in 3D, on the parts of the player model: the
  * jester's three-pointed hat (the points flop and swing, a bell at each tip), the dagged collar
  * with bells, the quartered tunic with its dagged hem, the sleeves, the parti-coloured hose and the
  * curled shoes with bells; the prisoner's burlap hood with its long tail, the sackcloth tunic with
@@ -39,6 +39,8 @@ public class OutfitsLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
     private static final Identifier PEASANT_TEXTURE = Punizioni.id("textures/entity/peasant.png");
     private static final RenderType JESTER = RenderTypes.entityCutout(JESTER_TEXTURE);
     private static final RenderType PEASANT = RenderTypes.entityCutout(PEASANT_TEXTURE);
+    private static final Identifier WITCH_TEXTURE = Punizioni.id("textures/entity/witch.png");
+    private static final RenderType WITCH = RenderTypes.entityCutout(WITCH_TEXTURE);
 
     private static final String[] POINTS = {"left", "right", "back"};
     private static final float[] NONE = new float[0];
@@ -71,6 +73,7 @@ public class OutfitsLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
 
     private final @Nullable Piece hat, collar, tunic, jSleeveRight, jSleeveLeft, hoseRight, hoseLeft, shoeRight, shoeLeft;
     private final @Nullable Piece hood, pTunic, pSleeveRight, pSleeveLeft, breechesRight, breechesLeft, wrapRight, wrapLeft;
+    private final @Nullable Piece wHat, wDress, wSleeveRight, wSleeveLeft, stockingRight, stockingLeft, bootRight, bootLeft;
 
     public OutfitsLayer(AvatarRenderer<?> renderer, ResourceManager manager) {
         super(renderer);
@@ -100,6 +103,17 @@ public class OutfitsLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
         this.breechesLeft = piece(p, "peasant_breeches_left");
         this.wrapRight = piece(p, "peasant_wrap_right", p.find("ankle_chain_right"));
         this.wrapLeft = piece(p, "peasant_wrap_left", p.find("ankle_chain_left"));
+
+        BbModel w = BbModel.load(manager, Punizioni.id("geometry/witch.bbmodel"));
+        this.wHat = piece(w, "witch_hat", w.find("hat_tip_1"), w.find("hat_tip_2"), w.find("hat_tip_3"), w.find("hat_spider"));
+        this.wDress = piece(w, "witch_dress", w.find("skirt_front"), w.find("skirt_back"), w.find("skirt_left"), w.find("skirt_right"),
+                w.find("dress_charm"));
+        this.wSleeveRight = piece(w, "witch_sleeve_right", w.find("cuff_right"));
+        this.wSleeveLeft = piece(w, "witch_sleeve_left", w.find("cuff_left"));
+        this.stockingRight = piece(w, "witch_stocking_right");
+        this.stockingLeft = piece(w, "witch_stocking_left");
+        this.bootRight = piece(w, "witch_boot_right", w.find("boot_toe_right"));
+        this.bootLeft = piece(w, "witch_boot_left", w.find("boot_toe_left"));
     }
 
     /** A piece drawn from the vanilla part's pivot (the bone's own offset is already there). */
@@ -116,7 +130,7 @@ public class OutfitsLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector collector, int light, AvatarRenderState state, float yRot, float xRot) {
         Visuals v = state.getData(Visuals.KEY);
-        if (v == null || state.isInvisible || (v.jester == 0 && v.peasant == 0)) {
+        if (v == null || state.isInvisible || (v.jester == 0 && v.peasant == 0 && v.witch == 0)) {
             return;
         }
         PlayerModel model = this.getParentModel();
@@ -217,6 +231,63 @@ public class OutfitsLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
                     float[] chain = {hang(-model.leftLeg.xRot * 0.8F + pitch * 0.3F - bounce * 0.4F), 0.0F, side(roll * 0.3F)};
                     this.on(poseStack, collector, model, model.leftLeg, this.wrapLeft, chain, PEASANT, light, overlay);
                 }
+            }
+        }
+
+        if (v.witch != 0) {
+            this.witch(poseStack, collector, model, v, pitch, roll, lift, bounce, legFront, legBack, noRightArm, noLeftArm, noRightLeg, noLeftLeg, light,
+                    overlay);
+        }
+    }
+
+    /** The witch's clothes: the hat's crooked tip and the little spider on its thread swing, the skirt's panels follow the legs. */
+    private void witch(PoseStack poseStack, SubmitNodeCollector collector, PlayerModel model, Visuals v, float pitch, float roll, float lift, float bounce,
+                       float legFront, float legBack, boolean noRightArm, boolean noLeftArm, boolean noRightLeg, boolean noLeftLeg, int light, int overlay) {
+        Body b = v.body;
+        if ((v.witch & 1) != 0 && !b.headless()) {
+            float[] t = new float[12];
+            float[] weight = {0.25F, 0.45F, 0.7F};
+            for (int i = 0; i < 3; i++) {
+                // the crooked tip droops back and wags; the head's nod is partly taken back
+                t[i * 3] = hang((lift + bounce) * weight[i] * 0.8F + pitch * 0.5F * weight[i] - model.head.xRot * 0.3F * weight[i]);
+                t[i * 3 + 2] = side(roll * weight[i]);
+            }
+            // the spider on its thread hangs straight down whatever the head does
+            t[9] = hang(-model.head.xRot + pitch * 0.9F + (lift + bounce) * 0.4F);
+            t[11] = side(-model.head.zRot + roll * 1.2F);
+            this.on(poseStack, collector, model, model.head, this.wHat, t, WITCH, light, overlay);
+        }
+        if ((v.witch & 2) != 0) {
+            float[] skirt = {
+                    hang(legFront * 0.85F + pitch * 0.3F + bounce * 0.1F), 0.0F, 0.0F,
+                    hang(legBack * 0.85F + pitch * 0.3F - bounce * 0.1F), 0.0F, 0.0F,
+                    0.0F, 0.0F, side(-Math.abs(roll) * 0.2F - Math.abs(bounce) * 0.15F + roll * 0.25F),
+                    0.0F, 0.0F, side(Math.abs(roll) * 0.2F + Math.abs(bounce) * 0.15F + roll * 0.25F),
+                    hang(pitch * 0.6F + bounce * 0.5F), 0.0F, side(roll * 0.6F)};
+            this.on(poseStack, collector, model, model.body, this.wDress, skirt, WITCH, light, overlay);
+            if (!noRightArm) {
+                float[] cuff = {hang(-model.rightArm.xRot * 0.45F + pitch * 0.3F + bounce * 0.2F), 0.0F, side(-model.rightArm.zRot * 0.4F + roll * 0.3F)};
+                this.on(poseStack, collector, model, model.rightArm, this.wSleeveRight, cuff, WITCH, light, overlay);
+            }
+            if (!noLeftArm) {
+                float[] cuff = {hang(-model.leftArm.xRot * 0.45F + pitch * 0.3F + bounce * 0.2F), 0.0F, side(-model.leftArm.zRot * 0.4F + roll * 0.3F)};
+                this.on(poseStack, collector, model, model.leftArm, this.wSleeveLeft, cuff, WITCH, light, overlay);
+            }
+        }
+        if ((v.witch & 4) != 0) {
+            if (!noRightLeg) {
+                this.on(poseStack, collector, model, model.rightLeg, this.stockingRight, NONE, WITCH, light, overlay);
+            }
+            if (!noLeftLeg) {
+                this.on(poseStack, collector, model, model.leftLeg, this.stockingLeft, NONE, WITCH, light, overlay);
+            }
+        }
+        if ((v.witch & 8) != 0) {
+            if (!noRightLeg) {
+                this.on(poseStack, collector, model, model.rightLeg, this.bootRight, NONE, WITCH, light, overlay);
+            }
+            if (!noLeftLeg) {
+                this.on(poseStack, collector, model, model.leftLeg, this.bootLeft, NONE, WITCH, light, overlay);
             }
         }
     }
