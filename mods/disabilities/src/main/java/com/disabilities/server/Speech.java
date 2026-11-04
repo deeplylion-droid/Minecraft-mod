@@ -46,6 +46,39 @@ public final class Speech {
             return message;
         });
         ServerPlayNetworking.registerGlobalReceiver(Net.MakeGesture.TYPE, (payload, context) -> gesture(context.player(), payload.gesture()));
+        ServerPlayNetworking.registerGlobalReceiver(Net.TriedToSpeak.TYPE, (payload, context) -> triedToSpeak(context.player()));
+        ServerMessageEvents.CHAT_MESSAGE.register((message, sender, type) -> afterChat(sender, message.decoratedContent()));
+    }
+
+    private static final java.util.Map<java.util.UUID, Long> LAST_TRY = new java.util.HashMap<>();
+
+    /** A mute player tried to talk: everybody around sees and hears them try. */
+    private static void triedToSpeak(ServerPlayer player) {
+        if (!isMute(player) || ModData.lying(player)) {
+            return;
+        }
+        long now = player.level().getGameTime();
+        Long last = LAST_TRY.get(player.getUUID());
+        if (last != null && now - last < 30) {
+            return;
+        }
+        LAST_TRY.put(player.getUUID(), now);
+        player.level().playSound(null, player.getX(), player.getEyeY(), player.getZ(), com.disabilities.sound.ModSounds.MMH,
+                net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 0.9F + player.getRandom().nextFloat() * 0.2F);
+        Ailments.bubble(player, Component.translatable("disabilities.bubble.mmh").withStyle(ChatFormatting.RED, ChatFormatting.BOLD), 50);
+    }
+
+    /** After a chat message: dyslexic players' words also float over their head; deaf players around say "Eh?". */
+    private static void afterChat(ServerPlayer sender, Component content) {
+        if (ModData.has(sender, Condition.DYSLEXIA)) {
+            Ailments.bubble(sender, content.copy().withStyle(ChatFormatting.WHITE), 70);
+        }
+        for (ServerPlayer other : sender.level().players()) {
+            if (other != sender && ModData.has(other, Condition.DEAF) && other.distanceToSqr(sender) < 16 * 16 && !ModData.lying(other)) {
+                Ailments.motion(other, com.disabilities.net.MotionKind.EAR, 0);
+                Ailments.bubble(other, Component.translatable("disabilities.bubble.eh").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), 40);
+            }
+        }
     }
 
     public static boolean isMute(ServerPlayer player) {

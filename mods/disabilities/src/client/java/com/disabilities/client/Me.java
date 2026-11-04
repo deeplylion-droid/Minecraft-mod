@@ -41,6 +41,12 @@ public final class Me {
         return player != null && ModData.asleep(player);
     }
 
+    /** Lying on the ground: asleep, in a seizure, in cardiac arrest. */
+    public static boolean lying() {
+        LocalPlayer player = player();
+        return player != null && ModData.lying(player);
+    }
+
     /** Asleep or frozen (Parkinson): no walking, no hands. */
     public static boolean frozen() {
         LocalPlayer player = player();

@@ -11,7 +11,10 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.world.entity.Pose;
 
-/** Draws the visible aids on players: glasses, eye patch, hearing aids, wheelchair, crutches. */
+/**
+ * Draws the visible aids on players: glasses, eye patch, hearing aids, wheelchair, crutches, and
+ * from 1.1.0 the casts and the sling of broken bones, the alien hand's glove, the allergy's swollen face.
+ */
 public class ConditionLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
     public ConditionLayer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer) {
         super(renderer);
@@ -26,11 +29,12 @@ public class ConditionLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
         int overlay = LivingEntityRenderer.getOverlayCoords(state, 0.0F);
 
         String glasses = v.has(Condition.BLIND) ? Accessories.DARK_GLASSES
-                : v.has(Condition.MYOPIA) ? Accessories.THICK_GLASSES
+                : v.has(Condition.MYOPIA) ? (v.glassesOff ? null : Accessories.THICK_GLASSES)
                 : v.has(Condition.ACHROMATOPSIA) ? Accessories.TINTED_GLASSES : null;
         boolean patch = v.has(Condition.ONE_EYE);
         boolean aids = v.has(Condition.DEAF);
-        if (glasses != null || patch || aids) {
+        boolean swollen = v.swollen;
+        if (glasses != null || patch || aids || swollen) {
             poseStack.pushPose();
             this.getParentModel().root().translateAndRotate(poseStack);
             this.getParentModel().getHead().translateAndRotate(poseStack);
@@ -43,6 +47,39 @@ public class ConditionLayer extends RenderLayer<AvatarRenderState, PlayerModel> 
             if (aids) {
                 draw(Accessories.HEARING_AIDS, poseStack, collector, light, overlay, state);
             }
+            if (swollen) {
+                draw(Accessories.SWOLLEN, poseStack, collector, light, overlay, state);
+            }
+            poseStack.popPose();
+        }
+
+        PlayerModel model = this.getParentModel();
+        // the arm of the main hand (the other one for the alien hand)
+        boolean mainRight = v.missingLeftArm;
+        if (v.brokenArm) {
+            poseStack.pushPose();
+            model.root().translateAndRotate(poseStack);
+            (mainRight ? model.rightArm : model.leftArm).translateAndRotate(poseStack);
+            draw(mainRight ? Accessories.CAST_ARM_R : Accessories.CAST_ARM_L, poseStack, collector, light, overlay, state);
+            poseStack.popPose();
+            poseStack.pushPose();
+            model.root().translateAndRotate(poseStack);
+            model.body.translateAndRotate(poseStack);
+            draw(mainRight ? Accessories.SLING_R : Accessories.SLING_L, poseStack, collector, light, overlay, state);
+            poseStack.popPose();
+        }
+        if (v.brokenLeg && !v.has(Condition.ONE_LEG)) {
+            poseStack.pushPose();
+            model.root().translateAndRotate(poseStack);
+            model.leftLeg.translateAndRotate(poseStack);
+            draw(Accessories.CAST_LEG, poseStack, collector, light, overlay, state);
+            poseStack.popPose();
+        }
+        if (v.has(Condition.ALIEN_HAND)) {
+            poseStack.pushPose();
+            model.root().translateAndRotate(poseStack);
+            (mainRight ? model.leftArm : model.rightArm).translateAndRotate(poseStack);
+            draw(mainRight ? Accessories.ALIEN_GLOVE_L : Accessories.ALIEN_GLOVE_R, poseStack, collector, light, overlay, state);
             poseStack.popPose();
         }
 

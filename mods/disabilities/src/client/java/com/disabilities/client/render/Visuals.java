@@ -27,6 +27,24 @@ public final class Visuals {
     public Component bubble;
     /** 0 = left, 1 = right: the arm a one-armed player is missing (the off-hand side). */
     public boolean missingLeftArm = true;
+    // 1.1.0
+    public boolean seizing;
+    public boolean arrested;
+    public boolean panicking;
+    public boolean anxious;
+    public int heartStage;
+    public boolean brokenArm;
+    public boolean brokenLeg;
+    public boolean glassesOff;
+    public boolean swollen;
+    /** Albinism and achromatopsia: in the sun, a hand shades the eyes. */
+    public boolean dazzled;
+    /** Blind: the white cane is in the hand, it sweeps the ground. */
+    public boolean cane;
+    public com.disabilities.net.MotionKind motion;
+    /** Ticks since the motion started. */
+    public float motionTime;
+    public int motionArg;
 
     public boolean has(Condition condition) {
         return (this.mask & condition.bit()) != 0;

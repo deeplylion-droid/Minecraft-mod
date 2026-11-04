@@ -17,7 +17,26 @@ public enum EpisodeKind {
     /** Amnesia: the inventory was shuffled. */
     FORGOT,
     /** Albinism: the sun burns. */
-    SUNBURN;
+    SUNBURN,
+    // 1.1.0
+    /** Epilepsy: the warning before a seizure (the world wobbles). */
+    AURA,
+    /** Alien hand: your own hand hits your face. */
+    SLAPPED,
+    /** Alien hand: it grabs your head and turns it. */
+    PULLED,
+    /** Gigantism, blind without the cane: you hit your head. */
+    BONK,
+    /** Brittle bones: crack. */
+    FRACTURE,
+    /** Narcolepsy: the eyes close for a moment. */
+    NOD,
+    /** Amnesia: where am I? The eyes wander. */
+    LOST,
+    /** Asthma: a coughing fit. */
+    COUGH,
+    /** Weak heart: someone brought you back. */
+    REVIVED;
 
     public static EpisodeKind byOrdinal(int ordinal) {
         EpisodeKind[] all = values();

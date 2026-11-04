@@ -61,6 +61,7 @@ Regole imparate a caro prezzo:
 - `key` preme e rilascia subito: per salto e corsa usa `hold`.
 - Gli slime del mondo piatto uccidono i giocatori di prova: il `server.properties` del modello è già in pacifico; se cambi mondo, controlla.
 - Le coordinate intere di `/tp` e `/summon` vanno al centro del blocco (+0,5).
+- Controlla `run/mods` dei client prima di partire: una vecchia mod di test rimasta lì (es. `dtest` delle prove di Disabilità 1.0) ha gli stessi mixin di `ctest` e fa crashare il client all'avvio (`@Redirect conflict` su `GlBackend`). Spostala nello scratchpad, non cancellarla.
 
 ## 4. La mod di test (`ctest`)
 

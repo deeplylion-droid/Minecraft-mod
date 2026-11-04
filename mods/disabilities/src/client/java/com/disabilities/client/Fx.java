@@ -54,6 +54,17 @@ public final class Fx {
     private static int ticks;
     private static boolean wasDeaf;
 
+    // 1.1.0
+    private static int bpm = 72;
+    private static float beatClock;
+    private static int auraLeft;
+    private static int auraTotal = 1;
+    private static int nod;
+    private static int lost;
+    private static int fractureFlash;
+    private static int bonkFlash;
+    private static int revived;
+
     // Parkinson tremor offsets currently added to the aim
     private static float tremorYaw;
     private static float tremorPitch;
@@ -108,6 +119,34 @@ public final class Fx {
         }
         fearO = fear;
         fear += (vertigoTarget(player) - fear) * 0.08F;
+
+        if (auraLeft > 0) {
+            auraLeft--;
+        }
+        if (nod > 0) {
+            nod--;
+        }
+        if (fractureFlash > 0) {
+            fractureFlash--;
+        }
+        if (bonkFlash > 0) {
+            bonkFlash--;
+        }
+        if (revived > 0) {
+            revived--;
+        }
+        if (lost > 0) {
+            lost--;
+            // the eyes wander, looking for something familiar
+            player.turn(Mth.sin(lost * 0.18F) * 4.0F / 0.15F, 0.0);
+        }
+        heartbeat(mc, player);
+        if (Me.status().seizing(Me.now()) && ticks % 2 == 0) {
+            kickRoll += (float) ((Math.random() - 0.5) * 9.0);
+        }
+        if (Me.status().panicking(Me.now()) && ticks % 3 == 0) {
+            kickRoll += (float) ((Math.random() - 0.5) * 3.0);
+        }
 
         boolean deaf = Me.has(Condition.DEAF);
         if (deaf && !wasDeaf) {
@@ -210,6 +249,41 @@ public final class Fx {
                 player.turn(arg * 12.0F / 0.15F, 8.0F / 0.15F);
             }
             case FORGOT -> forgotFlash = 50;
+            case AURA -> {
+                auraLeft = Math.max(1, arg);
+                auraTotal = auraLeft;
+            }
+            case SLAPPED -> {
+                float yaw = arg * (20.0F + random.nextFloat() * 15.0F);
+                player.turn(yaw / 0.15F, 4.0F / 0.15F);
+                kickRoll += arg * 9.0F;
+                bonkFlash = 5;
+            }
+            case PULLED -> spinLeft = arg * (70.0F + random.nextFloat() * 60.0F);
+            case BONK -> {
+                player.turn(0.0, (arg == 1 ? 18.0F : 10.0F) / 0.15F);
+                kickRoll += (random.nextBoolean() ? 1 : -1) * 6.0F;
+                kickFov -= 0.1F;
+                bonkFlash = 8;
+            }
+            case FRACTURE -> {
+                kickRoll += (random.nextBoolean() ? 1 : -1) * 10.0F;
+                kickFov -= 0.15F;
+                fractureFlash = 14;
+            }
+            case NOD -> {
+                nod = 26;
+                player.turn(0.0, 16.0F / 0.15F);
+            }
+            case LOST -> lost = 60;
+            case COUGH -> {
+                player.turn(0.0, 6.0F / 0.15F);
+                kickRoll += (random.nextBoolean() ? 1 : -1) * 2.0F;
+            }
+            case REVIVED -> {
+                revived = 40;
+                kickFov += 0.2F;
+            }
             case SUNBURN -> {
                 burnFlash = 8;
                 kickRoll += (random.nextBoolean() ? 1 : -1) * 2.0F;
@@ -229,6 +303,69 @@ public final class Fx {
         return ticks + partial;
     }
 
+    // ---------------------------------------------------------------- 1.1.0
+
+    public static void setBpm(int value) {
+        bpm = value;
+    }
+
+    public static int bpm() {
+        return bpm;
+    }
+
+    /** The heart you hear in your ears: weak heart over 125, claustrophobia when anxious. */
+    private static void heartbeat(Minecraft mc, LocalPlayer player) {
+        com.disabilities.condition.Status status = Me.status();
+        long now = Me.now();
+        float rate = 0.0F;
+        float volume = 0.0F;
+        if (Me.has(Condition.WEAK_HEART) && !status.arrested(now) && status.heartStage() > 0) {
+            rate = bpm;
+            volume = status.heartStage() == 2 ? 1.0F : 0.55F;
+        }
+        if (Me.has(Condition.CLAUSTROPHOBIA) && (status.anxious() || status.panicking(now))) {
+            rate = Math.max(rate, status.panicking(now) ? 150.0F : 110.0F);
+            volume = Math.max(volume, status.panicking(now) ? 1.0F : 0.5F);
+        }
+        if (rate <= 0.0F || Me.has(Condition.DEAF)) {
+            beatClock = 0.0F;
+            return;
+        }
+        beatClock += rate / 1200.0F;
+        if (beatClock >= 1.0F) {
+            beatClock -= 1.0F;
+            mc.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(ModSounds.HEARTBEAT, 1.0F, volume));
+        }
+    }
+
+    /** Epilepsy: the warning before a seizure, 0-1 (rises to the end). */
+    public static float aura(float partial) {
+        if (auraLeft <= 0) {
+            return 0.0F;
+        }
+        return Mth.clamp(1.0F - (auraLeft - partial) / auraTotal, 0.0F, 1.0F) * 0.7F + 0.3F;
+    }
+
+    public static float nod(float partial) {
+        if (nod <= 0) {
+            return 0.0F;
+        }
+        float t = (26 - nod + partial) / 26.0F;
+        return t < 0.2F ? t / 0.2F : t < 0.75F ? 1.0F : (1.0F - t) / 0.25F;
+    }
+
+    public static float fractureFlash(float partial) {
+        return fractureFlash <= 0 ? 0.0F : (fractureFlash - partial) / 14.0F;
+    }
+
+    public static float bonkFlash(float partial) {
+        return bonkFlash <= 0 ? 0.0F : (bonkFlash - partial) / 8.0F;
+    }
+
+    public static float revived(float partial) {
+        return revived <= 0 ? 0.0F : (revived - partial) / 40.0F;
+    }
+
     /** Camera roll in degrees: vertigo sway and the lurches. */
     public static float roll(float partial) {
         float t = time(partial);
@@ -238,12 +375,33 @@ public final class Fx {
             roll += Mth.sin(t * 0.045F) * 2.2F + Mth.sin(t * 0.11F + 1.0F) * 1.0F;
             roll += f * (Mth.sin(t * 0.09F) * 14.0F + Mth.sin(t * 0.23F) * 5.0F);
         }
+        float a = aura(partial);
+        if (a > 0.0F) {
+            roll += a * (Mth.sin(t * 0.21F) * 7.0F + Mth.sin(t * 0.53F) * 3.0F);
+        }
+        com.disabilities.condition.Status status = Me.status();
+        if (status.seizing(Me.now())) {
+            // convulsions: the view shakes hard (no flashing: people watching may be photosensitive)
+            roll += Mth.sin(t * 2.7F) * 9.0F + Mth.sin(t * 4.1F + 1.0F) * 5.0F;
+        }
         return roll;
     }
 
     /** FOV multiplier: the vertigo "dolly zoom" and the lurches. */
     public static float fov(float partial) {
         float f = 1.0F + Mth.lerp(partial, kickFovO, kickFov);
+        float a = aura(partial);
+        if (a > 0.0F) {
+            f *= 1.0F + a * 0.12F * Mth.sin(time(partial) * 0.3F);
+        }
+        com.disabilities.condition.Status status = Me.status();
+        long now = Me.now();
+        if (status.panicking(now)) {
+            // the walls close in
+            f *= 0.82F + 0.04F * Mth.sin(time(partial) * 0.5F);
+        } else if (status.anxious() && Me.has(Condition.CLAUSTROPHOBIA)) {
+            f *= 0.94F;
+        }
         if (Me.has(Condition.VERTIGO)) {
             float fr = Mth.lerp(partial, fearO, fear);
             f *= 1.0F + fr * 0.22F * Mth.sin(time(partial) * 0.06F);
@@ -341,6 +499,9 @@ public final class Fx {
         ECHOES.clear();
         kickRoll = kickRollO = kickFov = kickFovO = 0.0F;
         tears = blink = forgotFlash = burnFlash = crouchTicks = 0;
+        bpm = 72;
+        beatClock = 0.0F;
+        auraLeft = nod = lost = fractureFlash = bonkFlash = revived = 0;
         spinLeft = 0.0F;
         fear = fearO = 0.0F;
         tremorYaw = tremorPitch = 0.0F;

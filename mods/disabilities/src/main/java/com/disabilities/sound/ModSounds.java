@@ -27,6 +27,23 @@ public final class ModSounds {
     public static final SoundEvent TIC_SNIFF = register("tic_sniff");
     public static final SoundEvent TIC_GRUNT = register("tic_grunt");
 
+    // 1.1.0
+    public static final SoundEvent HEARTBEAT = register("heartbeat");
+    public static final SoundEvent FLATLINE = register("flatline");
+    public static final SoundEvent ECG_BEEP = register("ecg_beep");
+    public static final SoundEvent CPR_PUSH = register("cpr_push");
+    public static final SoundEvent BONE_CRACK = register("bone_crack");
+    public static final SoundEvent SLAP = register("slap");
+    public static final SoundEvent BONK = register("bonk");
+    public static final SoundEvent GIANT_STEP = register("giant_step");
+    public static final SoundEvent SEIZURE = register("seizure");
+    public static final SoundEvent HYPERVENTILATE = register("hyperventilate");
+    public static final SoundEvent COUGH = register("cough");
+    public static final SoundEvent CRUTCH = register("crutch");
+    public static final SoundEvent SQUEAK = register("squeak");
+    public static final SoundEvent MMH = register("mmh");
+    public static final SoundEvent THUD = register("thud");
+
     public static final SoundEvent[] VOCAL_TICS = {TIC_HM, TIC_WHISTLE, TIC_HEY, TIC_CLICK, TIC_SNIFF, TIC_GRUNT};
 
     private static SoundEvent register(String name) {

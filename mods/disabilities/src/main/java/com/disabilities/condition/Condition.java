@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * The 21 disabilities a player can pick. Each one has an icon (a glyph of the badge font, U+E000 + ordinal)
+ * The 27 disabilities a player can pick. Each one has an icon (a glyph of the badge font, U+E000 + ordinal)
  * and a colour; some pairs make no sense together and are not allowed.
  */
 public enum Condition {
@@ -32,7 +32,14 @@ public enum Condition {
     VERTIGO(0x5ADCC8, "vertigini"),
     ASTHMA(0xF08296, "asma"),
     HEMOPHILIA(0xC8141E, "emofilia"),
-    ALLERGY(0xFF78B4, "allergia");
+    ALLERGY(0xFF78B4, "allergia"),
+    // added in 1.1.0: always append at the end (the masks use the ordinals)
+    EPILEPSY(0xFF9A2E, "epilessia"),
+    ALIEN_HAND(0x9BE23C, "mano_aliena"),
+    GIGANTISM(0x8E6CD8, "gigante"),
+    BRITTLE_BONES(0xEDE6D2, "ossa_fragili"),
+    WEAK_HEART(0xD81E5B, "cuore"),
+    CLAUSTROPHOBIA(0x8A7B6A, "claustrofobia");
 
     /** How many conditions every player gets. */
     public static final int PER_PLAYER = 2;
@@ -90,6 +97,9 @@ public enum Condition {
             case WHEELCHAIR -> b == ONE_LEG;
             // crutches need both arms
             case ONE_LEG -> b == ONE_ARM;
+            // the alien hand is the off hand, the one a one-armed player does not have
+            case ALIEN_HAND -> b == ONE_ARM;
+            case GIGANTISM -> b == DWARFISM;
             default -> false;
         };
     }

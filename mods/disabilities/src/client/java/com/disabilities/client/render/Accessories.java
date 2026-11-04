@@ -41,7 +41,16 @@ public final class Accessories implements ResourceManagerReloadListener {
     public static final String HEARING_AIDS = "hearing_aids";
     public static final String WHEELCHAIR = "wheelchair";
     public static final String CRUTCHES = "crutches";
-    private static final String[] ALL = {DARK_GLASSES, TINTED_GLASSES, THICK_GLASSES, EYE_PATCH, HEARING_AIDS, WHEELCHAIR, CRUTCHES};
+    public static final String CAST_ARM_R = "cast_arm_r";
+    public static final String CAST_ARM_L = "cast_arm_l";
+    public static final String CAST_LEG = "cast_leg";
+    public static final String SLING_R = "sling_r";
+    public static final String SLING_L = "sling_l";
+    public static final String ALIEN_GLOVE_R = "alien_glove_r";
+    public static final String ALIEN_GLOVE_L = "alien_glove_l";
+    public static final String SWOLLEN = "swollen";
+    private static final String[] ALL = {DARK_GLASSES, TINTED_GLASSES, THICK_GLASSES, EYE_PATCH, HEARING_AIDS, WHEELCHAIR, CRUTCHES,
+            CAST_ARM_R, CAST_ARM_L, CAST_LEG, SLING_R, SLING_L, ALIEN_GLOVE_R, ALIEN_GLOVE_L, SWOLLEN};
 
     private static final Map<String, AccessoryModel> MODELS = new HashMap<>();
 

@@ -28,6 +28,8 @@ public abstract class GameRendererMixin {
     @Unique
     private static final Identifier DISABILITIES_MYOPIA = Disabilities.id("myopia");
     @Unique
+    private static final Identifier DISABILITIES_MYOPIA_STRONG = Disabilities.id("myopia_strong");
+    @Unique
     private static final Identifier DISABILITIES_TEARS = Disabilities.id("tears");
     @Unique
     private static final Identifier DISABILITIES_GRAYSCALE = Disabilities.id("grayscale");
@@ -48,7 +50,10 @@ public abstract class GameRendererMixin {
     @Inject(method = "update", at = @At("TAIL"))
     private void disabilities$postEffects(DeltaTracker deltaTracker, CallbackInfo ci) {
         GameRenderer self = (GameRenderer) (Object) this;
-        if (Me.has(Condition.MYOPIA)) {
+        boolean blurred = Me.status().seizing(Me.now()) || Me.has(Condition.MYOPIA) && Me.status().glassesOff(Me.now());
+        if (blurred) {
+            self.getRequestedPostEffects().add(DISABILITIES_MYOPIA_STRONG);
+        } else if (Me.has(Condition.MYOPIA)) {
             self.getRequestedPostEffects().add(DISABILITIES_MYOPIA);
         }
         if (Fx.tears(0.0F) > 0.3F) {

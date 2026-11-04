@@ -25,10 +25,10 @@ public abstract class MouseHandlerMixin {
         }
     }
 
-    /** Asleep: you cannot look around. */
+    /** Asleep, in a seizure, in cardiac arrest: you cannot look around. */
     @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
     private void disabilities$asleep(double mousea, CallbackInfo ci) {
-        if (Me.asleep()) {
+        if (Me.lying()) {
             ci.cancel();
         }
     }

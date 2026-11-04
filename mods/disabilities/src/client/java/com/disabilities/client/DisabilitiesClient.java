@@ -71,10 +71,14 @@ public class DisabilitiesClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(Net.Episode.TYPE, (payload, context) ->
                 Fx.onEpisode(EpisodeKind.byOrdinal(payload.kind()), payload.arg()));
         ClientPlayNetworking.registerGlobalReceiver(Net.Roster.TYPE, (payload, context) -> ClientHooks.setRoster(payload.masks()));
+        ClientPlayNetworking.registerGlobalReceiver(Net.Motion.TYPE, (payload, context) ->
+                Motions.start(payload.entityId(), com.disabilities.net.MotionKind.byOrdinal(payload.kind()), payload.arg()));
+        ClientPlayNetworking.registerGlobalReceiver(Net.Heart.TYPE, (payload, context) -> Fx.setBpm(payload.bpm()));
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             pendingChooser = -1;
             SEEN.clear();
             Bubbles.clear();
+            Motions.clear();
             Fx.reset();
             ClientHooks.setRoster(Map.of());
         });
@@ -85,6 +89,8 @@ public class DisabilitiesClient implements ClientModInitializer {
         ClientSendMessageEvents.ALLOW_CHAT.register(message -> {
             if (Me.has(Condition.MUTE)) {
                 muteHint();
+                // the others see you try
+                ClientPlayNetworking.send(Net.TriedToSpeak.INSTANCE);
                 return false;
             }
             return true;
@@ -118,6 +124,9 @@ public class DisabilitiesClient implements ClientModInitializer {
         Minecraft.getInstance().gui.hud.setOverlayMessage(Component.translatable("disabilities.msg.mute").withStyle(ChatFormatting.RED), false);
     }
 
+    private static int bumpCooldown;
+    private static double lastVy;
+
     private static void tick(Minecraft mc) {
         Fx.tick(mc);
         Overlays.tick(mc);
@@ -125,6 +134,7 @@ public class DisabilitiesClient implements ClientModInitializer {
         if (player == null || mc.level == null) {
             return;
         }
+        bumps(player);
         // the chooser cannot be avoided: it comes back whenever no other screen is open
         if (!ModData.picks(player).settled()) {
             if (pendingChooser >= 0 && mc.gui.screen() == null) {
@@ -154,6 +164,26 @@ public class DisabilitiesClient implements ClientModInitializer {
         if (mc.level.getGameTime() % 1200 == 0) {
             SEEN.keySet().removeIf(id -> mc.level.getEntity(id) == null);
         }
+    }
+
+    /** Blind without the cane walking into a wall, a giant hitting the ceiling: the server hurts and shows it. */
+    private static void bumps(LocalPlayer player) {
+        if (bumpCooldown > 0) {
+            bumpCooldown--;
+        }
+        double vy = player.getDeltaMovement().y;
+        if (bumpCooldown == 0 && !Me.lying()) {
+            if (Me.has(Condition.GIGANTISM) && player.verticalCollision && !player.onGround() && lastVy > 0.05) {
+                bumpCooldown = 20;
+                ClientPlayNetworking.send(new Net.Bump(1));
+            } else if (Me.has(Condition.BLIND) && player.horizontalCollision && player.input.getMoveVector().y > 0.5F
+                    && !player.getMainHandItem().is(com.disabilities.item.ModItems.WHITE_CANE)
+                    && !player.getOffhandItem().is(com.disabilities.item.ModItems.WHITE_CANE)) {
+                bumpCooldown = 40;
+                ClientPlayNetworking.send(new Net.Bump(0));
+            }
+        }
+        lastVy = vy;
     }
 
     static void clearSkins() {

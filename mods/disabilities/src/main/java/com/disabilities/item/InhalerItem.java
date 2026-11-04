@@ -30,6 +30,7 @@ public class InhalerItem extends Item {
             level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), ModSounds.INHALER, SoundSource.PLAYERS, 1.0F, 1.0F);
             Vec3 mouth = player.getEyePosition().add(player.getLookAngle().scale(0.4));
             serverLevel.sendParticles(ParticleTypes.CLOUD, mouth.x, mouth.y - 0.1, mouth.z, 6, 0.06, 0.06, 0.06, 0.01);
+            Ailments.motion(serverPlayer, com.disabilities.net.MotionKind.INHALER, 0);
             stack.hurtAndBreak(1, player, hand);
         }
         player.getCooldowns().addCooldown(stack, COOLDOWN);

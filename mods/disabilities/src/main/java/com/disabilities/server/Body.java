@@ -32,7 +32,7 @@ public final class Body {
     private static final List<Holder<Attribute>> TOUCHED = List.of(Attributes.MOVEMENT_SPEED, Attributes.JUMP_STRENGTH,
             Attributes.SCALE, Attributes.BLOCK_INTERACTION_RANGE, Attributes.ENTITY_INTERACTION_RANGE, Attributes.BLOCK_BREAK_SPEED,
             Attributes.ATTACK_SPEED, Attributes.FALL_DAMAGE_MULTIPLIER, Attributes.SAFE_FALL_DISTANCE, Attributes.KNOCKBACK_RESISTANCE,
-            Attributes.WAYPOINT_RECEIVE_RANGE);
+            Attributes.WAYPOINT_RECEIVE_RANGE, Attributes.ATTACK_DAMAGE, Attributes.MAX_HEALTH);
 
     private static final class Sum {
         double add;
@@ -69,14 +69,66 @@ public final class Body {
                     add(sums, Attributes.SAFE_FALL_DISTANCE, -1.0);
                     add(sums, Attributes.KNOCKBACK_RESISTANCE, 0.4);
                 }
+                case GIGANTISM -> {
+                    mul(sums, Attributes.SCALE, 1.6);
+                    mul(sums, Attributes.MOVEMENT_SPEED, 0.95);
+                    add(sums, Attributes.BLOCK_INTERACTION_RANGE, 1.0);
+                    add(sums, Attributes.ENTITY_INTERACTION_RANGE, 1.0);
+                    add(sums, Attributes.ATTACK_DAMAGE, 1.5);
+                    add(sums, Attributes.MAX_HEALTH, 6.0);
+                    add(sums, Attributes.FALL_DAMAGE_MULTIPLIER, 0.5);
+                    add(sums, Attributes.KNOCKBACK_RESISTANCE, 0.3);
+                }
+                case BRITTLE_BONES -> add(sums, Attributes.FALL_DAMAGE_MULTIPLIER, 0.5);
+                case CLAUSTROPHOBIA -> {
+                    if (status.anxious()) {
+                        mul(sums, Attributes.BLOCK_BREAK_SPEED, 0.75);
+                    }
+                }
+                case WEAK_HEART -> {
+                    if (status.heartStage() == 2) {
+                        mul(sums, Attributes.MOVEMENT_SPEED, 0.82);
+                    }
+                }
+                case EPILEPSY -> {
+                    if (status.confused(now)) {
+                        mul(sums, Attributes.MOVEMENT_SPEED, 0.7);
+                    }
+                }
+                default -> {
+                }
+            }
+        }
+        // the old ones, a bit harder (1.1.0)
+        for (Condition condition : picks.list()) {
+            switch (condition) {
+                case ONE_ARM -> mul(sums, Attributes.ATTACK_DAMAGE, 0.8);
+                case WHEELCHAIR -> {
+                    if (Ailments.onRoughGround(player)) {
+                        mul(sums, Attributes.MOVEMENT_SPEED, 0.55);
+                    }
+                }
                 default -> {
                 }
             }
         }
         // episodes
-        if (status.asleep(now) || status.frozen(now)) {
+        if (status.asleep(now) || status.frozen(now) || status.seizing(now) || status.arrested(now)) {
             mul(sums, Attributes.MOVEMENT_SPEED, 0.0);
             mul(sums, Attributes.JUMP_STRENGTH, 0.0);
+        }
+        if (status.brokenLeg(now)) {
+            mul(sums, Attributes.MOVEMENT_SPEED, 0.55);
+            mul(sums, Attributes.JUMP_STRENGTH, 0.35);
+        }
+        if (status.brokenArm(now)) {
+            mul(sums, Attributes.BLOCK_BREAK_SPEED, 0.35);
+            mul(sums, Attributes.ATTACK_DAMAGE, 0.4);
+            mul(sums, Attributes.ATTACK_SPEED, 0.7);
+        }
+        if (status.panicking(now)) {
+            mul(sums, Attributes.BLOCK_BREAK_SPEED, 0.0);
+            mul(sums, Attributes.ATTACK_DAMAGE, 0.0);
         }
         if (status.winded(now)) {
             mul(sums, Attributes.MOVEMENT_SPEED, 0.85);
@@ -94,6 +146,9 @@ public final class Body {
             Sum sum = e.getValue();
             set(instance, ADD, sum.add, AttributeModifier.Operation.ADD_VALUE);
             set(instance, MUL, sum.mul - 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        }
+        if (player.getHealth() > player.getMaxHealth()) {
+            player.setHealth(player.getMaxHealth());
         }
         player.refreshDimensions();
     }

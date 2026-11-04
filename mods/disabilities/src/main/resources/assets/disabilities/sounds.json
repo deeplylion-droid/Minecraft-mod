@@ -91,5 +91,101 @@
       "disabilities:tic_grunt"
     ],
     "subtitle": "subtitles.disabilities.tic"
+  },
+  "heartbeat": {
+    "sounds": [
+      "disabilities:heartbeat"
+    ],
+    "subtitle": "subtitles.disabilities.heartbeat"
+  },
+  "flatline": {
+    "sounds": [
+      "disabilities:flatline"
+    ],
+    "subtitle": "subtitles.disabilities.flatline"
+  },
+  "ecg_beep": {
+    "sounds": [
+      "disabilities:ecg_beep"
+    ],
+    "subtitle": "subtitles.disabilities.ecg_beep"
+  },
+  "cpr_push": {
+    "sounds": [
+      "disabilities:cpr_push"
+    ],
+    "subtitle": "subtitles.disabilities.cpr_push"
+  },
+  "bone_crack": {
+    "sounds": [
+      "disabilities:bone_crack1",
+      "disabilities:bone_crack2"
+    ],
+    "subtitle": "subtitles.disabilities.bone_crack"
+  },
+  "slap": {
+    "sounds": [
+      "disabilities:slap"
+    ],
+    "subtitle": "subtitles.disabilities.slap"
+  },
+  "bonk": {
+    "sounds": [
+      "disabilities:bonk"
+    ],
+    "subtitle": "subtitles.disabilities.bonk"
+  },
+  "giant_step": {
+    "sounds": [
+      "disabilities:giant_step1",
+      "disabilities:giant_step2",
+      "disabilities:giant_step3"
+    ],
+    "subtitle": "subtitles.disabilities.giant_step"
+  },
+  "seizure": {
+    "sounds": [
+      "disabilities:seizure"
+    ],
+    "subtitle": "subtitles.disabilities.seizure"
+  },
+  "hyperventilate": {
+    "sounds": [
+      "disabilities:hyperventilate"
+    ],
+    "subtitle": "subtitles.disabilities.hyperventilate"
+  },
+  "cough": {
+    "sounds": [
+      "disabilities:cough1",
+      "disabilities:cough2"
+    ],
+    "subtitle": "subtitles.disabilities.cough"
+  },
+  "crutch": {
+    "sounds": [
+      "disabilities:crutch1",
+      "disabilities:crutch2"
+    ],
+    "subtitle": "subtitles.disabilities.crutch"
+  },
+  "squeak": {
+    "sounds": [
+      "disabilities:squeak1",
+      "disabilities:squeak2"
+    ],
+    "subtitle": "subtitles.disabilities.squeak"
+  },
+  "mmh": {
+    "sounds": [
+      "disabilities:mmh"
+    ],
+    "subtitle": "subtitles.disabilities.mmh"
+  },
+  "thud": {
+    "sounds": [
+      "disabilities:thud"
+    ],
+    "subtitle": "subtitles.disabilities.thud"
   }
 }

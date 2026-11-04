@@ -25,11 +25,11 @@ public abstract class PlayerMixin {
         }
     }
 
-    /** Narcolepsy: lying on the ground while asleep. */
+    /** Narcolepsy, epilepsy, cardiac arrest: lying on the ground. */
     @Inject(method = "updatePlayerPose", at = @At("HEAD"), cancellable = true)
     private void disabilities$asleep(CallbackInfo ci) {
         Player self = (Player) (Object) this;
-        if (ModData.asleep(self) && !self.isPassenger() && !self.isSpectator()) {
+        if (ModData.lying(self) && !self.isPassenger() && !self.isSpectator()) {
             self.setPose(Pose.SLEEPING);
             ci.cancel();
         }
@@ -49,9 +49,14 @@ public abstract class PlayerMixin {
         cir.setReturnValue(cir.getReturnValue().copy().append(Component.literal(" ")).append(Chooser.badge(glyphs.toString())));
     }
 
-    /** Obesity: twice as hungry. */
+    /** Obesity: twice as hungry; gigantism: half as much again. */
     @ModifyVariable(method = "causeFoodExhaustion", at = @At("HEAD"), argsOnly = true)
     private float disabilities$hungry(float amount) {
-        return ModData.has((Player) (Object) this, Condition.OBESITY) ? amount * 2.0F : amount;
+        Player self = (Player) (Object) this;
+        float k = ModData.has(self, Condition.OBESITY) ? 2.0F : 1.0F;
+        if (ModData.has(self, Condition.GIGANTISM)) {
+            k *= 1.5F;
+        }
+        return amount * k;
     }
 }

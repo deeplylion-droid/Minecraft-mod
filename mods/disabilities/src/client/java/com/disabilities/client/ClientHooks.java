@@ -59,6 +59,23 @@ public final class ClientHooks {
         v.time = state.ageInTicks;
         v.seed = player.getUUID().getMostSignificantBits();
         v.missingLeftArm = player.getMainArm() == HumanoidArm.RIGHT;
+        v.seizing = status.seizing(now);
+        v.arrested = status.arrested(now);
+        v.panicking = status.panicking(now);
+        v.anxious = status.anxious();
+        v.heartStage = status.heartStage();
+        v.brokenArm = status.brokenArm(now);
+        v.brokenLeg = status.brokenLeg(now);
+        v.glassesOff = status.glassesOff(now);
+        v.swollen = status.swollen();
+        v.dazzled = (picks.has(Condition.ALBINISM) || picks.has(Condition.ACHROMATOPSIA)) && com.disabilities.client.hud.Overlays.inSun(player);
+        v.cane = player.getMainHandItem().is(com.disabilities.item.ModItems.WHITE_CANE);
+        Motions.Moving moving = Motions.get(player.getId());
+        if (moving != null) {
+            v.motion = moving.kind();
+            v.motionTime = now - moving.start() + partial;
+            v.motionArg = moving.arg();
+        }
         Bubbles.Gesturing gesturing = Bubbles.gesturing(player.getId());
         if (gesturing != null) {
             v.gesture = gesturing.gesture();
@@ -76,6 +93,10 @@ public final class ClientHooks {
 
         if (v.has(Condition.WHEELCHAIR)) {
             state.isCrouching = false;
+        }
+        if (v.panicking && !v.has(Condition.WHEELCHAIR)) {
+            // curled up, arms over the head
+            state.isCrouching = true;
         }
         if (v.has(Condition.ALBINISM)) {
             state.skin = PaleSkins.pale(state.skin);
@@ -125,7 +146,17 @@ public final class ClientHooks {
         if (player == null) {
             return false;
         }
-        if (Me.asleep()) {
+        if (Me.lying()) {
+            return true;
+        }
+        long now = Me.now();
+        com.disabilities.condition.Status status = Me.status();
+        if (status.panicking(now)) {
+            hint("disabilities.msg.panic_hands");
+            return true;
+        }
+        if (use && status.brokenArm(now) && (Ailments.twoHanded(player.getMainHandItem()) || Ailments.twoHanded(player.getOffhandItem()))) {
+            hint("disabilities.msg.broken_arm_hands");
             return true;
         }
         if (Me.has(Condition.ONE_LEG) && moving(player)) {
@@ -156,7 +187,7 @@ public final class ClientHooks {
         if (Me.frozen() || Me.has(Condition.ONE_LEG)) {
             return false;
         }
-        if (Me.status().winded(Me.now())) {
+        if (Me.status().winded(Me.now()) || Me.status().brokenLeg(Me.now()) || Me.status().panicking(Me.now())) {
             return false;
         }
         return !Me.has(Condition.ASTHMA) || player.getAirSupply() >= player.getMaxAirSupply() * 0.25F;

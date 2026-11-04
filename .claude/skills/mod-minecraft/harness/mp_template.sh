@@ -27,6 +27,7 @@ for d in $SRV $B; do
 done
 for r in $MOD/run $B/run; do
   mkdir -p $r/mods; rm -f $r/mods/ctest-*.jar; cp $T/ctest/build/libs/ctest-1.0.0.jar $r/mods/
+  ls $r/mods | grep -v '^ctest-' | sed "s#^#[driver] other mod in $r/mods: #"   # old test mods clash with ctest: move them away
   rm -f $r/ftest_cmd.txt
   [ -d $r/screenshots ] && mv $r/screenshots $OUT/old-shots-$(date +%s%N); mkdir -p $r/screenshots
   sed -i 's/^preferredGraphicsBackend:.*/preferredGraphicsBackend:"opengl"/' $r/options.txt

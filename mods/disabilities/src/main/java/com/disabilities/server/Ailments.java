@@ -71,7 +71,7 @@ public final class Ailments {
     private static final Map<UUID, Tracker> TRACKERS = new HashMap<>();
 
     /** Server-only bookkeeping for one player. */
-    private static final class Tracker {
+    static final class Tracker {
         long nextSleep;
         long nextTic;
         long nextFreeze;
@@ -93,6 +93,35 @@ public final class Ailments {
         int caneTimer;
         int sunTicks;
         float allergen;
+        // 1.1.0
+        long nextSeizure;
+        long auraAt;
+        int lastBolt;
+        boolean wasSeizing;
+        long nextAlien;
+        int giantStep;
+        long lastBonk;
+        float bpm = 72.0F;
+        int sentBpm;
+        int cpr;
+        long lastCpr;
+        boolean wasArrested;
+        float anxiety;
+        long lastPanic;
+        boolean wasPanicking;
+        long lastGlasses;
+        long nextNod;
+        long nextLost;
+        long nextCough;
+        long nextNosebleed;
+        long nextItch;
+        boolean rough;
+        int stepTimer;
+        boolean wasOnGround = true;
+        float fallStart;
+        boolean swollen;
+        long brokenLegShown;
+        long brokenArmShown;
     }
 
     public static void init() {
@@ -121,15 +150,36 @@ public final class Ailments {
                 Chooser.giveAids(newPlayer, true);
             }
         });
-        // right-click a sleeping friend to wake them up
+        // right-click a friend: wake them up, put them in the recovery position, CPR
         UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
-            if (!level.isClientSide() && entity instanceof ServerPlayer target && player instanceof ServerPlayer waker
-                    && ModData.asleep(target)) {
-                wake(target, waker);
+            if (level.isClientSide() || !(entity instanceof ServerPlayer target) || !(player instanceof ServerPlayer helper)
+                    || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+                return InteractionResult.PASS;
+            }
+            long now = level.getGameTime();
+            Status status = ModData.status(target);
+            if (status.arrested(now)) {
+                Heart.compress(target, helper);
+                return InteractionResult.SUCCESS;
+            }
+            if (status.seizing(now)) {
+                Epilepsy.secure(target, helper);
+                return InteractionResult.SUCCESS;
+            }
+            if (status.asleep(now)) {
+                wake(target, helper);
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;
         });
+        // hitting things makes a weak heart race
+        net.fabricmc.fabric.api.event.player.AttackEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
+            if (!level.isClientSide() && player instanceof ServerPlayer attacker && ModData.has(attacker, Condition.WEAK_HEART)) {
+                Heart.jolt(attacker, 4.0F);
+            }
+            return InteractionResult.PASS;
+        });
+        ServerPlayNetworking.registerGlobalReceiver(Net.Bump.TYPE, (payload, context) -> Giant.bump(context.player(), payload.kind()));
     }
 
     /** Resets the timers (new conditions, respawn). */
@@ -137,15 +187,15 @@ public final class Ailments {
         TRACKERS.remove(player.getUUID());
     }
 
-    private static Tracker tracker(ServerPlayer player) {
+    static Tracker tracker(ServerPlayer player) {
         return TRACKERS.computeIfAbsent(player.getUUID(), id -> new Tracker());
     }
 
-    private static int between(RandomSource random, int min, int max) {
+    static int between(RandomSource random, int min, int max) {
         return min + random.nextInt(max - min + 1);
     }
 
-    private static boolean episodesOn(ServerPlayer player) {
+    static boolean episodesOn(ServerPlayer player) {
         return player.level().getServer().getGameRules().get(ModRules.EPISODES);
     }
 
@@ -186,9 +236,13 @@ public final class Ailments {
 
         Status status = ModData.status(player);
         boolean asleep = status.asleep(now);
+        boolean lying = ModData.lying(player);
 
         // attributes follow the episodes: refresh when one starts or ends
-        int bits = (asleep ? 1 : 0) | (status.frozen(now) ? 2 : 0) | (status.winded(now) ? 4 : 0) | (t.breathless ? 8 : 0);
+        int bits = (asleep ? 1 : 0) | (status.frozen(now) ? 2 : 0) | (status.winded(now) ? 4 : 0) | (t.breathless ? 8 : 0)
+                | (status.seizing(now) ? 16 : 0) | (status.arrested(now) ? 32 : 0) | (status.panicking(now) ? 64 : 0)
+                | (status.brokenArm(now) ? 128 : 0) | (status.brokenLeg(now) ? 256 : 0) | (status.confused(now) ? 512 : 0)
+                | (t.rough ? 1024 : 0);
         if (bits != t.episodes) {
             if ((t.episodes & 1) != 0 && !asleep) {
                 level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), ModSounds.GASP, SoundSource.PLAYERS, 1.0F, 1.0F);
@@ -206,8 +260,14 @@ public final class Ailments {
         if (picks.has(Condition.ONE_ARM)) {
             tickOneArm(player);
         }
-        if (picks.has(Condition.ONE_LEG) && player.isSprinting()) {
-            player.setSprinting(false);
+        if (picks.has(Condition.ONE_LEG)) {
+            if (player.isSprinting()) {
+                player.setSprinting(false);
+            }
+            tickCrutches(player, t);
+        }
+        if (picks.has(Condition.WHEELCHAIR)) {
+            tickWheelchair(player, t, now);
         }
         if (picks.has(Condition.OBESITY)) {
             tickObesity(player, t, now, status);
@@ -217,6 +277,21 @@ public final class Ailments {
         }
         if (status.bleeding(now)) {
             tickBleeding(player, now);
+        }
+        if (picks.has(Condition.EPILEPSY)) {
+            Epilepsy.tick(player, t, now, ModData.status(player), episodes);
+        }
+        if (picks.has(Condition.WEAK_HEART)) {
+            Heart.tick(player, t, now, ModData.status(player));
+        }
+        if (picks.has(Condition.CLAUSTROPHOBIA) && !lying) {
+            Claustrophobia.tick(player, t, now, ModData.status(player));
+        }
+        if (picks.has(Condition.BRITTLE_BONES)) {
+            Bones.tick(player, t, now, ModData.status(player));
+        }
+        if (picks.has(Condition.GIGANTISM) && !lying) {
+            Giant.tick(player, t, now);
         }
         if (asleep) {
             if (now % 50 == 0) {
@@ -231,28 +306,26 @@ public final class Ailments {
                 player.stopUsingItem();
             }
         }
-        if (!episodes) {
+        t.wasOnGround = player.onGround();
+        if (!episodes || lying) {
             return;
         }
-        if (picks.has(Condition.NARCOLEPSY) && !asleep) {
+        if (picks.has(Condition.ALIEN_HAND)) {
+            AlienHand.tick(player, t, now, true);
+        }
+        if (picks.has(Condition.NARCOLEPSY)) {
             tickNarcolepsy(player, t, now);
         }
-        if (picks.has(Condition.TOURETTE) && !asleep) {
+        if (picks.has(Condition.TOURETTE)) {
             tickTourette(player, t, now);
         }
-        if (picks.has(Condition.PARKINSON) && !asleep) {
+        if (picks.has(Condition.PARKINSON)) {
             tickParkinson(player, t, now, status);
         }
         if (picks.has(Condition.AMNESIA)) {
-            if (t.nextShuffle == 0) {
-                t.nextShuffle = now + between(random, 6000, 10800);
-            }
-            if (now >= t.nextShuffle) {
-                t.nextShuffle = now + between(random, 6000, 10800);
-                forgetInventory(player);
-            }
+            tickAmnesia(player, t, now);
         }
-        if (picks.has(Condition.VERTIGO) && !asleep) {
+        if (picks.has(Condition.VERTIGO)) {
             if (t.nextStumble == 0) {
                 t.nextStumble = now + between(random, 1200, 3000);
             }
@@ -265,8 +338,17 @@ public final class Ailments {
                 }
             }
         }
-        if (picks.has(Condition.ALLERGY) && !asleep && now % 20 == 0) {
+        if (picks.has(Condition.ALLERGY) && now % 20 == 0) {
             tickAllergy(player, t, now);
+        }
+        if (picks.has(Condition.HEMOPHILIA)) {
+            if (t.nextNosebleed == 0) {
+                t.nextNosebleed = now + between(random, 6000, 9600);
+            }
+            if (now >= t.nextNosebleed) {
+                t.nextNosebleed = now + between(random, 6000, 9600);
+                nosebleed(player);
+            }
         }
     }
 
@@ -304,9 +386,14 @@ public final class Ailments {
             level.sendParticles(ParticleTypes.SMOKE, player.getX(), player.getY() + player.getBbHeight() * 0.8, player.getZ(), 2,
                     0.2, 0.15, 0.2, 0.01);
         }
+        if (t.sunTicks % 8 == 0) {
+            level.sendParticles(new DustParticleOptions(0xE8603C, 0.8F), player.getX(), player.getY() + player.getBbHeight() * 0.6, player.getZ(), 2,
+                    0.22, 0.3, 0.22, 0.0);
+        }
         if (t.sunTicks >= 60 && t.sunTicks % 40 == 0) {
-            level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.4F, 1.6F);
-            player.hurtServer(level, level.damageSources().source(ModDamage.SUNBURN), 1.0F);
+            level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5F, 1.6F);
+            // the longer you stay in the sun, the worse it burns
+            player.hurtServer(level, level.damageSources().source(ModDamage.SUNBURN), t.sunTicks >= 400 ? 2.0F : 1.0F);
             send(player, new Net.Episode(EpisodeKind.SUNBURN, 0));
             if (now - t.lastMessage > 600) {
                 t.lastMessage = now;
@@ -339,6 +426,21 @@ public final class Ailments {
 
     private static void tickObesity(ServerPlayer player, Tracker t, long now, Status status) {
         ServerLevel level = player.level();
+        if (!player.onGround()) {
+            t.fallStart = Math.max(t.fallStart, (float) player.fallDistance);
+        } else {
+            if (!t.wasOnGround && t.fallStart >= 1.0F) {
+                // a heavy landing everybody hears and sees
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.THUD, SoundSource.PLAYERS, 1.0F,
+                        0.85F + player.getRandom().nextFloat() * 0.2F);
+                BlockState below = level.getBlockState(BlockPos.containing(player.getX(), player.getY() - 0.2, player.getZ()));
+                if (!below.isAir()) {
+                    level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, below), player.getX(), player.getY() + 0.05,
+                            player.getZ(), 20, 0.6, 0.05, 0.6, 0.15);
+                }
+            }
+            t.fallStart = 0.0F;
+        }
         if (status.winded(now)) {
             player.setSprinting(false);
             if (now % 22 == 0) {
@@ -392,6 +494,13 @@ public final class Ailments {
         } else if (t.breathless && player.getAirSupply() >= max * 0.5F) {
             t.breathless = false;
         }
+        if (now >= t.nextCough && now % 20 == 0) {
+            boolean smoke = irritants(player);
+            if (smoke || player.getRandom().nextFloat() < 0.02F) {
+                cough(player);
+                t.nextCough = now + (smoke ? between(player.getRandom(), 80, 200) : between(player.getRandom(), 1200, 2400));
+            }
+        }
         if (t.breathless) {
             player.setSprinting(false);
             if (now % 30 == 0) {
@@ -399,6 +508,33 @@ public final class Ailments {
                         0.95F + player.getRandom().nextFloat() * 0.1F);
             }
         }
+    }
+
+    /** Smoke, fire and dust around: a coughing fit now and then. */
+    private static boolean irritants(ServerPlayer player) {
+        ServerLevel level = player.level();
+        BlockPos center = player.blockPosition();
+        RandomSource random = player.getRandom();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int i = 0; i < 40; i++) {
+            pos.set(center.getX() + random.nextInt(9) - 4, center.getY() + random.nextInt(5) - 2, center.getZ() + random.nextInt(9) - 4);
+            BlockState state = level.getBlockState(pos);
+            if (state.is(BlockTags.CAMPFIRES) || state.is(BlockTags.FIRE) || state.is(Blocks.LAVA) || state.is(Blocks.MAGMA_BLOCK)) {
+                return true;
+            }
+        }
+        return player.isOnFire();
+    }
+
+    public static void cough(ServerPlayer player) {
+        ServerLevel level = player.level();
+        player.setAirSupply(Math.max(0, player.getAirSupply() - 60));
+        level.playSound(null, player.getX(), player.getEyeY(), player.getZ(), ModSounds.COUGH, SoundSource.PLAYERS, 1.0F,
+                0.9F + player.getRandom().nextFloat() * 0.2F);
+        Vec3 mouth = player.getEyePosition().add(player.getLookAngle().scale(0.4));
+        level.sendParticles(ParticleTypes.POOF, mouth.x, mouth.y - 0.1, mouth.z, 3, 0.05, 0.05, 0.05, 0.02);
+        motion(player, com.disabilities.net.MotionKind.COUGH, 0);
+        send(player, new Net.Episode(EpisodeKind.COUGH, 0));
     }
 
     /** True while the asthma rules hold the breath back (no recovery while you run or climb). */
@@ -428,6 +564,9 @@ public final class Ailments {
             Tracker t = tracker(player);
             t.stamina -= 12.0F;
         }
+        if (picks.has(Condition.WEAK_HEART)) {
+            Heart.jolt(player, 7.0F);
+        }
     }
 
     // ---------------------------------------------------------------- health
@@ -444,10 +583,41 @@ public final class Ailments {
             }
             setStatus(player, status.withBleed(until));
         }
-        if (picks.has(Condition.NARCOLEPSY) && episodesOn(player) && !ModData.asleep(player) && safe(player)
-                && player.getRandom().nextFloat() < 0.12F) {
+        if (picks.has(Condition.NARCOLEPSY) && episodesOn(player) && !ModData.lying(player) && safe(player)
+                && player.getRandom().nextFloat() < 0.18F) {
             fallAsleep(player, 50, true);
         }
+        Tracker t = tracker(player);
+        if (picks.has(Condition.WEAK_HEART)) {
+            Heart.jolt(player, 6.0F + damage * 1.5F);
+        }
+        if (picks.has(Condition.EPILEPSY) && episodesOn(player)) {
+            Epilepsy.afterDamage(player, t, source, damage);
+        }
+        if (picks.has(Condition.BRITTLE_BONES)) {
+            Bones.afterDamage(player, source, damage);
+        }
+        if (picks.has(Condition.TOURETTE) && episodesOn(player) && damage >= 2.0F && player.getRandom().nextFloat() < 0.5F) {
+            // stress: a burst of tics
+            t.nextTic = now + 4;
+        }
+        if (picks.has(Condition.MYOPIA) && damage >= 3.0F && now - t.lastGlasses > 400 && player.getRandom().nextFloat() < 0.35F) {
+            glassesOff(player);
+        }
+    }
+
+    /** Myopia: a hard hit knocks the glasses off for half a minute. */
+    public static void glassesOff(ServerPlayer player) {
+        long now = player.level().getGameTime();
+        Status status = ModData.status(player);
+        if (status.glassesOff(now)) {
+            return;
+        }
+        tracker(player).lastGlasses = now;
+        setStatus(player, status.withGlassesOff(now + 600));
+        player.level().playSound(null, player.getX(), player.getEyeY(), player.getZ(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.6F, 1.6F);
+        bubble(player, Component.translatable("disabilities.bubble.glasses").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD), 40);
+        player.sendOverlayMessage(Component.translatable("disabilities.msg.glasses_off").withStyle(ChatFormatting.AQUA));
     }
 
     private static void tickBleeding(ServerPlayer player, long now) {
@@ -461,6 +631,7 @@ public final class Ailments {
                 if (viewer == player) {
                     level.sendParticles(viewer, blood, false, false, player.getX(), player.getY() + 0.15, player.getZ(), 1, 0.25, 0.05, 0.25, 0.0);
                 } else if (viewer.distanceToSqr(player) < 48 * 48) {
+                    level.sendParticles(viewer, blood, false, false, player.getX(), player.getY() + 0.08, player.getZ(), 2, 0.3, 0.02, 0.3, 0.0);
                     level.sendParticles(viewer, blood, false, false, player.getX(), y, player.getZ(), 2, 0.22, 0.1, 0.22, 0.0);
                     level.sendParticles(viewer, ParticleTypes.DRIPPING_DRIPSTONE_LAVA, false, false, player.getX(), y, player.getZ(), 1, 0.2, 0.1, 0.2,
                             0.0);
@@ -500,7 +671,7 @@ public final class Ailments {
 
     // ---------------------------------------------------------------- neuro
 
-    private static boolean safe(ServerPlayer player) {
+    static boolean safe(ServerPlayer player) {
         return player.onGround() && !player.isInWater() && !player.isInLava() && !player.isPassenger() && !player.isFallFlying()
                 && !player.getAbilities().flying && !player.isOnFire() && !player.isSleeping() && player.isAlive();
     }
@@ -508,17 +679,28 @@ public final class Ailments {
     private static void tickNarcolepsy(ServerPlayer player, Tracker t, long now) {
         RandomSource random = player.getRandom();
         if (t.nextSleep == 0) {
-            t.nextSleep = now + between(random, 3600, 7200);
+            t.nextSleep = now + between(random, 3000, 6000);
+        }
+        if (t.nextNod == 0) {
+            t.nextNod = now + between(random, 600, 1400);
+        }
+        if (now >= t.nextNod && now < t.nextSleep - 200) {
+            // a moment with the eyes closed: the head drops, then jerks back up
+            t.nextNod = now + between(random, 600, 1400);
+            motion(player, com.disabilities.net.MotionKind.NOD, 0);
+            send(player, new Net.Episode(EpisodeKind.NOD, 0));
+            bubble(player, Component.literal("zz").withStyle(ChatFormatting.AQUA), 30);
         }
         if (!t.yawned && now >= t.nextSleep - 60) {
             t.yawned = true;
             player.level().playSound(null, player.getX(), player.getEyeY(), player.getZ(), ModSounds.YAWN, SoundSource.PLAYERS, 1.0F, 1.0F);
+            motion(player, com.disabilities.net.MotionKind.YAWN, 0);
             player.sendOverlayMessage(Component.translatable("disabilities.msg.sleepy").withStyle(ChatFormatting.AQUA));
         }
         if (now >= t.nextSleep) {
             if (safe(player)) {
                 fallAsleep(player, between(random, 100, 160), false);
-                t.nextSleep = now + between(random, 3600, 7200);
+                t.nextSleep = now + between(random, 3000, 6000);
                 t.yawned = false;
             } else {
                 t.nextSleep = now + 40;
@@ -603,23 +785,23 @@ public final class Ailments {
     private static void tickParkinson(ServerPlayer player, Tracker t, long now, Status status) {
         RandomSource random = player.getRandom();
         if (t.nextFreeze == 0) {
-            t.nextFreeze = now + between(random, 900, 2000);
+            t.nextFreeze = now + between(random, 700, 1600);
         }
         if (!status.frozen(now) && now >= t.nextFreeze) {
             if (player.onGround() && t.moving) {
                 freeze(player, between(random, 40, 80));
-                t.nextFreeze = now + between(random, 900, 2000);
+                t.nextFreeze = now + between(random, 700, 1600);
             } else {
                 t.nextFreeze = now + 40;
             }
         }
         if (t.nextDrop == 0) {
-            t.nextDrop = now + between(random, 2400, 6000);
+            t.nextDrop = now + between(random, 1800, 4200);
         }
         if (now >= t.nextDrop) {
             if (!player.getMainHandItem().isEmpty()) {
                 dropHeld(player, "disabilities.msg.slipped");
-                t.nextDrop = now + between(random, 2400, 6000);
+                t.nextDrop = now + between(random, 1800, 4200);
             } else {
                 t.nextDrop = now + 200;
             }
@@ -713,6 +895,16 @@ public final class Ailments {
             t.lastSneeze = now;
             sneeze(player);
         }
+        // red, swollen eyes and nose while it lasts; the itch makes you rub them
+        boolean swollen = t.swollen ? t.allergen > 0.12F : t.allergen > 0.3F;
+        if (swollen != t.swollen) {
+            t.swollen = swollen;
+            setStatus(player, ModData.status(player).withFlag(Status.SWOLLEN, swollen));
+        }
+        if (swollen && now >= t.nextItch) {
+            t.nextItch = now + between(random, 160, 400);
+            motion(player, com.disabilities.net.MotionKind.ITCH, 0);
+        }
     }
 
     public static void sneeze(ServerPlayer player) {
@@ -736,15 +928,125 @@ public final class Ailments {
         }
     }
 
+    // ---------------------------------------------------------------- 1.1.0: more to see and to hear
+
+    /** Crutches: the rubber tips knock on the ground at every step. */
+    private static void tickCrutches(ServerPlayer player, Tracker t) {
+        if (t.moving && player.onGround() && !player.isPassenger()) {
+            if (++t.stepTimer >= 9) {
+                t.stepTimer = 0;
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.CRUTCH, SoundSource.PLAYERS, 0.7F,
+                        0.9F + player.getRandom().nextFloat() * 0.2F);
+            }
+        } else {
+            t.stepTimer = 5;
+        }
+    }
+
+    /** Ground a wheelchair hardly rolls on. */
+    private static boolean rough(BlockState state) {
+        return state.is(BlockTags.SAND) || state.is(Blocks.GRAVEL) || state.is(Blocks.SNOW) || state.is(Blocks.SNOW_BLOCK)
+                || state.is(Blocks.POWDER_SNOW) || state.is(Blocks.MUD) || state.is(Blocks.SOUL_SAND) || state.is(Blocks.SOUL_SOIL)
+                || state.is(Blocks.FARMLAND) || state.is(Blocks.CLAY) || state.is(Blocks.SUSPICIOUS_SAND) || state.is(Blocks.SUSPICIOUS_GRAVEL);
+    }
+
+    /** Wheelchair: sand, gravel, snow and mud slow you down a lot; the wheels squeak. */
+    private static void tickWheelchair(ServerPlayer player, Tracker t, long now) {
+        ServerLevel level = player.level();
+        BlockPos feet = BlockPos.containing(player.getX(), player.getY() - 0.05, player.getZ());
+        boolean onRough = player.onGround() && (rough(level.getBlockState(feet)) || rough(level.getBlockState(feet.above())));
+        if (onRough != t.rough) {
+            t.rough = onRough;
+            if (onRough) {
+                player.sendOverlayMessage(Component.translatable("disabilities.msg.rough").withStyle(ChatFormatting.BLUE));
+            }
+        }
+        if (t.moving && player.onGround() && now % 34 == 0) {
+            level.playSound(null, player.getX(), player.getY() + 0.4, player.getZ(), ModSounds.SQUEAK, SoundSource.PLAYERS, 0.45F,
+                    0.9F + player.getRandom().nextFloat() * 0.25F);
+        }
+    }
+
+    public static boolean onRoughGround(ServerPlayer player) {
+        Tracker t = TRACKERS.get(player.getUUID());
+        return t != null && t.rough;
+    }
+
+    /** Amnesia: now and then you stop, lost ("where am I?"), and look around. */
+    private static void tickAmnesia(ServerPlayer player, Tracker t, long now) {
+        RandomSource random = player.getRandom();
+        if (t.nextShuffle == 0) {
+            t.nextShuffle = now + between(random, 6000, 10800);
+        }
+        if (now >= t.nextShuffle) {
+            t.nextShuffle = now + between(random, 6000, 10800);
+            forgetInventory(player);
+            return;
+        }
+        if (t.nextLost == 0) {
+            t.nextLost = now + between(random, 2400, 4800);
+        }
+        if (now >= t.nextLost) {
+            t.nextLost = now + between(random, 2400, 4800);
+            lost(player);
+        }
+    }
+
+    public static void lost(ServerPlayer player) {
+        long now = player.level().getGameTime();
+        setStatus(player, ModData.status(player).withFreeze(now + 80).withConfused(now + 90));
+        Body.refresh(player);
+        motion(player, com.disabilities.net.MotionKind.LOOK_AROUND, 0);
+        send(player, new Net.Episode(EpisodeKind.LOST, 0));
+        bubble(player, Component.translatable("disabilities.bubble.lost").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD), 80);
+        player.sendOverlayMessage(Component.translatable("disabilities.msg.lost").withStyle(ChatFormatting.LIGHT_PURPLE));
+    }
+
+    /** Hemophilia: a nosebleed out of nowhere. */
+    public static void nosebleed(ServerPlayer player) {
+        long now = player.level().getGameTime();
+        Status status = ModData.status(player);
+        setStatus(player, status.withBleed(Math.max(status.bleedUntil(), now + 200)));
+        bubble(player, Component.translatable("disabilities.bubble.nosebleed").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD), 60);
+        player.sendOverlayMessage(Component.translatable("disabilities.msg.nosebleed").withStyle(ChatFormatting.DARK_RED));
+        Vec3 nose = player.getEyePosition().add(player.getLookAngle().scale(0.3));
+        player.level().sendParticles(new DustParticleOptions(0x8A0303, 1.0F), nose.x, nose.y - 0.15, nose.z, 8, 0.05, 0.1, 0.05, 0.0);
+    }
+
     // ---------------------------------------------------------------- helpers
 
     public static void setStatus(ServerPlayer player, Status status) {
         player.setAttached(ModData.STATUS, status);
     }
 
-    private static void send(ServerPlayer player, CustomPacketPayload payload) {
+    static void send(ServerPlayer player, CustomPacketPayload payload) {
         if (ServerPlayNetworking.canSend(player, payload.type())) {
             ServerPlayNetworking.send(player, payload);
+        }
+    }
+
+    /** A body movement on this player, for them and everyone who can see them. */
+    public static void motion(ServerPlayer player, com.disabilities.net.MotionKind kind, int arg) {
+        Net.Motion payload = new Net.Motion(player.getId(), kind, arg);
+        send(player, payload);
+        for (ServerPlayer other : PlayerLookup.tracking(player)) {
+            if (other != player) {
+                send(other, payload);
+            }
+        }
+    }
+
+    /** A sound at the player's head that everybody nearby hears. */
+    static void sound(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
+        player.level().playSound(null, player.getX(), player.getEyeY(), player.getZ(), sound, SoundSource.PLAYERS, volume, pitch);
+    }
+
+    /** A line in the chat of everyone within {@code range} blocks (the player too). */
+    static void tellNearby(ServerPlayer player, Component line, double range) {
+        for (ServerPlayer other : player.level().players()) {
+            if (other.distanceToSqr(player) < range * range) {
+                other.sendSystemMessage(line);
+            }
         }
     }
 

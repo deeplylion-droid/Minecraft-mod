@@ -37,7 +37,10 @@ public final class DisabilityCommand {
     private static final SuggestionProvider<CommandSourceStack> CONDITIONS = (c, b) ->
             SharedSuggestionProvider.suggest(Arrays.stream(Condition.values()).map(x -> x.command), b);
     private static final List<String> EVENTS = List.of("sonno", "tic", "starnuto", "inciampo", "blocco", "dimenticanza", "ferita",
-            "sveglia", "fiato");
+            "sveglia", "fiato", "aura", "crisi", "mano", "frattura", "braccio", "infarto", "panico", "tosse", "naso", "dovesono", "testata",
+            "occhiali", "tachicardia",
+            // the alien hand's actions one by one (AlienHand.ACTIONS)
+            "schiaffo", "lancio", "pugno", "presa", "testa", "saluto");
     private static final SuggestionProvider<CommandSourceStack> EVENT_NAMES = (c, b) -> SharedSuggestionProvider.suggest(EVENTS, b);
 
     public static void init() {
@@ -215,7 +218,27 @@ public final class DisabilityCommand {
                 case "dimenticanza" -> Ailments.forgetInventory(player);
                 case "ferita" -> player.hurtServer(player.level(), player.level().damageSources().generic(), 2.0F);
                 case "fiato" -> player.setAirSupply(0);
+                case "aura" -> Epilepsy.aura(player, Ailments.tracker(player), player.level().getGameTime(), Epilepsy.AURA_TICKS);
+                case "crisi" -> Epilepsy.seize(player, 220);
+                case "mano" -> AlienHand.act(player, -1);
+                case "frattura" -> Bones.breakBone(player, true);
+                case "braccio" -> Bones.breakBone(player, false);
+                case "infarto" -> Heart.arrest(player);
+                case "tachicardia" -> Heart.jolt(player, 110.0F);
+                case "panico" -> Claustrophobia.panic(player);
+                case "tosse" -> Ailments.cough(player);
+                case "naso" -> Ailments.nosebleed(player);
+                case "dovesono" -> Ailments.lost(player);
+                case "occhiali" -> Ailments.glassesOff(player);
+                case "testata" -> {
+                    Ailments.tracker(player).lastBonk = 0;
+                    Giant.bump(player, ModData.has(player, Condition.GIGANTISM) ? 1 : 0);
+                }
                 default -> {
+                    int action = java.util.Arrays.asList(AlienHand.ACTIONS).indexOf(type);
+                    if (action >= 0) {
+                        AlienHand.act(player, action);
+                    }
                 }
             }
         }

@@ -166,47 +166,57 @@ Jumpscare da fare agli amici, per **Fabric 1.21.1**: serve anche **Fabric API**.
 
 ![La scelta obbligatoria e alcune disabilità, viste da dentro e da fuori](docs/disabilities-preview.png)
 
-Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.0.1.jar` nelle [Releases](../../releases) (la 1.0.0 non faceva cliccare le carte nella scelta: usate la 1.0.1). Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
+![Le novità della 1.1.0: epilessia, arresto cardiaco e massaggio, claustrofobia, ossa fragili, mano aliena, gigantismo](docs/disabilities-1.1-preview.png)
 
-- **Alla prima entrata nel mondo è obbligatorio scegliere due disabilità** su 21, da una schermata che non si può chiudere (finché scegli non puoi essere ferito). Passando sopra una carta leggi cosa cambia per te e cosa vedono gli altri. Il pulsante *Casuale* sceglie per te.
-- **Ognuno le sue**: due giocatori non possono avere la stessa disabilità (con 8 giocatori se ne usano 16 su 21). Le carte già prese sono segnate *PRESA*; alcune coppie non vanno insieme (cieco + miope, sedia a rotelle + stampelle, stampelle + un braccio solo...).
+Per **Fabric 26.3** (l'ultima versione di Minecraft): serve **Fabric API 0.163.0+26.3** e **Java 25**. Jar: `disabilities-1.1.0.jar` nelle [Releases](../../releases). La **1.1.0** aggiunge 6 disabilità (Epilessia, Mano aliena, Gigantismo, Ossa fragili, Cuore debole, Claustrofobia) e rende quelle di prima più pesanti e molto più visibili, soprattutto per chi guarda. (La 1.0.0 non faceva cliccare le carte nella scelta.) Va installata sul server **e da tutti i giocatori**: chi entra senza la mod viene rimandato indietro con un messaggio.
+
+- **Alla prima entrata nel mondo è obbligatorio scegliere due disabilità** su 27, da una schermata che non si può chiudere (finché scegli non puoi essere ferito). Passando sopra una carta leggi cosa cambia per te e cosa vedono gli altri. Il pulsante *Casuale* sceglie per te.
+- **Ognuno le sue**: due giocatori non possono avere la stessa disabilità (con 8 giocatori se ne usano 16 su 27). Le carte già prese sono segnate *PRESA*; alcune coppie non vanno insieme (cieco + miope, sedia a rotelle + stampelle, stampelle + un braccio solo, mano aliena + un braccio solo, gigantismo + nanismo...).
 - Quando qualcuno sceglie, in chat compare per tutti: "*Mario ha scelto: ♿ Paraplegia e 🔇 Sordità*" (passa sopra i nomi per la descrizione).
 - **Le icone delle disabilità** stanno dopo il nome di ognuno: sopra la testa, nella lista giocatori (Tab), in chat e nei messaggi di morte. Le tue sono anche in alto a sinistra.
 - Gli effetti sulla vista restano anche nascondendo l'HUD (F1) e in terza persona: niente trucchi.
 
 | Disabilità | Cosa cambia per te | Cosa vedono gli altri |
 |---|---|---|
-| Cecità | Vedi solo a 3 blocchi, cielo compreso; chi fa rumore si illumina per un attimo. Col **bastone bianco** (tasto destro) per qualche secondo vedi intorno | Occhiali scuri, il bastone che batte a terra mentre cammini |
-| Acromatopsia | Tutto in bianco e nero, inventario compreso | Occhiali con le lenti rosa |
-| Miopia grave | Oltre pochi blocchi è tutto sfocato | Occhiali spessi |
-| Cieco da un occhio | Metà sinistra dello schermo buia | Benda sull'occhio |
-| Albinismo | Di giorno all'aperto il sole ti abbaglia e, senza elmo, ti brucia | Capelli bianchi e pelle pallidissima (dalla tua skin); fumi al sole |
-| Sordità | Nessun suono, neanche la musica | Apparecchi acustici |
-| Mutismo | Non puoi scrivere in chat (né /msg, /me...): fai i **gesti** col tasto **G** (Ciao, Sì, No, Vieni qui, Aiuto, Pericolo, Grazie, Seguimi) | Il gesto con le braccia, un fumetto sopra la testa e una riga in chat per chi è vicino |
-| Dislessia | Tutte le scritte hanno le lettere che si mescolano (menu, chat, cartelli, inventario) | I tuoi messaggi in chat arrivano con le lettere scambiate |
-| Paraplegia | Sedia a rotelle: niente salti, niente scale a pioli, liane o impalcature; più basso. La vedi anche in prima persona | Seduto sulla sedia, le ruote girano mentre ti muovi |
-| Gamba amputata | Stampelle: più lento, niente corsa, salti bassi; **per usare le mani devi fermarti** | Una gamba sola e le stampelle che dondolano |
-| Braccio amputato | Niente mano secondaria; archi, balestre, tridenti e lance non si usano; scavi più piano | Un braccio solo |
+| Cecità | Vedi solo a 3 blocchi, cielo compreso; chi fa rumore si illumina per un attimo. Col **bastone bianco** (tasto destro) per qualche secondo vedi intorno. Senza il bastone in mano sbatti contro i muri | Occhiali scuri, il bastone che spazza davanti e batte a terra mentre cammini; le testate contro i muri |
+| Acromatopsia | Tutto in bianco e nero, inventario compreso; al sole sei abbagliato (meno con un elmo) | Occhiali con le lenti rosa; al sole si ripara gli occhi con la mano |
+| Miopia grave | Oltre pochi blocchi è tutto sfocato; un colpo forte ti fa cadere gli occhiali e per mezzo minuto non vedi quasi niente | Occhiali spessi e testa protesa in avanti; gli occhiali che volano via ("I miei occhiali!") |
+| Cieco da un occhio | Metà sinistra dello schermo buia | Benda sull'occhio, testa inclinata |
+| Albinismo | Di giorno all'aperto il sole ti abbaglia e, senza elmo, ti brucia | Capelli bianchi e pelle pallidissima (dalla tua skin); al sole fumi, ti arrossi e ti ripari gli occhi con la mano |
+| Sordità | Nessun suono, neanche la musica | Apparecchi acustici; quando qualcuno vicino scrive in chat si porta la mano all'orecchio: "Eh?" |
+| Mutismo | Non puoi scrivere in chat (né /msg, /me...): fai i **gesti** col tasto **G** (Ciao, Sì, No, Vieni qui, Aiuto, Pericolo, Grazie, Seguimi) | Il gesto con le braccia, un fumetto sopra la testa e una riga in chat per chi è vicino; se prova a scrivere in chat si sente solo "Mmh! Mmh!" |
+| Dislessia | Tutte le scritte hanno le lettere che si mescolano (menu, chat, cartelli, inventario) | I tuoi messaggi arrivano con le lettere scambiate, in chat e nel fumetto sopra la testa |
+| Paraplegia | Sedia a rotelle: niente salti, niente scale a pioli, liane o impalcature; più basso. Su sabbia, ghiaia, neve, fango, sabbia delle anime e terra arata le ruote affondano e vai pianissimo. La vedi anche in prima persona | Seduto sulla sedia, le ruote girano e cigolano mentre ti muovi |
+| Gamba amputata | Stampelle: più lento, niente corsa, salti bassi; **per usare le mani devi fermarti** | Una gamba sola e le stampelle che dondolano e battono a terra |
+| Braccio amputato | Niente mano secondaria; archi, balestre, tridenti e lance non si usano; scavi e colpisci più piano | Un braccio solo |
 | Nanismo | Alto la metà, braccia corte (arrivi meno lontano), più lento | Sei piccolissimo |
-| Obesità | Più lento, fame doppia, dopo 4 secondi di corsa hai il fiatone, le cadute fanno più male; però ti spostano meno | Corporatura enorme, fiatone e sudore |
-| Parkinson | La mira trema sempre; ogni tanto le gambe si bloccano e ti scivola di mano quello che tieni | Testa e braccia che tremano |
-| Narcolessia | Ogni 3-6 minuti ti addormenti di colpo per qualche secondo (schermo nero), a volte anche quando vieni colpito. Un amico ti sveglia col tasto destro | Crolli a terra, russi, "Zzz" sopra la testa |
-| Sindrome di Tourette | Tic: scatti della testa, salti, colpi nel vuoto (a volte colpisci davvero chi hai davanti), giravolte, ammiccamenti, versi e parole a caso | Vedono i tic, sentono i versi, leggono le parole in chat e nel fumetto ("PATATA!") |
-| Amnesia | Niente F3 (coordinate), niente libro delle ricette e niente segnalini dei compagni; i nomi degli altri diventano "???"; ogni 5-9 minuti l'inventario si rimescola | Ti gratti la testa sotto un "?" |
-| Vertigini | Il mondo ondeggia, vicino ai burroni gira tutto (e lo zoom impazzisce), cammini storto e ogni tanto inciampi | Barcolli e inciampi |
-| Asma | Correre, saltare, nuotare e arrampicarti ti tolgono il fiato (le bollicine dell'aria); senza fiato vedi buio ai lati e rallenti. Hai un **inalatore** | Il respiro che fischia, la mano sul petto |
-| Emofilia | Ogni ferita continua a sanguinare (e intanto non guarisci) finché non usi una **benda** | Gocce di sangue, la mano sulla ferita; puoi fasciarli tu (tasto destro con la benda) |
-| Allergia | Vicino a fiori, erba, foglie e animali starnutisci: la testa scatta, gli occhi lacrimano e a volte ti cade quello che tieni | Starnuti fortissimi |
+| Obesità | Più lento, fame doppia, dopo 4 secondi di corsa hai il fiatone, le cadute fanno più male; però ti spostano meno | Corporatura enorme, pancia che ballonzola, fiatone e sudore; quando atterri un tonfo e la polvere |
+| Parkinson | La mira trema sempre; spesso le gambe si bloccano e ti scivola di mano quello che tieni | Testa e braccia che tremano forte; cammini curvo, a piccoli passi strascicati |
+| Narcolessia | Ogni 2,5-5 minuti ti addormenti di colpo per qualche secondo (schermo nero), a volte anche quando vieni colpito; in mezzo ti si chiudono gli occhi per un attimo. Un amico ti sveglia col tasto destro | Sbadigli, la testa che ciondola ("zz"), crolli a terra e russi, "Zzz" sopra la testa |
+| Sindrome di Tourette | Tic: scatti della testa, salti, colpi nel vuoto (a volte colpisci davvero chi hai davanti), giravolte, ammiccamenti, versi e parole a caso; quando ti fai male parte una raffica di tic | Vedono i tic, sentono i versi, leggono le parole in chat e nel fumetto ("PATATA!") |
+| Amnesia | Niente F3 (coordinate), niente libro delle ricette e niente segnalini dei compagni; i nomi degli altri diventano "???"; ogni 5-9 minuti l'inventario si rimescola; ogni 2-4 minuti non sai più dove sei (ti fermi e la testa gira intorno) | Ti gratti la testa sotto un "?", ti guardi intorno smarrito ("Dove sono?") |
+| Vertigini | Il mondo ondeggia, vicino ai burroni gira tutto (e lo zoom impazzisce), cammini storto e ogni tanto inciampi | Ondeggi anche da fermo, barcolli e inciampi |
+| Asma | Correre, saltare, nuotare e arrampicarti ti tolgono il fiato (le bollicine dell'aria); senza fiato vedi buio ai lati e rallenti. Il fumo di fuochi, falò, lava e magma ti fa tossire e ti toglie fiato. Hai un **inalatore** | Il respiro che fischia, la tosse con le nuvolette, la mano sul petto, l'inalatore |
+| Emofilia | Ogni ferita continua a sanguinare (e intanto non guarisci) finché non usi una **benda**; ogni 5-8 minuti ti sanguina il naso | Gocce di sangue che restano a terra, la mano sulla ferita, sangue dal naso; puoi fasciarli tu (tasto destro con la benda) |
+| Allergia | Vicino a fiori, erba, foglie e animali starnutisci: la testa scatta, gli occhi lacrimano e a volte ti cade quello che tieni | Starnuti fortissimi; ti gratti, naso rosso e occhi gonfi |
+| **Epilessia** | Ogni 8-14 minuti (e con fulmini vicini, esplosioni e colpi forti) una **crisi**: 5 secondi di avviso (il mondo ondeggia e i bordi diventano arancioni: fermati in un posto sicuro), poi 10-14 secondi a terra in convulsioni, ti cade quello che tieni, e mezzo minuto confuso e lento. **Nessun lampo sullo schermo** (per chi guarda la live) | A terra in convulsioni con la schiuma alla bocca, e un messaggio in chat per chi è vicino; **col tasto destro** lo metti in posizione di sicurezza e la crisi finisce in 2 secondi |
+| **Mano aliena** | La mano secondaria fa di testa sua ogni 30-90 secondi: ti dà uno schiaffo, butta via quello che tieni, tira un pugno a chi hai davanti, fa cadere di mano le cose a un amico vicino, ti gira la testa o saluta il nulla | Un guanto verde con un occhio; la mano che schiaffeggia e tira pugni ("Scusa! Non sono io!") |
+| **Gigantismo** | Alto 1,6 volte (quasi 3 blocchi): arrivi più lontano, picchi più forte, 3 cuori in più, ti spostano meno. Però non passi dalle porte e dai tunnel alti 2, sbatti la testa saltando sotto un soffitto, niente cavalli, barche e carrelli, più fame e cadute più dolorose | Enorme, con passi pesanti che sollevano la terra |
+| **Ossa fragili** | Cadute da 5 blocchi, esplosioni e colpi forti ti rompono le ossa (crack e lampo bianco). Gamba rotta: zoppichi, niente corsa, salti bassi. Braccio rotto: scavi e colpisci pianissimo, niente oggetti a due mani. Guarisce in 4 minuti, col **gesso** in 45 secondi (ne hai 3) | Il crack, il gesso bianco con le firme sulla gamba, il braccio al collo; puoi mettergli tu il gesso (tasto destro col gesso) |
+| **Cuore debole** | Correre, saltare, nuotare, arrampicarti, combattere e farti male fanno salire il battito, che vedi in alto a sinistra col tracciato e senti. Sopra 125 corre, sopra 165 rallenti e ansimi, a 190 **arresto cardiaco**: schermo nero con la linea piatta e 30 secondi per essere salvato | La mano sul petto, piegato in avanti quando è critico; nell'arresto crolla a terra col bip piatto: **tieni premuto il tasto destro** su di lui per il massaggio cardiaco (30 compressioni) |
+| **Claustrofobia** | In grotte, tunnel e stanze piccole e buie sale la paura: lo schermo si stringe, il cuore batte forte e scavi più piano. Al massimo: **attacco di panico**, 12 secondi senza poter usare le mani. All'aperto passa; con un amico vicino sale la metà | Suda e si guarda intorno; nel panico si accuccia con le braccia sopra la testa e respira affannato ("Aiuto! Fatemi uscire!") |
 
 - **Oggetti** (in Creativa nella scheda *Strumenti e utilità*; il bastone e l'inalatore te li dà la mod, e te li ridà quando rinasci):
   - **Bastone bianco**: `bastone` + `bastone` + `colorante bianco`;
   - **Inalatore** (16 spruzzi): `lingotto di ferro` + `ampolla di vetro`;
-  - **Benda** (×2): `carta` + `carta` + `filo`.
+  - **Benda** (×2): `carta` + `carta` + `filo`;
+  - **Gesso** (×2): `farina d'ossa` + `farina d'ossa` + `carta` (chi ha le ossa fragili ne riceve 3). Tasto destro su di te o su un amico con un osso rotto.
+- **Aiutare gli altri** (a mano vuota): tasto destro su chi dorme lo sveglia, su chi ha una crisi epilettica lo mette in posizione di sicurezza; **tasto destro tenuto** su chi ha un arresto cardiaco è il massaggio cardiaco.
 - **Comando** `/disabilita`:
   - per tutti: `/disabilita` (le tue), `/disabilita lista` (di tutti), `/disabilita info <disabilità>`;
-  - da operatore: `scegli [giocatori]` (fa riscegliere), `assegna <giocatori> <prima> <seconda>`, `casuale [giocatori]`, `togli <giocatori>` (nessuna disabilità, per esempio per chi fa le riprese), `evento <sonno|sveglia|tic|starnuto|inciampo|blocco|dimenticanza|ferita|fiato> [giocatori]` per far succedere subito un episodio.
-  - I nomi da usare: `cieco`, `acromatopsia`, `miope`, `monocolo`, `albino`, `sordo`, `muto`, `dislessico`, `sedia`, `stampelle`, `monco`, `nano`, `obeso`, `parkinson`, `narcolessia`, `tourette`, `amnesia`, `vertigini`, `asma`, `emofilia`, `allergia` (il tab li suggerisce).
-- **Gamerule**: `/gamerule disabilities:unique false` (disabilità ripetibili), `/gamerule disabilities:reroll_on_death true` (quando muori riscegli), `/gamerule disabilities:episodes false` (mette in pausa sonni, tic, starnuti, blocchi, inciampi e dimenticanze).
+  - da operatore: `scegli [giocatori]` (fa riscegliere), `assegna <giocatori> <prima> <seconda>`, `casuale [giocatori]`, `togli <giocatori>` (nessuna disabilità, per esempio per chi fa le riprese), `evento <tipo> [giocatori]` per far succedere subito un episodio: `sonno`, `sveglia`, `tic`, `starnuto`, `inciampo`, `blocco`, `dimenticanza`, `ferita`, `fiato`, `aura` (avviso e poi crisi), `crisi`, `mano` (a caso) o una sola mossa della mano aliena (`schiaffo`, `lancio`, `pugno`, `presa`, `testa`, `saluto`), `frattura` (gamba), `braccio`, `infarto`, `tachicardia` (battito alle stelle), `panico`, `tosse`, `naso`, `dovesono`, `testata`, `occhiali`.
+  - I nomi da usare: `cieco`, `acromatopsia`, `miope`, `monocolo`, `albino`, `sordo`, `muto`, `dislessico`, `sedia`, `stampelle`, `monco`, `nano`, `obeso`, `parkinson`, `narcolessia`, `tourette`, `amnesia`, `vertigini`, `asma`, `emofilia`, `allergia`, `epilessia`, `mano_aliena`, `gigante`, `ossa_fragili`, `cuore`, `claustrofobia` (il tab li suggerisce).
+- **Gamerule**: `/gamerule disabilities:unique false` (disabilità ripetibili), `/gamerule disabilities:reroll_on_death true` (quando muori riscegli), `/gamerule disabilities:episodes false` (mette in pausa sonni, tic, starnuti, blocchi, inciampi, dimenticanze, crisi e mano aliena).
 - In live: la mod non può spegnere il vostro microfono su Discord, quindi chi è muto o sordo deve stare al gioco.
 - **Se Minecraft si chiude da solo mentre carica** (con schede NVIDIA, codice `-1073741819` / `0xC0000005` nel log, senza errori Java): si rompe il driver video mentre il gioco prepara la grafica. Nelle impostazioni *Video* scegliete **Vulkan** come API grafica (o mettete `preferredGraphicsBackend:"vulkan"` in `options.txt`), oppure nel Pannello di controllo NVIDIA spegnete *Threaded optimization* per `javaw.exe`; con MultiMC conviene Prism Launcher.
 

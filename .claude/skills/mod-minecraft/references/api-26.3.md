@@ -300,6 +300,8 @@ public abstract class PlayerModelMixin {
 ```
 (da mods/disabilities/src/client/java/com/disabilities/client/mixin/PlayerModelMixin.java e render/Poses.java.) Parti: `head`, `body`, `rightArm`, `leftArm`, `rightLeg`, `leftLeg`, con `xRot/yRot/zRot`, `x/y/z`, `xScale/yScale/zScale`, `visible`. Il modello è uno solo per tutti i giocatori: quello che cambia per uno passa dal suo stato.
 
+Versi degli angoli (spazio del modello: y in giù, la faccia guarda -z, il braccio destro sta a x = -5): `xRot` negativo alza il braccio in avanti (-π/2 = dritto davanti, -π = in alto); per il braccio **destro** `yRot` negativo lo porta verso il petto e `zRot` positivo lo apre di lato; per il sinistro è il contrario (come lo scudo di vanilla: destro `yRot = -π/6`, sinistro `+π/6`). Con un `lato` = +1 destro / -1 sinistro: verso il petto `yRot = -lato * a`, in fuori `zRot = lato * a`. `head.yRot` positivo gira la testa a destra del giocatore. In Disabilità 1.1.0 avevo sbagliato il segno e la fascia del braccio rotto, la mano sul petto, lo schiaffo della mano aliena, la tosse e l'inalatore andavano verso l'esterno: guarda sempre una foto da davanti.
+
 ## 8. Nel mondo, HUD, schermate
 ```java
 LevelRenderEvents.COLLECT_SUBMITS.register(ThreadRenderer::submit);

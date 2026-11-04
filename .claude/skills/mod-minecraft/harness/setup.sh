@@ -26,7 +26,7 @@ for r in "$MOD/run" "$T/cli2/run"; do
 done
 # the mod first (the driver may read its classes), then the driver with the mod's own wrapper
 (cd "$MOD" && ./gradlew build -q)
-JAR=$(ls "$MOD"/build/libs/*.jar | grep -v -- '-sources' | head -1)
+JAR=$(ls -t "$MOD"/build/libs/*.jar | grep -v -- "-sources" | head -1)   # the newest jar (old versions stay in build/libs)
 rm -rf "$T/ctest" && cp -r "$H/ctest" "$T/ctest" && cp -r "$MOD/gradle" "$MOD/gradlew" "$T/ctest/"
 (cd "$T/ctest" && ./gradlew build -q -PmodJar="$JAR")
 echo "ready: $T"

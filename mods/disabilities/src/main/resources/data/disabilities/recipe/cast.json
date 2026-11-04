@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bone_meal",
+    "minecraft:bone_meal",
+    "minecraft:paper"
+  ],
+  "result": {
+    "id": "disabilities:cast",
+    "count": 2
+  }
+}

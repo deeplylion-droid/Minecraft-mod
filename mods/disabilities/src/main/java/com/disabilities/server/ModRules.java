@@ -10,7 +10,7 @@ public final class ModRules {
     private ModRules() {
     }
 
-    /** Two players cannot have the same condition (default on: with 8 players, 16 of the 21 are used). */
+    /** Two players cannot have the same condition (default on: with 8 players, 16 of the 27 are used). */
     public static final GameRule<Boolean> UNIQUE = GameRuleBuilder.forBoolean(true).category(GameRuleCategory.PLAYER)
             .buildAndRegister(Disabilities.id("unique"));
     /** When you die you choose again (default off). */

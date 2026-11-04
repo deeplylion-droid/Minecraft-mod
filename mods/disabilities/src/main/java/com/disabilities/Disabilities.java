@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Disabilità: on your first spawn you must pick two disabilities out of 21. Each one changes how
+ * Disabilità: on your first spawn you must pick two disabilities out of 27. Each one changes how
  * you play, and the others can see it on you.
  */
 public class Disabilities implements ModInitializer {

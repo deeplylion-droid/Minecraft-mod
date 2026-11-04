@@ -42,9 +42,17 @@ public final class ModData {
         return status(entity).asleep(entity.level().getGameTime());
     }
 
+    /** On the ground, out of it: asleep, in a seizure or in cardiac arrest. */
+    public static boolean lying(Entity entity) {
+        long now = entity.level().getGameTime();
+        Status s = status(entity);
+        return s.asleep(now) || s.seizing(now) || s.arrested(now);
+    }
+
+    /** Cannot walk or use the hands: lying, frozen legs. */
     public static boolean frozen(Entity entity) {
         long now = entity.level().getGameTime();
         Status s = status(entity);
-        return s.asleep(now) || s.frozen(now);
+        return s.asleep(now) || s.frozen(now) || s.seizing(now) || s.arrested(now);
     }
 }

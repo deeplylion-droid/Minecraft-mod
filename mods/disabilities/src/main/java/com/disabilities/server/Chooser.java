@@ -220,6 +220,9 @@ public final class Chooser {
         if (picks.has(Condition.ASTHMA)) {
             aids.add(new ItemStack(ModItems.INHALER));
         }
+        if (picks.has(Condition.BRITTLE_BONES) && !onlyEssentials) {
+            aids.add(new ItemStack(ModItems.CAST, 3));
+        }
         if (picks.has(Condition.HEMOPHILIA) && !onlyEssentials) {
             aids.add(new ItemStack(ModItems.BANDAGE, 8));
         }

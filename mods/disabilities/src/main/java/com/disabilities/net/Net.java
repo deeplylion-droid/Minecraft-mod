@@ -111,6 +111,59 @@ public final class Net {
         }
     }
 
+    /** Server to clients: a body movement on player {@code entityId} (see {@link MotionKind}). */
+    public record Motion(int entityId, int kind, int arg) implements CustomPacketPayload {
+        public static final Type<Motion> TYPE = new Type<>(Disabilities.id("motion"));
+        public static final StreamCodec<ByteBuf, Motion> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, Motion::entityId,
+                ByteBufCodecs.VAR_INT, Motion::kind,
+                ByteBufCodecs.VAR_INT, Motion::arg,
+                Motion::new);
+
+        public Motion(int entityId, MotionKind kind, int arg) {
+            this(entityId, kind.ordinal(), arg);
+        }
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Server to the player with a weak heart: their heart rate, for the monitor on screen. */
+    public record Heart(int bpm) implements CustomPacketPayload {
+        public static final Type<Heart> TYPE = new Type<>(Disabilities.id("heart"));
+        public static final StreamCodec<ByteBuf, Heart> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, Heart::bpm, Heart::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: a mute player tried to talk in chat (the others see and hear them try). */
+    public record TriedToSpeak() implements CustomPacketPayload {
+        public static final TriedToSpeak INSTANCE = new TriedToSpeak();
+        public static final Type<TriedToSpeak> TYPE = new Type<>(Disabilities.id("tried_to_speak"));
+        public static final StreamCodec<ByteBuf, TriedToSpeak> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client to server: you hit something (0 = a wall, blind without the cane; 1 = your head, a giant). */
+    public record Bump(int kind) implements CustomPacketPayload {
+        public static final Type<Bump> TYPE = new Type<>(Disabilities.id("bump"));
+        public static final StreamCodec<ByteBuf, Bump> CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, Bump::kind, Bump::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public static void init() {
         PayloadTypeRegistry.clientboundPlay().register(OpenChooser.TYPE, OpenChooser.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(Choose.TYPE, Choose.CODEC);
@@ -119,5 +172,9 @@ public final class Net {
         PayloadTypeRegistry.clientboundPlay().register(Bubble.TYPE, Bubble.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Episode.TYPE, Episode.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(Roster.TYPE, Roster.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Motion.TYPE, Motion.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(Heart.TYPE, Heart.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(TriedToSpeak.TYPE, TriedToSpeak.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(Bump.TYPE, Bump.CODEC);
     }
 }

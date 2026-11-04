@@ -8,7 +8,7 @@ In ordine di tempo. Per ognuna: cosa ha chiesto l'utente, cosa c'è, cosa è eme
 | Yo-Yo Arcobaleno | `mods/rainbow-yoyo/` | `rainbowyoyo` | Forge 1.20.1 | 1.0.0 |
 | Sotto la Bedrock | `mods/below-bedrock/` | `belowbedrock` | Fabric 1.21.1 | 1.1.0 |
 | Jumpscare! | `mods/jumpscares/` | `jumpscares` | Fabric 1.21.1 | 1.0.0 |
-| Disabilità | `mods/disabilities/` | `disabilities` | Fabric 26.3 | 1.0.1 |
+| Disabilità | `mods/disabilities/` | `disabilities` | Fabric 26.3 | 1.1.0 |
 | Filo Rosso | `mods/filo-rosso/` | `filorosso` | Fabric 26.3 | 1.0.0 |
 | Chiappe Colossali | `mods/chiappe-colossali/` | `chiappe` | Fabric 26.3 | 1.0.0 |
 
@@ -46,6 +46,7 @@ C'è anche la skill `monster` (`.claude/skills/monster/`), fatta per l'utente: m
 - 21 disabilità (cieco col bastone, sedia a rotelle, Parkinson, narcolessia, Tourette, muto con gesti, dislessia, albino...), accessori 3D visti dagli altri, effetti sullo schermo, `/disabilita`.
 - **1.0.1**: nella 1.0.0 le carte della scelta non si cliccavano (solo *Casuale*): in 26.3 il tasto sinistro del mouse vale 1, non 0. Da allora le schermate si provano con clic veri.
 - Crash dell'utente all'avvio (driver NVIDIA in OpenGL): risolto con Vulkan. **Usata in live** con gli amici.
+- **1.1.0**, richiesta dopo la live: "altre 6 disabilità e quelle che ci sono più impattanti e visibili, sia per chi le porta che (soprattutto) per chi le osserva". Scelte dall'utente fra quelle che ho proposto: Epilessia, Mano aliena, Gigantismo, Ossa fragili, Cuore debole, Claustrofobia (27 in tutto). Per chi guarda: pose, accessori (gessi, fascia, guanto), fumetti, suoni e messaggi in chat per ogni episodio; gli amici aiutano col tasto destro (posizione di sicurezza, massaggio cardiaco, gesso). Niente lampi per l'epilessia: la guardano in live.
 
 ## Filo Rosso (Fabric 26.3)
 

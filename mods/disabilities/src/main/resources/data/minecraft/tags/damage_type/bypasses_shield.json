@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "disabilities:bleeding",
-    "disabilities:sunburn"
+    "disabilities:sunburn",
+    "disabilities:alien_hand",
+    "disabilities:bonk",
+    "disabilities:heart_attack"
   ]
 }

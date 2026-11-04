@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * The mandatory choice: 21 cards, pick two that go together and that nobody else has. Cannot be
+ * The mandatory choice: 27 cards, pick two that go together and that nobody else has. Cannot be
  * closed: it comes back until the server confirms.
  */
 public class ChooserScreen extends Screen {
-    private static final int COLUMNS = 7;
+    private static final int COLUMNS = 9;
 
     private int taken;
     private final List<Condition> selected = new ArrayList<>();
